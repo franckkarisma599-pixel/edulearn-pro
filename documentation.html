@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Documentation - EduLearn Pro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a0ca3;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --info: #3498db;
+            --dark: #1a1a2e;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --gray-light: #e9ecef;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0,0,0,0.1);
+            --shadow-sm: 0 2px 10px rgba(0,0,0,0.05);
+            --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        body { background: #f5f7ff; }
+
+        /* Navigation */
+        .navbar { background: var(--white); box-shadow: var(--shadow-sm); position: sticky; top: 0; z-index: 1000; padding: 12px 0; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .navbar .container { display: flex; justify-content: space-between; align-items: center; }
+        .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+        .logo-icon { width: 40px; height: 40px; background: var(--gradient); border-radius: 12px; display: flex; align-items: center; justify-content: center; }
+        .logo-icon i { font-size: 1.3rem; color: white; }
+        .logo h1 { font-size: 1.3rem; font-weight: 700; color: var(--dark); }
+        .logo span { color: var(--primary); }
+        .nav-menu { display: flex; gap: 15px; flex-wrap: wrap; }
+        .nav-menu a { text-decoration: none; color: var(--gray); padding: 8px 16px; border-radius: 8px; transition: all 0.3s; font-weight: 500; font-size: 0.9rem; }
+        .nav-menu a:hover, .nav-menu a.active { background: rgba(67,97,238,0.1); color: var(--primary); }
+        .user-info { display: flex; align-items: center; gap: 12px; }
+        .user-info img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
+        .logout-btn { background: none; border: none; color: var(--gray); cursor: pointer; font-size: 1.2rem; transition: all 0.3s; }
+        .logout-btn:hover { color: var(--danger); }
+
+        /* Menu Mobile */
+        .mobile-menu-toggle { display: none; background: none; border: none; font-size: 1.5rem; color: var(--dark); cursor: pointer; padding: 8px; border-radius: 8px; z-index: 1001; }
+        .mobile-nav { position: fixed; top: 0; right: -100%; width: 80%; max-width: 320px; height: 100vh; background: var(--white); box-shadow: -5px 0 30px rgba(0,0,0,0.1); z-index: 1000; transition: right 0.3s ease; display: flex; flex-direction: column; padding: 80px 20px 20px; overflow-y: auto; }
+        .mobile-nav.open { right: 0; }
+        .mobile-nav a, .mobile-nav button { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 12px; text-decoration: none; color: var(--dark); font-weight: 500; width: 100%; text-align: left; background: none; border: none; cursor: pointer; font-size: 1rem; }
+        .mobile-nav a:hover, .mobile-nav button:hover { background: rgba(67,97,238,0.1); color: var(--primary); }
+        .mobile-nav i { width: 24px; }
+
+        /* Main Content */
+        .main-content { padding: 30px 0; }
+
+        /* Page Header avec fond dégradé */
+        .page-header {
+            background: var(--gradient);
+            border-radius: 24px;
+            padding: 40px 35px;
+            margin-bottom: 40px;
+            color: white;
+            text-align: center;
+        }
+        .page-header h1 {
+            font-size: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        .page-header p {
+            opacity: 0.9;
+            font-size: 1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Documentation Layout */
+        .doc-layout {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 30px;
+        }
+
+        /* Sidebar */
+        .doc-sidebar {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 100px;
+            height: fit-content;
+        }
+        .doc-sidebar h3 {
+            font-size: 1rem;
+            color: var(--dark);
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--gray-light);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .doc-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .doc-nav a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 15px;
+            border-radius: 12px;
+            text-decoration: none;
+            color: var(--gray);
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        .doc-nav a i { width: 22px; font-size: 1rem; }
+        .doc-nav a:hover { background: rgba(67,97,238,0.1); color: var(--primary); }
+        .doc-nav a.active { background: var(--primary); color: white; }
+
+        /* Content */
+        .doc-content {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 35px;
+            box-shadow: var(--shadow);
+        }
+        .doc-section {
+            animation: fadeIn 0.3s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .doc-header {
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--gray-light);
+        }
+        .doc-header h2 {
+            font-size: 1.6rem;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .doc-header h2 i { color: var(--primary); }
+        .doc-body { color: var(--gray); line-height: 1.6; }
+        .doc-body h3 { color: var(--dark); margin: 20px 0 10px; font-size: 1.2rem; }
+        .doc-body p { margin-bottom: 15px; }
+        .doc-body ul, .doc-body ol { margin: 15px 0 15px 25px; }
+        .doc-body li { margin-bottom: 8px; }
+        .doc-body code { background: var(--light); padding: 2px 8px; border-radius: 6px; font-family: monospace; }
+        .doc-tip { background: rgba(46,204,113,0.1); border-left: 4px solid var(--success); padding: 15px 20px; border-radius: 12px; margin: 20px 0; }
+        .doc-warning { background: rgba(243,156,18,0.1); border-left: 4px solid var(--warning); padding: 15px 20px; border-radius: 12px; margin: 20px 0; }
+        .doc-info { background: rgba(52,152,219,0.1); border-left: 4px solid var(--info); padding: 15px 20px; border-radius: 12px; margin: 20px 0; }
+
+        /* Search */
+        .doc-search {
+            margin-bottom: 20px;
+            position: relative;
+        }
+        .doc-search input {
+            width: 100%;
+            padding: 12px 40px 12px 15px;
+            border: 1px solid var(--gray-light);
+            border-radius: 12px;
+            font-size: 0.9rem;
+        }
+        .doc-search input:focus { outline: none; border-color: var(--primary); }
+        .doc-search i {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+        }
+
+        /* Footer Pro */
+        .footer {
+            background: var(--dark);
+            color: white;
+            padding: 60px 0 30px;
+            margin-top: 60px;
+        }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        .footer-col h3 {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            color: white;
+        }
+        .footer-col p {
+            color: #aaa;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+        .footer-col a {
+            display: block;
+            color: #aaa;
+            text-decoration: none;
+            margin-bottom: 12px;
+            transition: all 0.3s;
+        }
+        .footer-col a:hover { color: white; transform: translateX(5px); }
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .social-links a {
+            width: 38px;
+            height: 38px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+        }
+        .social-links a:hover { background: var(--primary); transform: translateY(-3px); }
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #aaa;
+            font-size: 0.85rem;
+        }
+        .footer-bottom a { color: #aaa; text-decoration: none; }
+        .footer-bottom a:hover { color: white; }
+
+        /* Message */
+        .message { position: fixed; bottom: 20px; right: 20px; background: var(--dark); color: white; padding: 12px 20px; border-radius: 8px; display: none; z-index: 2000; animation: slideIn 0.3s ease; }
+        .message.show { display: block; }
+        .message.success { background: var(--success); }
+        .message.error { background: var(--danger); }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .doc-layout { grid-template-columns: 1fr; }
+            .doc-sidebar { position: static; margin-bottom: 20px; }
+            .footer-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 768px) { 
+            .nav-menu { display: none !important; } 
+            .user-info { display: none !important; } 
+            .mobile-menu-toggle { display: block; } 
+            .page-header { padding: 30px 20px; }
+            .page-header h1 { font-size: 1.5rem; }
+            .doc-content { padding: 25px; }
+            .footer-grid { grid-template-columns: 1fr; text-align: center; }
+            .social-links { justify-content: center; }
+        }
+        @media (min-width: 769px) { .mobile-nav, .mobile-menu-toggle { display: none; } .nav-menu { display: flex !important; } .user-info { display: flex !important; } }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="dashboard.html" class="logo"><div class="logo-icon"><i class="fas fa-graduation-cap"></i></div><h1>Edu<span>Learn</span> Pro</h1></a>
+            <div class="nav-menu">
+                <a href="dashboard.html">Accueil</a>
+                <a href="storage.html">Fichiers</a>
+                <a href="cours.html">Cours</a>
+                <a href="notes.html">Notes</a>
+                <a href="questions.html">Quiz</a>
+                <a href="rappels.html">Rappels</a>
+                <a href="projets.html">Projets</a>
+                <a href="carrieres.html">Carrières</a>
+                <a href="negociation.html">Négociations</a>
+                <a href="contrat.html">Contrats</a>
+                 <a href="centre-partenariats.html">Partenariats</a>
+                <a href="tarifs.html">Tarifs</a>
+                <a href="documentation.html" class="active">Documentation</a>
+                <a href="compte.html">Compte</a>
+            </div>
+            <div class="user-info"><img id="user-avatar" src="https://via.placeholder.com/40"><span id="user-name"></span><button class="logout-btn" id="logout-btn"><i class="fas fa-sign-out-alt"></i></button></div>
+            <button class="mobile-menu-toggle" id="mobile-toggle"><i class="fas fa-bars"></i></button>
+        </div>
+    </nav>
+
+    <div class="mobile-nav" id="mobile-nav">
+        <a href="dashboard.html"><i class="fas fa-home"></i> Accueil</a>
+        <a href="storage.html"><i class="fas fa-file-alt"></i> Fichiers</a>
+        <a href="cours.html"><i class="fas fa-book"></i> Cours</a>
+        <a href="notes.html"><i class="fas fa-pencil-alt"></i> Notes</a>
+        <a href="questions.html"><i class="fas fa-question-circle"></i> Quiz</a>
+        <a href="rappels.html"><i class="fas fa-bell"></i> Rappels</a>
+        <a href="projets.html"><i class="fas fa-tasks"></i> Projets</a>
+        <a href="negociation.html"><i class="fas fa-handshake"></i> Négociations</a>
+        <a href="contrat.html"><i class="fas fa-file-signature"></i> Contrats</a>
+        <a href="documentation.html"><i class="fas fa-book-open"></i> Documentation</a>
+        <a href="comptes.html"><i class="fas fa-user-circle"></i> Compte</a>
+        <a href="carrieres.html"><i class="fas fa-briefcase"></i> Carrières</a>
+         <a href="centre-partenariats.html"><i class="fas fa-handshake"></i> Partenariats</a>
+        <button id="mobile-logout"><i class="fas fa-sign-out-alt"></i> Déconnexion</button>
+    </div>
+
+    <div class="main-content">
+        <div class="container">
+            <div class="page-header">
+                <h1><i class="fas fa-book-open"></i> Documentation</h1>
+                <p>Guide complet pour utiliser toutes les fonctionnalités d'EduLearn Pro</p>
+            </div>
+
+            <div class="doc-layout">
+                <div class="doc-sidebar">
+                    <div class="doc-search">
+                        <input type="text" id="search-doc" placeholder="Rechercher dans la documentation...">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h3><i class="fas fa-rocket"></i> Guide</h3>
+                    <div class="doc-nav" id="doc-nav">
+                        <a href="#" data-section="debutant" class="active"><i class="fas fa-rocket"></i> Guide débutant</a>
+                        <a href="#" data-section="documents"><i class="fas fa-file-alt"></i> Gestion des fichiers</a>
+                        <a href="#" data-section="cours"><i class="fas fa-book"></i> Création de cours</a>
+                        <a href="#" data-section="notes"><i class="fas fa-pencil-alt"></i> Prise de notes</a>
+                        <a href="#" data-section="quiz"><i class="fas fa-question-circle"></i> Quiz</a>
+                        <a href="#" data-section="rappels"><i class="fas fa-bell"></i> Rappels</a>
+                        <a href="#" data-section="projets"><i class="fas fa-tasks"></i> Projets</a>
+                        <a href="#" data-section="negociations"><i class="fas fa-handshake"></i> Négociations</a>
+                        <a href="#" data-section="contrats"><i class="fas fa-file-signature"></i> Contrats</a>
+                        <a href="#" data-section="premium"><i class="fas fa-crown"></i> Premium</a>
+                    </div>
+                </div>
+
+                <div class="doc-content" id="doc-content">
+                    <div class="doc-section">
+                        <div class="doc-header">
+                            <h2><i class="fas fa-rocket"></i> Guide débutant</h2>
+                        </div>
+                        <div class="doc-body">
+                            <h3>Bienvenue sur EduLearn Pro</h3>
+                            <p>EduLearn Pro est une plateforme complète conçue pour vous aider à organiser vos études de manière efficace et intuitive. Voici les premières étapes pour bien démarrer :</p>
+                            <ul>
+                                <li><strong>Créez votre compte</strong> - Inscrivez-vous gratuitement avec votre email</li>
+                                <li><strong>Connectez-vous</strong> - Accédez à votre tableau de bord personnalisé</li>
+                                <li><strong>Importez vos documents</strong> - Commencez par importer vos premiers cours</li>
+                                <li><strong>Créez vos notes</strong> - Prenez des notes structurées par matière</li>
+                                <li><strong>Planifiez vos révisions</strong> - Utilisez le système de rappels</li>
+                                <li><strong>Testez vos connaissances</strong> - Faites les quiz par matière</li>
+                            </ul>
+                            <div class="doc-tip">
+                                <i class="fas fa-lightbulb"></i>
+                                <strong>Astuce :</strong> Commencez par importer vos documents pour organiser vos révisions !
+                            </div>
+                            <h3>Tableau de bord</h3>
+                            <p>Le tableau de bord est votre espace central. Il vous permet de :</p>
+                            <ul>
+                                <li>Voir un résumé de votre activité</li>
+                                <li>Accéder rapidement à vos documents récents</li>
+                                <li>Consulter vos rappels à venir</li>
+                                <li>Démarrer des quiz recommandés</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="logo" style="margin-bottom: 15px;">
+                        <div class="logo-icon"><i class="fas fa-graduation-cap"></i></div>
+                        <h1 style="color:white;">Edu<span>Learn</span> Pro</h1>
+                    </div>
+                    <p>Votre compagnon d'études intelligent</p>
+                    <p>Douala, Cameroun</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h3>Produit</h3>
+                    <a href="index.html">Accueil</a>
+                    <a href="dashboard.html">Tableau de bord</a>
+                    <a href="tarifs.html">Tarifs</a>
+                    <a href="faq.html">FAQ</a>
+                </div>
+                <div class="footer-col">
+                    <h3>Entreprise</h3>
+                    <a href="about.html">À propos</a>
+                    <a href="blog.html">Blog</a>
+                    <a href="carrieres.html">Carrières</a>
+                    <a href="contact.html">Contact</a>
+                </div>
+                <div class="footer-col">
+                    <h3>Légal</h3>
+                    <a href="legal.html">Mentions légales</a>
+                    <a href="cgu.html">CGU</a>
+                    <a href="confidentialite.html">Confidentialité</a>
+                    <a href="cookies.html">Cookies</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 EduLearn Pro - Tous droits réservés | Conçu par Lee Startup - Douala, Cameroun</p>
+            </div>
+        </div>
+    </footer>
+
+    <div id="message" class="message"></div>
+
+    <script>
+        let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        if (currentUser) {
+            document.getElementById('user-name').innerText = currentUser.name.split(' ')[0];
+            if (currentUser.avatar) document.getElementById('user-avatar').src = currentUser.avatar;
+        } else {
+            const userInfo = document.querySelector('.user-info');
+            if (userInfo) userInfo.style.display = 'none';
+        }
+
+        function showMessage(msg, type = 'success') {
+            const m = document.getElementById('message');
+            m.textContent = msg;
+            m.className = `message show ${type}`;
+            setTimeout(() => m.classList.remove('show'), 3000);
+        }
+
+        const documentation = {
+            debutant: {
+                title: "Guide débutant",
+                icon: "fa-rocket",
+                content: `
+                    <h3>Bienvenue sur EduLearn Pro</h3>
+                    <p>EduLearn Pro est une plateforme complète conçue pour vous aider à organiser vos études de manière efficace et intuitive.</p>
+                    <h3>Premiers pas</h3>
+                    <ul><li><strong>Créez votre compte</strong> - Inscrivez-vous gratuitement avec votre email</li><li><strong>Connectez-vous</strong> - Accédez à votre tableau de bord</li><li><strong>Importez vos documents</strong> - Commencez par importer vos premiers cours</li><li><strong>Créez vos notes</strong> - Prenez des notes structurées</li><li><strong>Planifiez vos révisions</strong> - Utilisez le système de rappels</li></ul>
+                    <div class="doc-tip"><i class="fas fa-lightbulb"></i> <strong>Astuce :</strong> Commencez par importer vos documents pour organiser vos révisions !</div>
+                `
+            },
+            documents: {
+                title: "Gestion des fichiers",
+                icon: "fa-file-alt",
+                content: `
+                    <h3>Gérer vos documents</h3>
+                    <p>La section "Mes Fichiers" vous permet d'organiser tous vos documents pédagogiques.</p>
+                    <h3>Importer un fichier</h3>
+                    <ul><li>Cliquez sur la zone de dépôt ou glissez-déposez vos fichiers</li><li>Formats acceptés : PDF, DOC, DOCX, JPG, PNG, TXT</li><li>Taille maximale : 10 Mo par fichier</li></ul>
+                    <h3>Actions disponibles</h3>
+                    <ul><li><strong>Télécharger</strong> - Récupérez votre fichier</li><li><strong>Partager WhatsApp</strong> - Envoyez le fichier via WhatsApp</li><li><strong>Supprimer</strong> - Retirez le fichier</li><li><strong>Tout exporter</strong> - Téléchargez tous vos fichiers</li></ul>
+                `
+            },
+            cours: {
+                title: "Création de cours",
+                icon: "fa-book",
+                content: `
+                    <h3>Organisez vos connaissances</h3>
+                    <p>Créez des cours structurés par matière avec titre, description et contenu détaillé.</p>
+                    <h3>Fonctionnalités</h3>
+                    <ul><li>Titre du cours</li><li>Matière et niveau</li><li>Description et contenu</li><li>Modification et suppression</li><li>Partage WhatsApp</li></ul>
+                `
+            },
+            notes: {
+                title: "Prise de notes",
+                icon: "fa-pencil-alt",
+                content: `
+                    <h3>Prenez des notes efficacement</h3>
+                    <p>Créez des notes colorées pour mieux organiser vos révisions.</p>
+                    <h3>Fonctionnalités</h3>
+                    <ul><li>Titre et matière</li><li>Contenu enrichi</li><li>Modification et suppression</li><li>Recherche par titre ou contenu</li><li>Partage WhatsApp</li></ul>
+                `
+            },
+            quiz: {
+                title: "Quiz",
+                icon: "fa-question-circle",
+                content: `
+                    <h3>Testez vos connaissances</h3>
+                    <p>Quiz interactifs pour vous évaluer par matière.</p>
+                    <ul><li>10 questions aléatoires par matière</li><li>Correction détaillée à la fin</li><li>Historique des scores</li><li>Partage des résultats</li></ul>
+                `
+            },
+            rappels: {
+                title: "Rappels",
+                icon: "fa-bell",
+                content: `
+                    <h3>Ne manquez rien</h3>
+                    <p>Planifiez vos révisions et examens avec le système de rappels.</p>
+                    <ul><li>Créez des rappels avec titre, date et heure</li><li>Choisissez la priorité (haute/moyenne/basse)</li><li>Recevez des notifications</li><li>Marquez comme terminé</li></ul>
+                `
+            },
+            projets: {
+                title: "Projets",
+                icon: "fa-tasks",
+                content: `
+                    <h3>Gérez vos projets</h3>
+                    <p>Organisez vos travaux et suivez votre progression.</p>
+                    <ul><li>Créez des projets avec titre et description</li><li>Ajoutez des tâches</li><li>Suivez votre progression</li><li>Date limite et statut</li></ul>
+                `
+            },
+            negociations: {
+                title: "Négociations",
+                icon: "fa-handshake",
+                content: `
+                    <h3>Gérez vos négociations</h3>
+                    <p>Suivez vos partenariats et discussions professionnelles.</p>
+                    <ul><li>Créez des négociations avec partenaire et objet</li><li>Suivez le statut (en cours/accepté/rejeté)</li><li>Ajoutez des détails</li><li>Historique complet</li></ul>
+                `
+            },
+            contrats: {
+                title: "Contrats",
+                icon: "fa-file-signature",
+                content: `
+                    <h3>Gérez vos contrats</h3>
+                    <p>Centralisez tous vos documents contractuels.</p>
+                    <ul><li>Créez des contrats avec type et contenu</li><li>Signature électronique</li><li>Historique des signatures</li><li>Export des contrats</li></ul>
+                `
+            },
+            premium: {
+                title: "Premium",
+                icon: "fa-crown",
+                content: `
+                    <h3>Débloquez toutes les fonctionnalités</h3>
+                    <p>L'abonnement Premium vous offre :</p>
+                    <ul><li>Stockage illimité</li><li>Quiz illimités</li><li>Statistiques avancées</li><li>Export WhatsApp</li><li>Support prioritaire</li></ul>
+                    <div class="doc-warning"><i class="fas fa-crown"></i> <strong>Offre spéciale :</strong> 4 500 FCFA/mois ou 45 000 FCFA/an (2 mois offerts)</div>
+                `
+            }
+        };
+
+        let currentSection = 'debutant';
+
+        function loadSection(sectionId) {
+            const section = documentation[sectionId];
+            if (!section) return;
+            currentSection = sectionId;
+            const container = document.getElementById('doc-content');
+            container.innerHTML = `
+                <div class="doc-section">
+                    <div class="doc-header">
+                        <h2><i class="fas ${section.icon}"></i> ${section.title}</h2>
+                    </div>
+                    <div class="doc-body">
+                        ${section.content}
+                    </div>
+                </div>
+            `;
+            document.querySelectorAll('.doc-nav a').forEach(a => {
+                if (a.dataset.section === sectionId) a.classList.add('active');
+                else a.classList.remove('active');
+            });
+            window.scrollTo({ top: 300, behavior: 'smooth' });
+        }
+
+        function searchDocumentation() {
+            const query = document.getElementById('search-doc').value.toLowerCase().trim();
+            if (!query) { loadSection(currentSection); return; }
+            const results = Object.entries(documentation).filter(([k, v]) => v.title.toLowerCase().includes(query) || v.content.toLowerCase().includes(query));
+            if (results.length === 0) {
+                document.getElementById('doc-content').innerHTML = `
+                    <div class="doc-section">
+                        <div class="doc-header"><h2><i class="fas fa-search"></i> Aucun résultat</h2></div>
+                        <div class="doc-body"><p>Aucune section ne correspond à votre recherche "${query}".</p><p>Essayez avec d'autres mots-clés.</p></div>
+                    </div>
+                `;
+            } else {
+                document.getElementById('doc-content').innerHTML = `
+                    <div class="doc-section">
+                        <div class="doc-header"><h2><i class="fas fa-search"></i> Résultats (${results.length})</h2></div>
+                        <div class="doc-body">
+                            ${results.map(([k, v]) => `<div onclick="loadSection('${k}')" style="padding:15px; background:var(--light); border-radius:12px; margin-bottom:15px; cursor:pointer;"><h3><i class="fas ${v.icon}"></i> ${v.title}</h3><p style="color:var(--gray);">${v.content.substring(0,150)}...</p></div>`).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        document.querySelectorAll('.doc-nav a').forEach(a => {
+            a.addEventListener('click', (e) => {
+                e.preventDefault();
+                loadSection(a.dataset.section);
+                document.getElementById('search-doc').value = '';
+            });
+        });
+        document.getElementById('search-doc').addEventListener('input', searchDocumentation);
+        document.getElementById('logout-btn').onclick = () => { localStorage.removeItem('currentUser'); window.location.href = 'index.html'; };
+
+        // Menu responsive
+        const toggleBtn = document.getElementById('mobile-toggle');
+        const mobileNav = document.getElementById('mobile-nav');
+        if (toggleBtn && mobileNav) {
+            toggleBtn.onclick = () => { mobileNav.classList.toggle('open'); toggleBtn.classList.toggle('active'); document.body.style.overflow = mobileNav.classList.contains('open') ? 'hidden' : ''; };
+            document.querySelectorAll('.mobile-nav a, .mobile-nav button').forEach(link => { link.onclick = () => { mobileNav.classList.remove('open'); toggleBtn.classList.remove('active'); document.body.style.overflow = ''; }; });
+            document.addEventListener('click', (e) => { if (!mobileNav.contains(e.target) && !toggleBtn.contains(e.target) && mobileNav.classList.contains('open')) { mobileNav.classList.remove('open'); toggleBtn.classList.remove('active'); document.body.style.overflow = ''; } });
+        }
+        document.getElementById('mobile-logout')?.addEventListener('click', () => { localStorage.removeItem('currentUser'); window.location.href = 'index.html'; });
+    </script>
+</body>
+</html>

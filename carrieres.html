@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Carrières - EduLearn Pro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a0ca3;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --info: #3498db;
+            --dark: #1a1a2e;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --gray-light: #e9ecef;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0,0,0,0.1);
+            --shadow-sm: 0 2px 10px rgba(0,0,0,0.05);
+            --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        body { background: #f5f7ff; }
+
+        /* Navigation */
+        .navbar { background: var(--white); box-shadow: var(--shadow-sm); position: sticky; top: 0; z-index: 1000; padding: 12px 0; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .navbar .container { display: flex; justify-content: space-between; align-items: center; }
+        .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+        .logo-icon { width: 40px; height: 40px; background: var(--gradient); border-radius: 12px; display: flex; align-items: center; justify-content: center; }
+        .logo-icon i { font-size: 1.3rem; color: white; }
+        .logo h1 { font-size: 1.3rem; font-weight: 700; color: var(--dark); }
+        .logo span { color: var(--primary); }
+        .nav-menu { display: flex; gap: 15px; flex-wrap: wrap; }
+        .nav-menu a { text-decoration: none; color: var(--gray); padding: 8px 16px; border-radius: 8px; transition: all 0.3s; font-weight: 500; font-size: 0.9rem; }
+        .nav-menu a:hover, .nav-menu a.active { background: rgba(67,97,238,0.1); color: var(--primary); }
+        .user-info { display: flex; align-items: center; gap: 12px; }
+        .user-info img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
+        .logout-btn { background: none; border: none; color: var(--gray); cursor: pointer; font-size: 1.2rem; transition: all 0.3s; }
+        .logout-btn:hover { color: var(--danger); }
+
+        /* Menu Mobile */
+        .mobile-menu-toggle { display: none; background: none; border: none; font-size: 1.5rem; color: var(--dark); cursor: pointer; padding: 8px; border-radius: 8px; z-index: 1001; }
+        .mobile-nav { position: fixed; top: 0; right: -100%; width: 80%; max-width: 320px; height: 100vh; background: var(--white); box-shadow: -5px 0 30px rgba(0,0,0,0.1); z-index: 1000; transition: right 0.3s ease; display: flex; flex-direction: column; padding: 80px 20px 20px; overflow-y: auto; }
+        .mobile-nav.open { right: 0; }
+        .mobile-nav a, .mobile-nav button { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 12px; text-decoration: none; color: var(--dark); font-weight: 500; width: 100%; text-align: left; background: none; border: none; cursor: pointer; font-size: 1rem; }
+        .mobile-nav a:hover, .mobile-nav button:hover { background: rgba(67,97,238,0.1); color: var(--primary); }
+        .mobile-nav i { width: 24px; }
+
+        /* Main Content */
+        .main-content { padding: 30px 0 60px; }
+
+        /* Page Header avec fond dégradé */
+        .page-header {
+            background: var(--gradient);
+            border-radius: 24px;
+            padding: 40px 30px;
+            margin-bottom: 40px;
+            color: white;
+            text-align: center;
+        }
+        .page-header h1 {
+            font-size: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        .page-header p {
+            opacity: 0.9;
+            font-size: 1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Values Section */
+        .section-title {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .section-title h2 {
+            font-size: 1.8rem;
+            color: var(--dark);
+            margin-bottom: 10px;
+        }
+        .section-title p {
+            color: var(--gray);
+            font-size: 1rem;
+        }
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+            margin-bottom: 60px;
+        }
+        .value-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 30px 20px;
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s;
+            border: 1px solid var(--gray-light);
+        }
+        .value-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow);
+            border-color: transparent;
+        }
+        .value-icon {
+            width: 70px;
+            height: 70px;
+            background: rgba(67,97,238,0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+        .value-icon i { font-size: 2rem; color: var(--primary); }
+        .value-card h3 { font-size: 1.2rem; margin-bottom: 10px; color: var(--dark); }
+        .value-card p { color: var(--gray); font-size: 0.85rem; line-height: 1.5; }
+
+        /* Jobs Section */
+        .jobs-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .jobs-header h2 { font-size: 1.5rem; color: var(--dark); display: flex; align-items: center; gap: 10px; }
+        .jobs-header h2 i { color: var(--primary); }
+        .jobs-count { background: var(--light); padding: 5px 15px; border-radius: 50px; font-size: 0.85rem; color: var(--gray); }
+        .jobs-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+            margin-bottom: 60px;
+        }
+        .job-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s;
+            border: 1px solid var(--gray-light);
+        }
+        .job-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow);
+            border-color: transparent;
+        }
+        .job-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .job-title { font-size: 1.2rem; font-weight: 600; color: var(--dark); }
+        .job-type {
+            padding: 5px 12px;
+            border-radius: 50px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+        .job-type.cdi { background: rgba(46,204,113,0.1); color: var(--success); }
+        .job-type.stage { background: rgba(243,156,18,0.1); color: var(--warning); }
+        .job-type.freelance { background: rgba(52,152,219,0.1); color: var(--info); }
+        .job-location { display: flex; align-items: center; gap: 8px; color: var(--gray); font-size: 0.85rem; margin-bottom: 15px; }
+        .job-description { color: var(--gray); font-size: 0.9rem; line-height: 1.5; margin-bottom: 20px; }
+        .job-requirements { margin-bottom: 20px; }
+        .job-requirements h4 { font-size: 0.85rem; color: var(--dark); margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+        .job-requirements p { color: var(--gray); font-size: 0.8rem; line-height: 1.5; }
+        .job-apply {
+            width: 100%;
+            padding: 10px;
+            background: var(--light);
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--primary);
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .job-apply:hover { background: var(--primary); color: white; }
+
+        /* Benefits Section */
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin-bottom: 60px;
+        }
+        .benefit-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s;
+            border: 1px solid var(--gray-light);
+        }
+        .benefit-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow);
+        }
+        .benefit-card i { font-size: 2.5rem; color: var(--primary); margin-bottom: 15px; }
+        .benefit-card h4 { font-size: 1.1rem; margin-bottom: 10px; color: var(--dark); }
+        .benefit-card p { color: var(--gray); font-size: 0.85rem; line-height: 1.5; }
+
+        /* Candidature Form */
+        .candidature-section {
+            background: var(--white);
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: var(--shadow);
+            margin-bottom: 40px;
+        }
+        .candidature-section h2 { font-size: 1.5rem; margin-bottom: 10px; color: var(--dark); display: flex; align-items: center; gap: 10px; }
+        .candidature-section h2 i { color: var(--primary); }
+        .candidature-section > p { color: var(--gray); margin-bottom: 30px; }
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 500; color: var(--dark); }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--gray-light);
+            border-radius: 12px;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67,97,238,0.1);
+        }
+        .upload-area {
+            border: 2px dashed var(--gray-light);
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 20px;
+        }
+        .upload-area:hover { border-color: var(--primary); background: rgba(67,97,238,0.05); }
+        .upload-area i { font-size: 2rem; color: var(--gray); margin-bottom: 10px; }
+        .upload-area p { color: var(--gray); font-size: 0.85rem; }
+        .upload-area small { color: var(--gray); font-size: 0.7rem; }
+        .btn-submit {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1rem;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .btn-submit:hover { background: var(--primary-dark); transform: translateY(-2px); }
+
+        /* Footer */
+        .footer {
+            background: var(--dark);
+            color: white;
+            padding: 60px 0 30px;
+            margin-top: 40px;
+        }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        .footer-col h3 { font-size: 1.1rem; margin-bottom: 20px; color: white; }
+        .footer-col a { display: block; color: #aaa; text-decoration: none; margin-bottom: 12px; transition: all 0.3s; font-size: 0.9rem; }
+        .footer-col a:hover { color: white; transform: translateX(5px); }
+        .footer-col p { color: #aaa; margin-bottom: 10px; font-size: 0.9rem; display: flex; align-items: center; gap: 10px; }
+        .social-links { display: flex; gap: 15px; margin-top: 20px; }
+        .social-links a { width: 38px; height: 38px; background: rgba(255,255,255,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0; }
+        .social-links a:hover { background: var(--primary); transform: translateY(-3px); }
+        .footer-bottom { text-align: center; padding-top: 30px; border-top: 1px solid rgba(255,255,255,0.1); color: #aaa; font-size: 0.85rem; }
+
+        /* Message */
+        .message { position: fixed; bottom: 20px; right: 20px; background: var(--dark); color: white; padding: 12px 20px; border-radius: 8px; display: none; z-index: 2000; animation: slideIn 0.3s ease; }
+        .message.show { display: block; }
+        .message.success { background: var(--success); }
+        .message.error { background: var(--danger); }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .values-grid { grid-template-columns: repeat(2, 1fr); }
+            .jobs-grid { grid-template-columns: 1fr; }
+            .benefits-grid { grid-template-columns: repeat(2, 1fr); }
+            .footer-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 768px) { 
+            .nav-menu { display: none !important; } 
+            .user-info { display: none !important; } 
+            .mobile-menu-toggle { display: block; } 
+            .page-header { padding: 30px 20px; }
+            .page-header h1 { font-size: 1.5rem; }
+            .values-grid { grid-template-columns: 1fr; }
+            .benefits-grid { grid-template-columns: 1fr; }
+            .footer-grid { grid-template-columns: 1fr; }
+            .form-grid { grid-template-columns: 1fr; }
+            .candidature-section { padding: 25px; }
+        }
+        @media (min-width: 769px) { .mobile-nav, .mobile-menu-toggle { display: none; } .nav-menu { display: flex !important; } .user-info { display: flex !important; } }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="dashboard.html" class="logo"><div class="logo-icon"><i class="fas fa-graduation-cap"></i></div><h1>Edu<span>Learn</span> Pro</h1></a>
+            <div class="nav-menu">
+                <a href="dashboard.html">Accueil</a>
+                <a href="storage.html">Fichiers</a>
+                <a href="cours.html">Cours</a>
+                <a href="notes.html">Notes</a>
+                <a href="questions.html">Quiz</a>
+                <a href="rappels.html">Rappels</a>
+                <a href="projets.html">Projets</a>
+                <a href="negociation.html">Négociations</a>
+                <a href="contrat.html">Contrats</a>
+                 <a href="centre-partenariats.html">Partenariats</a>
+                <a href="tarifs.html">tarifs</a>
+                <a href="carrieres.html" class="active">Carrières</a>
+                <a href="comptes.html">Compte</a>
+            </div>
+            <div class="user-info"><img id="user-avatar" src="https://via.placeholder.com/40"><span id="user-name"></span><button class="logout-btn" id="logout-btn"><i class="fas fa-sign-out-alt"></i></button></div>
+            <button class="mobile-menu-toggle" id="mobile-toggle"><i class="fas fa-bars"></i></button>
+        </div>
+    </nav>
+
+    <div class="mobile-nav" id="mobile-nav">
+        <a href="dashboard.html"><i class="fas fa-home"></i> Accueil</a>
+        <a href="storage.html"><i class="fas fa-file-alt"></i> Fichiers</a>
+        <a href="cours.html"><i class="fas fa-book"></i> Cours</a>
+        <a href="notes.html"><i class="fas fa-pencil-alt"></i> Notes</a>
+        <a href="questions.html"><i class="fas fa-question-circle"></i> Quiz</a>
+        <a href="rappels.html"><i class="fas fa-bell"></i> Rappels</a>
+        <a href="projets.html"><i class="fas fa-tasks"></i> Projets</a>
+        <a href="negociation.html"><i class="fas fa-handshake"></i> Négociations</a>
+        <a href="contrat.html"><i class="fas fa-file-signature"></i> Contrats</a>
+        <a href="carrieres.html"><i class="fas fa-briefcase"></i> Carrières</a>
+        <a href="comptes.html"><i class="fas fa-user-circle"></i> Compte</a>
+       <a href="carrieres.html"><i class="fas fa-briefcase"></i> Carrières</a>
+        <a href="centre-partenariats.html"><i class="fas fa-handshake"></i> Partenariats</a>
+        <button id="mobile-logout"><i class="fas fa-sign-out-alt"></i> Déconnexion</button>
+    </div>
+
+    <div class="main-content">
+        <div class="container">
+            <!-- Page Header -->
+            <div class="page-header">
+                <h1><i class="fas fa-briefcase"></i> Rejoignez l'aventure EduLearn Pro</h1>
+                <p>Nous recherchons des talents passionnés pour transformer l'éducation en Afrique et dans le monde</p>
+            </div>
+
+            <!-- Values Section -->
+            <div class="section-title">
+                <h2>Nos valeurs</h2>
+                <p>Ce qui nous anime au quotidien</p>
+            </div>
+            <div class="values-grid">
+                <div class="value-card"><div class="value-icon"><i class="fas fa-lightbulb"></i></div><h3>Innovation</h3><p>Nous repoussons les limites de l'éducation numérique</p></div>
+                <div class="value-card"><div class="value-icon"><i class="fas fa-users"></i></div><h3>Impact</h3><p>Chaque jour, nous aidons des milliers d'étudiants</p></div>
+                <div class="value-card"><div class="value-icon"><i class="fas fa-chart-line"></i></div><h3>Croissance</h3><p>Évoluez avec nous dans un environnement stimulant</p></div>
+                <div class="value-card"><div class="value-icon"><i class="fas fa-handshake"></i></div><h3>Bien-être</h3><p>Nous prenons soin de nos collaborateurs</p></div>
+            </div>
+
+            <!-- Jobs Section -->
+            <div class="jobs-header">
+                <h2><i class="fas fa-briefcase"></i> Offres d'emploi</h2>
+                <span class="jobs-count" id="jobs-count">0 postes</span>
+            </div>
+            <div class="jobs-grid" id="jobs-container"></div>
+
+            <!-- Benefits Section -->
+            <div class="section-title">
+                <h2>Pourquoi nous rejoindre ?</h2>
+                <p>Les avantages de travailler chez EduLearn Pro</p>
+            </div>
+            <div class="benefits-grid">
+                <div class="benefit-card"><i class="fas fa-laptop-house"></i><h4>Télétravail possible</h4><p>Flexibilité totale, travaillez d'où vous voulez</p></div>
+                <div class="benefit-card"><i class="fas fa-chart-simple"></i><h4>Évolution rapide</h4><p>Opportunités de carrière et promotions internes</p></div>
+                <div class="benefit-card"><i class="fas fa-graduation-cap"></i><h4>Formation continue</h4><p>Développez vos compétences avec nos formations</p></div>
+                <div class="benefit-card"><i class="fas fa-globe"></i><h4>Environnement international</h4><p>Collaborez avec des équipes du monde entier</p></div>
+                <div class="benefit-card"><i class="fas fa-medal"></i><h4>Reconnaissance</h4><p>Votre travail a un impact réel sur l'éducation</p></div>
+                <div class="benefit-card"><i class="fas fa-heart"></i><h4>Ambiance bienveillante</h4><p>Équipe soudée, solidaire et passionnée</p></div>
+            </div>
+
+            <!-- Candidature Section -->
+            <div class="candidature-section">
+                <h2><i class="fas fa-paper-plane"></i> Candidature spontanée</h2>
+                <p>Vous ne trouvez pas l'offre qui vous correspond ? Envoyez-nous votre candidature</p>
+                <form id="candidature-form">
+                    <div class="form-grid">
+                        <div class="form-group"><label>Nom complet *</label><input type="text" id="cand-name" required></div>
+                        <div class="form-group"><label>Email *</label><input type="email" id="cand-email" required></div>
+                        <div class="form-group"><label>Téléphone</label><input type="tel" id="cand-phone"></div>
+                        <div class="form-group"><label>Poste souhaité</label><input type="text" id="cand-position" placeholder="Ex: Développeur Frontend"></div>
+                    </div>
+                    <div class="form-group"><label>Message de motivation</label><textarea id="cand-message" rows="4" placeholder="Dites-nous pourquoi vous voulez rejoindre EduLearn Pro..."></textarea></div>
+                    <div class="upload-area" id="upload-area" onclick="document.getElementById('cv-upload').click()">
+                        <input type="file" id="cv-upload" accept=".pdf,.doc,.docx" style="display:none">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p>Cliquez pour télécharger votre CV</p>
+                        <small id="cv-filename">Aucun fichier sélectionné (PDF, DOC)</small>
+                    </div>
+                    <button type="submit" class="btn-submit"><i class="fas fa-paper-plane"></i> Envoyer ma candidature</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="logo" style="margin-bottom: 15px;"><div class="logo-icon"><i class="fas fa-graduation-cap"></i></div><h1 style="color:white;">Edu<span>Learn</span> Pro</h1></div>
+                    <p><i class="fas fa-map-marker-alt"></i> Douala, Cameroun</p>
+                    <p><i class="fas fa-envelope"></i> contact@edulearnpro.com</p>
+                    <p><i class="fas fa-phone"></i> +237 653 34 36 96</p>
+                    <div class="social-links"><a href="#"><i class="fab fa-facebook-f"></i></a><a href="#"><i class="fab fa-twitter"></i></a><a href="#"><i class="fab fa-instagram"></i></a><a href="#"><i class="fab fa-linkedin-in"></i></a></div>
+                </div>
+                <div class="footer-col"><h3>Produit</h3><a href="features.html">Fonctionnalités</a><a href="tarifs.html">Tarifs</a><a href="faq.html">FAQ</a><a href="documentation.html">Documentation</a></div>
+                <div class="footer-col"><h3>Entreprise</h3><a href="about.html">À propos</a><a href="blog.html">Blog</a><a href="carrieres.html">Carrières</a><a href="contact.html">Contact</a></div>
+                <div class="footer-col"><h3>Légal</h3><a href="legal.html">Mentions légales</a><a href="cgu.html">CGU</a><a href="confidentialite.html">Confidentialité</a><a href="cookies.html">Cookies</a></div>
+            </div>
+            <div class="footer-bottom"><p>&copy; 2026 EduLearn Pro - Tous droits réservés | Conçu par Lee Startup - Douala, Cameroun</p></div>
+        </div>
+    </footer>
+
+    <div id="message" class="message"></div>
+
+    <script>
+        let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        if (!currentUser) window.location.href = 'index.html';
+        document.getElementById('user-name').innerText = currentUser.name.split(' ')[0];
+        if (currentUser.avatar) document.getElementById('user-avatar').src = currentUser.avatar;
+
+        const jobs = [
+            { id: 1, title: "Développeur Full Stack", type: "CDI", location: "Douala / Remote", description: "Nous recherchons un développeur Full Stack passionné pour renforcer notre équipe technique. Vous travaillerez sur l'évolution de notre plateforme et le développement de nouvelles fonctionnalités.", requirements: "React, Node.js, PHP, MySQL, 3 ans d'expérience minimum" },
+            { id: 2, title: "Chef de Projet Digital", type: "CDI", location: "Douala", description: "Vous coordonnerez les projets digitaux, assurerez le lien entre les équipes techniques et les clients, et garantirez la qualité des livrables.", requirements: "3 ans d'expérience, certification Agile, excellent relationnel" },
+            { id: 3, title: "Responsable Marketing Digital", type: "CDI", location: "Remote", description: "Développez notre présence en ligne, gérez les campagnes d'acquisition et animez notre communauté sur les réseaux sociaux.", requirements: "SEO, SEA, réseaux sociaux, analyse de données, anglais courant" },
+            { id: 4, title: "Stagiaire Développeur Web", type: "Stage", location: "Douala", description: "Vous participerez au développement de nouvelles fonctionnalités sous la supervision d'un développeur senior. Idéal pour débuter dans le développement web.", requirements: "HTML, CSS, JavaScript, PHP, passion pour le code" }
+        ];
+
+        function showMessage(msg, type = 'success') { const m = document.getElementById('message'); m.textContent = msg; m.className = `message show ${type}`; setTimeout(() => m.classList.remove('show'), 3000); }
+
+        function renderJobs() {
+            const container = document.getElementById('jobs-container');
+            document.getElementById('jobs-count').innerText = jobs.length;
+            container.innerHTML = jobs.map(job => `
+                <div class="job-card">
+                    <div class="job-header"><span class="job-title">${job.title}</span><span class="job-type ${job.type === 'CDI' ? 'cdi' : (job.type === 'Stage' ? 'stage' : 'freelance')}">${job.type}</span></div>
+                    <div class="job-location"><i class="fas fa-map-marker-alt"></i> ${job.location}</div>
+                    <div class="job-description">${job.description}</div>
+                    <div class="job-requirements"><h4><i class="fas fa-check-circle"></i> Profil recherché</h4><p>${job.requirements}</p></div>
+                    <button class="job-apply" onclick="applyForJob(${job.id})"><i class="fas fa-paper-plane"></i> Postuler</button>
+                </div>
+            `).join('');
+        }
+
+        function applyForJob(jobId) {
+            const job = jobs.find(j => j.id === jobId);
+            if (job) {
+                document.getElementById('cand-position').value = job.title;
+                document.getElementById('candidature-form').scrollIntoView({ behavior: 'smooth' });
+                showMessage(`Vous postulez pour le poste de ${job.title}. Remplissez le formulaire ci-dessous.`, 'success');
+            }
+        }
+
+        document.getElementById('cv-upload').addEventListener('change', (e) => {
+            if (e.target.files[0]) document.getElementById('cv-filename').textContent = e.target.files[0].name;
+        });
+
+        document.getElementById('candidature-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('cand-name').value;
+            if (name) {
+                showMessage(`Merci ${name} ! Votre candidature a bien été envoyée. Nous vous répondrons dans les plus brefs délais.`, 'success');
+                document.getElementById('candidature-form').reset();
+                document.getElementById('cv-filename').textContent = 'Aucun fichier sélectionné (PDF, DOC)';
+            } else {
+                showMessage('Veuillez remplir tous les champs obligatoires.', 'error');
+            }
+        });
+
+        document.getElementById('logout-btn').onclick = () => { localStorage.removeItem('currentUser'); window.location.href = 'index.html'; };
+
+        // Menu responsive
+        const toggleBtn = document.getElementById('mobile-toggle');
+        const mobileNav = document.getElementById('mobile-nav');
+        if (toggleBtn && mobileNav) {
+            toggleBtn.onclick = () => { mobileNav.classList.toggle('open'); toggleBtn.classList.toggle('active'); document.body.style.overflow = mobileNav.classList.contains('open') ? 'hidden' : ''; };
+            document.querySelectorAll('.mobile-nav a, .mobile-nav button').forEach(link => { link.onclick = () => { mobileNav.classList.remove('open'); toggleBtn.classList.remove('active'); document.body.style.overflow = ''; }; });
+            document.addEventListener('click', (e) => { if (!mobileNav.contains(e.target) && !toggleBtn.contains(e.target) && mobileNav.classList.contains('open')) { mobileNav.classList.remove('open'); toggleBtn.classList.remove('active'); document.body.style.overflow = ''; } });
+        }
+        document.getElementById('mobile-logout')?.addEventListener('click', () => { localStorage.removeItem('currentUser'); window.location.href = 'index.html'; });
+
+        renderJobs();
+    </script>
+</body>
+</html>

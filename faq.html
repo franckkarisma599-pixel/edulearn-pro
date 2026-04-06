@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>FAQ - EduLearn Pro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a0ca3;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --info: #3498db;
+            --dark: #1a1a2e;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --gray-light: #e9ecef;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0,0,0,0.1);
+            --shadow-sm: 0 2px 10px rgba(0,0,0,0.05);
+            --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        body {
+            background: #f5f7ff;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            padding: 12px 0;
+            transition: all 0.3s;
+        }
+
+        .navbar.scrolled {
+            padding: 8px 0;
+            box-shadow: var(--shadow);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-icon i {
+            font-size: 1.3rem;
+            color: white;
+        }
+
+        .logo h1 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .logo span {
+            color: var(--primary);
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .nav-menu a {
+            text-decoration: none;
+            color: var(--gray);
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.3s;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .nav-menu a:hover,
+        .nav-menu a.active {
+            background: rgba(67, 97, 238, 0.1);
+            color: var(--primary);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-info img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .logout-btn {
+            background: none;
+            border: none;
+            color: var(--gray);
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+        }
+
+        .logout-btn:hover {
+            color: var(--danger);
+        }
+
+        /* Menu Mobile */
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--dark);
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+            z-index: 1001;
+        }
+
+        .mobile-menu-toggle:hover {
+            background: rgba(67, 97, 238, 0.1);
+        }
+
+        .mobile-nav {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 80%;
+            max-width: 320px;
+            height: 100vh;
+            background: var(--white);
+            box-shadow: -5px 0 30px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            transition: right 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            padding: 80px 20px 20px;
+            overflow-y: auto;
+        }
+
+        .mobile-nav.open {
+            right: 0;
+        }
+
+        .mobile-nav a,
+        .mobile-nav button {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: 12px;
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            width: 100%;
+            text-align: left;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .mobile-nav a:hover,
+        .mobile-nav button:hover {
+            background: rgba(67, 97, 238, 0.1);
+            color: var(--primary);
+        }
+
+        .mobile-nav i {
+            width: 24px;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 40px 0 60px;
+        }
+
+        /* Page Header avec fond dégradé */
+        .page-header {
+            background: var(--gradient);
+            border-radius: 24px;
+            padding: 50px 40px;
+            margin-bottom: 50px;
+            text-align: center;
+            color: white;
+        }
+
+        .page-header h1 {
+            font-size: 2.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .page-header p {
+            font-size: 1rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Search Bar */
+        .search-container {
+            max-width: 600px;
+            margin: -30px auto 40px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .search-bar {
+            background: var(--white);
+            border-radius: 60px;
+            padding: 5px;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+        }
+
+        .search-bar input {
+            flex: 1;
+            padding: 18px 25px;
+            border: none;
+            background: transparent;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .search-bar button {
+            background: var(--primary);
+            border: none;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin-right: 5px;
+        }
+
+        .search-bar button:hover {
+            background: var(--primary-dark);
+            transform: scale(1.02);
+        }
+
+        /* Categories */
+        .categories {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 50px;
+            flex-wrap: wrap;
+        }
+
+        .category-btn {
+            padding: 10px 24px;
+            border: none;
+            background: var(--white);
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+            color: var(--gray);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .category-btn:hover {
+            background: rgba(67, 97, 238, 0.1);
+            color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .category-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* FAQ Accordion */
+        .faq-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .faq-category {
+            margin-bottom: 40px;
+        }
+
+        .faq-category h2 {
+            font-size: 1.4rem;
+            margin-bottom: 25px;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--gray-light);
+        }
+
+        .faq-category h2 i {
+            color: var(--primary);
+        }
+
+        .faq-item {
+            background: var(--white);
+            border-radius: 16px;
+            margin-bottom: 15px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s;
+            border: 1px solid var(--gray-light);
+        }
+
+        .faq-item:hover {
+            border-color: var(--primary);
+        }
+
+        .faq-question {
+            padding: 20px 25px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            color: var(--dark);
+            transition: all 0.3s;
+        }
+
+        .faq-question:hover {
+            background: rgba(67, 97, 238, 0.05);
+        }
+
+        .faq-question i {
+            color: var(--primary);
+            transition: transform 0.3s;
+        }
+
+        .faq-item.active .faq-question i {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            padding: 0 25px;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            color: var(--gray);
+            line-height: 1.7;
+            border-top: 1px solid transparent;
+        }
+
+        .faq-item.active .faq-answer {
+            padding: 0 25px 25px 25px;
+            max-height: 500px;
+            border-top-color: var(--gray-light);
+        }
+
+        /* Contact Banner */
+        .contact-banner {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            border-radius: 24px;
+            padding: 40px;
+            text-align: center;
+            margin-top: 50px;
+            color: white;
+        }
+
+        .contact-banner h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .contact-banner p {
+            margin-bottom: 20px;
+            opacity: 0.9;
+        }
+
+        .contact-banner .btn {
+            background: white;
+            color: var(--primary);
+            padding: 12px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .contact-banner .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--dark);
+            color: white;
+            padding: 60px 0 30px;
+            margin-top: 60px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-col h3 {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-col h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background: var(--primary);
+        }
+
+        .footer-col a {
+            display: block;
+            color: #aaa;
+            text-decoration: none;
+            margin-bottom: 12px;
+            transition: all 0.3s;
+        }
+
+        .footer-col a:hover {
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .footer-col p {
+            color: #aaa;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+        }
+
+        .social-links a:hover {
+            background: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #aaa;
+            font-size: 0.85rem;
+        }
+
+        /* Message Toast */
+        .message {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--dark);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            display: none;
+            z-index: 2000;
+            animation: slideIn 0.3s ease;
+        }
+
+        .message.show {
+            display: block;
+        }
+
+        .message.success {
+            background: var(--success);
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .footer-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none !important;
+            }
+            .user-info {
+                display: none !important;
+            }
+            .mobile-menu-toggle {
+                display: block;
+            }
+            .page-header {
+                padding: 35px 20px;
+            }
+            .page-header h1 {
+                font-size: 1.6rem;
+            }
+            .search-container {
+                margin: -20px 20px 30px;
+            }
+            .search-bar {
+                flex-direction: column;
+                border-radius: 30px;
+            }
+            .search-bar input {
+                width: 100%;
+                padding: 15px 20px;
+                text-align: center;
+            }
+            .search-bar button {
+                width: 100%;
+                margin: 5px;
+                padding: 12px;
+            }
+            .categories {
+                gap: 10px;
+            }
+            .category-btn {
+                padding: 6px 16px;
+                font-size: 0.8rem;
+            }
+            .footer-grid {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            .footer-col h3::after {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+            .footer-col p {
+                justify-content: center;
+            }
+            .social-links {
+                justify-content: center;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .mobile-nav,
+            .mobile-menu-toggle {
+                display: none;
+            }
+            .nav-menu {
+                display: flex !important;
+            }
+            .user-info {
+                display: flex !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <a href="dashboard.html" class="logo">
+                <div class="logo-icon"><i class="fas fa-graduation-cap"></i></div>
+                <h1>Edu<span>Learn</span> Pro</h1>
+            </a>
+            <div class="nav-menu">
+                <a href="dashboard.html">Accueil</a>
+                <a href="storage.html">Fichiers</a>
+                <a href="cours.html">Cours</a>
+                <a href="notes.html">Notes</a>
+                <a href="questions.html">Quiz</a>
+                <a href="rappels.html">Rappels</a>
+                <a href="projets.html">Projets</a>
+                <a href="carrieres.html">Carrières</a>
+                <a href="negociation.html">Négociations</a>
+                <a href="contrat.html">Contrats</a>
+                 <a href="centre-partenariats.html">Partenariats</a>
+                <a href="faq.html" class="active">FAQ</a>
+                <a href="compte.html">Compte</a>
+            </div>
+            <div class="user-info">
+                <img id="user-avatar" src="https://via.placeholder.com/40">
+                <span id="user-name"></span>
+                <button class="logout-btn" id="logout-btn"><i class="fas fa-sign-out-alt"></i></button>
+            </div>
+            <button class="mobile-menu-toggle" id="mobile-toggle"><i class="fas fa-bars"></i></button>
+        </div>
+    </nav>
+
+    <div class="mobile-nav" id="mobile-nav">
+        <a href="dashboard.html"><i class="fas fa-home"></i> Accueil</a>
+        <a href="storage.html"><i class="fas fa-file-alt"></i> Fichiers</a>
+        <a href="cours.html"><i class="fas fa-book"></i> Cours</a>
+        <a href="notes.html"><i class="fas fa-pencil-alt"></i> Notes</a>
+        <a href="questions.html"><i class="fas fa-question-circle"></i> Quiz</a>
+        <a href="rappels.html"><i class="fas fa-bell"></i> Rappels</a>
+        <a href="projets.html"><i class="fas fa-tasks"></i> Projets</a>
+        <a href="negociation.html"><i class="fas fa-handshake"></i> Négociations</a>
+        <a href="contrat.html"><i class="fas fa-file-signature"></i> Contrats</a>
+        <a href="faq.html"><i class="fas fa-question-circle"></i> FAQ</a>
+        <a href="compte.html"><i class="fas fa-user-circle"></i> Compte</a>
+        <a href="carrieres.html"><i class="fas fa-briefcase"></i> Carrières</a>
+         <a href="centre-partenariats.html"><i class="fas fa-handshake"></i> Partenariats</a>
+        <button id="mobile-logout"><i class="fas fa-sign-out-alt"></i> Déconnexion</button>
+    </div>
+
+    <div class="main-content">
+        <div class="container">
+            <!-- Page Header avec fond dégradé -->
+            <div class="page-header">
+                <h1><i class="fas fa-question-circle"></i> Foire Aux Questions</h1>
+                <p>Trouvez rapidement les réponses à vos questions les plus fréquentes</p>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="search-container">
+                <div class="search-bar">
+                    <input type="text" id="search-faq" placeholder="Rechercher une question...">
+                    <button id="search-btn"><i class="fas fa-search"></i> Rechercher</button>
+                </div>
+            </div>
+
+            <!-- Categories -->
+            <div class="categories" id="categories">
+                <button class="category-btn active" data-category="all">Toutes</button>
+                <button class="category-btn" data-category="compte">📝 Compte & Inscription</button>
+                <button class="category-btn" data-category="paiement">💰 Paiement & Facturation</button>
+                <button class="category-btn" data-category="technique">🔧 Technique</button>
+                <button class="category-btn" data-category="utilisation">📚 Utilisation</button>
+                <button class="category-btn" data-category="securite">🔒 Sécurité & Confidentialité</button>
+            </div>
+
+            <!-- FAQ Container -->
+            <div class="faq-container" id="faq-container"></div>
+
+            <!-- Contact Banner -->
+            <div class="contact-banner">
+                <h3><i class="fas fa-headset"></i> Vous n'avez pas trouvé votre réponse ?</h3>
+                <p>Notre équipe de support est là pour vous aider 24h/24 et 7j/7</p>
+                <a href="contact.html" class="btn"><i class="fas fa-envelope"></i> Contacter le support</a>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="logo" style="margin-bottom: 15px;">
+                        <div class="logo-icon"><i class="fas fa-graduation-cap"></i></div>
+                        <h1 style="color:white;">Edu<span>Learn</span> Pro</h1>
+                    </div>
+                    <p>Votre compagnon d'études intelligent</p>
+                    <p><i class="fas fa-map-marker-alt"></i> Douala, Cameroun</p>
+                    <p><i class="fas fa-envelope"></i> contact@edulearnpro.com</p>
+                    <p><i class="fas fa-phone"></i> +237 653 34 36 96</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h3>Produit</h3>
+                    <a href="features.html">Fonctionnalités</a>
+                    <a href="tarifs.html">Tarifs</a>
+                    <a href="faq.html">FAQ</a>
+                    <a href="documentation.html">Documentation</a>
+                </div>
+                <div class="footer-col">
+                    <h3>Entreprise</h3>
+                    <a href="about.html">À propos</a>
+                    <a href="blog.html">Blog</a>
+                    <a href="carrieres.html">Carrières</a>
+                    <a href="contact.html">Contact</a>
+                </div>
+                <div class="footer-col">
+                    <h3>Légal</h3>
+                    <a href="legal.html">Mentions légales</a>
+                    <a href="cgu.html">CGU</a>
+                    <a href="confidentialite.html">Confidentialité</a>
+                    <a href="cookies.html">Cookies</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 EduLearn Pro - Tous droits réservés | Conçu par Franck BESSALA - Douala, Cameroun</p>
+            </div>
+        </div>
+    </footer>
+
+    <div id="message" class="message"></div>
+
+    <script>
+        // Données des FAQs
+        const faqData = [
+            // Compte & Inscription
+            { category: "compte", question: "Comment créer un compte sur EduLearn Pro ?", answer: "Pour créer un compte, cliquez sur le bouton 'Inscription' en haut à droite, remplissez le formulaire avec votre nom, email et mot de passe, puis validez. Votre compte sera créé instantanément et vous pourrez accéder à toutes les fonctionnalités gratuites." },
+            { category: "compte", question: "Je n'arrive pas à me connecter, que faire ?", answer: "Vérifiez que votre email et mot de passe sont corrects. Si vous avez oublié votre mot de passe, contactez notre support à support@edulearnpro.com pour le réinitialiser." },
+            { category: "compte", question: "Puis-je modifier mes informations personnelles ?", answer: "Oui, connectez-vous à votre compte, allez dans 'Mon compte' et vous pourrez modifier votre nom, email, mot de passe et avatar à tout moment." },
+            { category: "compte", question: "Comment supprimer définitivement mon compte ?", answer: "Dans la section 'Mon compte', allez dans 'Zone de danger' et cliquez sur 'Supprimer mon compte'. Cette action est irréversible, pensez à exporter vos données au préalable." },
+            // Paiement & Facturation
+            { category: "paiement", question: "Quels sont les moyens de paiement acceptés ?", answer: "Nous acceptons les paiements par Orange Money, MTN Mobile Money et carte bancaire (Visa, Mastercard)." },
+            { category: "paiement", question: "Comment résilier mon abonnement Premium ?", answer: "Vous pouvez résilier à tout moment depuis votre espace compte. L'abonnement reste actif jusqu'à la fin de la période déjà payée." },
+            { category: "paiement", question: "Y a-t-il une période d'essai gratuite ?", answer: "Oui, nous offrons 14 jours d'essai gratuit pour le plan Premium. Aucun engagement, vous pouvez annuler à tout moment." },
+            // Technique
+            { category: "technique", question: "Quels types de fichiers puis-je importer ?", answer: "Vous pouvez importer des fichiers PDF, DOC, DOCX, JPG, PNG et TXT. La taille maximale est de 10 Mo par fichier." },
+            { category: "technique", question: "Pourquoi mes fichiers ne s'importent-ils pas ?", answer: "Vérifiez que vos fichiers ne dépassent pas 10 Mo et sont au format accepté. Si le problème persiste, videz le cache de votre navigateur et réessayez." },
+            { category: "technique", question: "L'application est-elle disponible sur mobile ?", answer: "Oui, notre site est entièrement responsive et fonctionne sur tous les appareils. Vous pouvez également installer notre PWA depuis votre navigateur." },
+            { category: "technique", question: "Comment partager un fichier sur WhatsApp ?", answer: "Cliquez sur l'icône WhatsApp à côté du fichier dans votre espace 'Mes fichiers'. Le fichier sera téléchargé et vous pourrez l'envoyer via WhatsApp." },
+            // Utilisation
+            { category: "utilisation", question: "Comment fonctionnent les quiz ?", answer: "Choisissez une matière, répondez aux 10 questions. À la fin, vous obtenez votre score et la correction détaillée de chaque question. Les questions sont aléatoires à chaque tentative." },
+            { category: "utilisation", question: "Puis-je créer plusieurs cours ?", answer: "Oui, vous pouvez créer un nombre illimité de cours, les organiser par matière et les partager avec vos camarades." },
+            { category: "utilisation", question: "Comment créer un rappel ?", answer: "Allez dans la section 'Rappels', cliquez sur 'Nouveau rappel', choisissez le titre, la date, l'heure et la priorité. Vous recevrez une notification." },
+            // Sécurité & Confidentialité
+            { category: "securite", question: "Mes données sont-elles sécurisées ?", answer: "Oui, vos données sont stockées sur des serveurs sécurisés avec chiffrement. Les mots de passe sont hachés et les connexions sont protégées par HTTPS." },
+            { category: "securite", question: "Que deviennent mes données si je supprime mon compte ?", answer: "Toutes vos données (documents, cours, notes) sont définitivement supprimées. Nous vous recommandons d'exporter vos données avant suppression." }
+        ];
+
+        let currentCategory = "all";
+        let searchTerm = "";
+
+        function renderFAQs() {
+            let filtered = faqData;
+            if (currentCategory !== "all") {
+                filtered = filtered.filter(f => f.category === currentCategory);
+            }
+            if (searchTerm) {
+                filtered = filtered.filter(f => f.question.toLowerCase().includes(searchTerm.toLowerCase()) || f.answer.toLowerCase().includes(searchTerm.toLowerCase()));
+            }
+
+            const container = document.getElementById('faq-container');
+            if (filtered.length === 0) {
+                container.innerHTML = '<div style="text-align: center; padding: 60px; color: var(--gray);"><i class="fas fa-search" style="font-size: 3rem; margin-bottom: 15px; opacity: 0.5;"></i><p>Aucune question trouvée</p><small>Essayez d\'autres mots-clés</small></div>';
+                return;
+            }
+
+            // Grouper par catégorie
+            const grouped = {};
+            filtered.forEach(f => {
+                if (!grouped[f.category]) grouped[f.category] = [];
+                grouped[f.category].push(f);
+            });
+
+            const categoryNames = {
+                compte: "📝 Compte & Inscription",
+                paiement: "💰 Paiement & Facturation",
+                technique: "🔧 Technique",
+                utilisation: "📚 Utilisation",
+                securite: "🔒 Sécurité & Confidentialité"
+            };
+
+            let html = '';
+            for (const [cat, questions] of Object.entries(grouped)) {
+                html += `<div class="faq-category"><h2><i class="fas fa-folder-open"></i> ${categoryNames[cat] || cat}</h2>`;
+                questions.forEach((faq, index) => {
+                    html += `
+                        <div class="faq-item">
+                            <div class="faq-question" onclick="toggleFAQ(this)">
+                                ${faq.question}
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="faq-answer">
+                                ${faq.answer}
+                            </div>
+                        </div>
+                    `;
+                });
+                html += `</div>`;
+            }
+            container.innerHTML = html;
+        }
+
+        function toggleFAQ(element) {
+            const item = element.parentElement;
+            item.classList.toggle('active');
+        }
+
+        function filterByCategory(category) {
+            currentCategory = category;
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                if (btn.dataset.category === category) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+            renderFAQs();
+        }
+
+        function searchFAQs() {
+            searchTerm = document.getElementById('search-faq').value;
+            renderFAQs();
+        }
+
+        document.querySelectorAll('.category-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterByCategory(btn.dataset.category);
+            });
+        });
+
+        document.getElementById('search-btn').addEventListener('click', searchFAQs);
+        document.getElementById('search-faq').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') searchFAQs();
+        });
+
+        // Gestion utilisateur
+        let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        if (currentUser) {
+            document.getElementById('user-name').innerText = currentUser.name.split(' ')[0];
+            if (currentUser.avatar) document.getElementById('user-avatar').src = currentUser.avatar;
+        }
+
+        document.getElementById('logout-btn').onclick = () => {
+            localStorage.removeItem('currentUser');
+            window.location.href = 'index.html';
+        };
+
+        // Menu responsive
+        const toggleBtn = document.getElementById('mobile-toggle');
+        const mobileNav = document.getElementById('mobile-nav');
+        if (toggleBtn && mobileNav) {
+            toggleBtn.onclick = () => {
+                mobileNav.classList.toggle('open');
+                toggleBtn.classList.toggle('active');
+                document.body.style.overflow = mobileNav.classList.contains('open') ? 'hidden' : '';
+            };
+            document.querySelectorAll('.mobile-nav a, .mobile-nav button').forEach(link => {
+                link.onclick = () => {
+                    mobileNav.classList.remove('open');
+                    toggleBtn.classList.remove('active');
+                    document.body.style.overflow = '';
+                };
+            });
+            document.addEventListener('click', (e) => {
+                if (!mobileNav.contains(e.target) && !toggleBtn.contains(e.target) && mobileNav.classList.contains('open')) {
+                    mobileNav.classList.remove('open');
+                    toggleBtn.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            });
+        }
+        document.getElementById('mobile-logout')?.addEventListener('click', () => {
+            localStorage.removeItem('currentUser');
+            window.location.href = 'index.html';
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        renderFAQs();
+        window.toggleFAQ = toggleFAQ;
+    </script>
+</body>
+</html>

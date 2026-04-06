@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>À propos - EduLearn Pro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a0ca3;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --info: #3498db;
+            --dark: #1a1a2e;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --gray-light: #e9ecef;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0,0,0,0.1);
+            --shadow-sm: 0 2px 10px rgba(0,0,0,0.05);
+            --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        body { background: #f5f7ff; }
+
+        /* Navigation */
+        .navbar { background: var(--white); box-shadow: var(--shadow-sm); position: sticky; top: 0; z-index: 1000; padding: 12px 0; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .navbar .container { display: flex; justify-content: space-between; align-items: center; }
+        .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+        .logo-icon { width: 40px; height: 40px; background: var(--gradient); border-radius: 12px; display: flex; align-items: center; justify-content: center; }
+        .logo-icon i { font-size: 1.3rem; color: white; }
+        .logo h1 { font-size: 1.3rem; font-weight: 700; color: var(--dark); }
+        .logo span { color: var(--primary); }
+        .nav-menu { display: flex; gap: 15px; flex-wrap: wrap; }
+        .nav-menu a { text-decoration: none; color: var(--gray); padding: 8px 16px; border-radius: 8px; transition: all 0.3s; font-weight: 500; font-size: 0.9rem; }
+        .nav-menu a:hover, .nav-menu a.active { background: rgba(67,97,238,0.1); color: var(--primary); }
+        .user-info { display: flex; align-items: center; gap: 12px; }
+        .user-info img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
+        .logout-btn { background: none; border: none; color: var(--gray); cursor: pointer; font-size: 1.2rem; transition: all 0.3s; }
+        .logout-btn:hover { color: var(--danger); }
+
+        /* Menu Mobile */
+        .mobile-menu-toggle { display: none; background: none; border: none; font-size: 1.5rem; color: var(--dark); cursor: pointer; padding: 8px; border-radius: 8px; z-index: 1001; }
+        .mobile-nav { position: fixed; top: 0; right: -100%; width: 80%; max-width: 320px; height: 100vh; background: var(--white); box-shadow: -5px 0 30px rgba(0,0,0,0.1); z-index: 1000; transition: right 0.3s ease; display: flex; flex-direction: column; padding: 80px 20px 20px; overflow-y: auto; }
+        .mobile-nav.open { right: 0; }
+        .mobile-nav a, .mobile-nav button { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 12px; text-decoration: none; color: var(--dark); font-weight: 500; width: 100%; text-align: left; background: none; border: none; cursor: pointer; font-size: 1rem; }
+        .mobile-nav a:hover, .mobile-nav button:hover { background: rgba(67,97,238,0.1); color: var(--primary); }
+        .mobile-nav i { width: 24px; }
+
+        /* Main Content */
+        .main-content { padding: 30px 0 60px; }
+
+        /* Page Header avec fond dégradé */
+        .page-header {
+            background: var(--gradient);
+            border-radius: 24px;
+            padding: 45px 30px;
+            margin-bottom: 40px;
+            color: white;
+            text-align: center;
+        }
+        .page-header h1 {
+            font-size: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        .page-header p {
+            opacity: 0.9;
+            font-size: 1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Stats Section */
+        .stats-section {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+            margin-bottom: 60px;
+        }
+        .stat-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 30px 20px;
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s;
+            border: 1px solid var(--gray-light);
+        }
+        .stat-card:hover { transform: translateY(-5px); box-shadow: var(--shadow); }
+        .stat-card i { font-size: 2.5rem; color: var(--primary); margin-bottom: 15px; }
+        .stat-card h3 { font-size: 2rem; font-weight: 700; color: var(--dark); margin-bottom: 8px; }
+        .stat-card p { color: var(--gray); font-size: 0.85rem; }
+
+        /* Story Section */
+        .story-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            margin-bottom: 60px;
+            align-items: center;
+        }
+        .story-content h2 {
+            font-size: 1.8rem;
+            color: var(--dark);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .story-content h2 i { color: var(--primary); }
+        .story-content p {
+            color: var(--gray);
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+        .story-image img {
+            width: 100%;
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+        }
+
+        /* Values Section */
+        .values-section {
+            margin-bottom: 60px;
+        }
+        .values-section h2 {
+            text-align: center;
+            font-size: 1.8rem;
+            color: var(--dark);
+            margin-bottom: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .values-section h2 i { color: var(--primary); }
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+        .value-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s;
+            border: 1px solid var(--gray-light);
+        }
+        .value-card:hover { transform: translateY(-5px); box-shadow: var(--shadow); }
+        .value-icon {
+            width: 70px;
+            height: 70px;
+            background: rgba(67,97,238,0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+        .value-icon i { font-size: 2rem; color: var(--primary); }
+        .value-card h3 { font-size: 1.2rem; margin-bottom: 12px; color: var(--dark); }
+        .value-card p { color: var(--gray); line-height: 1.6; }
+
+        /* Team Section */
+        .team-section {
+            margin-bottom: 60px;
+        }
+        .team-section h2 {
+            text-align: center;
+            font-size: 1.8rem;
+            color: var(--dark);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .team-section h2 i { color: var(--primary); }
+        .team-subtitle {
+            text-align: center;
+            color: var(--gray);
+            margin-bottom: 40px;
+            font-size: 1rem;
+        }
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+        .team-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s;
+            border: 1px solid var(--gray-light);
+        }
+        .team-card:hover { transform: translateY(-5px); box-shadow: var(--shadow); }
+        .team-card img {
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 20px;
+            border: 3px solid var(--primary);
+            padding: 3px;
+        }
+        .team-card h3 { font-size: 1.2rem; margin-bottom: 5px; color: var(--dark); }
+        .team-card .team-role { color: var(--primary); font-size: 0.8rem; font-weight: 500; margin-bottom: 12px; }
+        .team-card .team-desc { color: var(--gray); font-size: 0.85rem; line-height: 1.5; margin-bottom: 15px; }
+        .team-social { display: flex; justify-content: center; gap: 15px; }
+        .team-social a { color: var(--gray); transition: all 0.3s; font-size: 1.1rem; }
+        .team-social a:hover { color: var(--primary); transform: translateY(-2px); }
+
+        /* CTA Section */
+        .cta-section {
+            background: var(--gradient);
+            border-radius: 24px;
+            padding: 50px;
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+        .cta-section h2 { font-size: 1.8rem; margin-bottom: 15px; }
+        .cta-section p { opacity: 0.9; margin-bottom: 25px; max-width: 600px; margin-left: auto; margin-right: auto; }
+        .cta-btn {
+            background: white;
+            color: var(--primary);
+            border: none;
+            padding: 12px 32px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+        .cta-btn:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+
+        /* Footer */
+        .footer {
+            background: var(--dark);
+            color: white;
+            padding: 60px 0 30px;
+            margin-top: 40px;
+        }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        .footer-col h3 {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            color: white;
+        }
+        .footer-col p {
+            color: #aaa;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+        .footer-col a {
+            display: block;
+            color: #aaa;
+            text-decoration: none;
+            margin-bottom: 12px;
+            transition: all 0.3s;
+        }
+        .footer-col a:hover { color: white; transform: translateX(5px); }
+        .social-links { display: flex; gap: 15px; margin-top: 20px; }
+        .social-links a {
+            width: 38px;
+            height: 38px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+        }
+        .social-links a:hover { background: var(--primary); transform: translateY(-3px); }
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #aaa;
+            font-size: 0.8rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .stats-section { grid-template-columns: repeat(2, 1fr); }
+            .story-section { grid-template-columns: 1fr; }
+            .values-grid { grid-template-columns: 1fr; }
+            .team-grid { grid-template-columns: 1fr; }
+            .footer-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 768px) { 
+            .nav-menu { display: none !important; } 
+            .user-info { display: none !important; } 
+            .mobile-menu-toggle { display: block; } 
+            .stats-section { grid-template-columns: 1fr; }
+            .page-header { padding: 30px 20px; }
+            .page-header h1 { font-size: 1.5rem; }
+            .cta-section { padding: 30px 20px; }
+            .cta-section h2 { font-size: 1.3rem; }
+            .footer-grid { grid-template-columns: 1fr; text-align: center; }
+            .social-links { justify-content: center; }
+        }
+        @media (min-width: 769px) { .mobile-nav, .mobile-menu-toggle { display: none; } .nav-menu { display: flex !important; } .user-info { display: flex !important; } }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="dashboard.html" class="logo"><div class="logo-icon"><i class="fas fa-graduation-cap"></i></div><h1>Edu<span>Learn</span> Pro</h1></a>
+            <div class="nav-menu">
+                <a href="dashboard.html">Accueil</a>
+                <a href="storage.html">Fichiers</a>
+                <a href="cours.html">Cours</a>
+                <a href="notes.html">Notes</a>
+                <a href="questions.html">Quiz</a>
+                <a href="rappels.html">Rappels</a>
+                <a href="projets.html">Projets</a>
+                <a href="carrieres.html">Carrières</a>
+                <a href="negociation.html">Négociations</a>
+                <a href="contrat.html">Contrats</a>
+                <a href="centre-partenariats.html">Partenariats</a>
+                <a href="tarifs.html">Tarifs</a>
+                <a href="about.html" class="active">À propos</a>
+                <a href="comptes.html">Compte</a>
+            </div>
+            <div class="user-info"><img id="user-avatar" src="https://via.placeholder.com/40"><span id="user-name"></span><button class="logout-btn" id="logout-btn"><i class="fas fa-sign-out-alt"></i></button></div>
+            <button class="mobile-menu-toggle" id="mobile-toggle"><i class="fas fa-bars"></i></button>
+        </div>
+    </nav>
+
+    <div class="mobile-nav" id="mobile-nav">
+        <a href="dashboard.html"><i class="fas fa-home"></i> Accueil</a>
+        <a href="storage.html"><i class="fas fa-file-alt"></i> Fichiers</a>
+        <a href="cours.html"><i class="fas fa-book"></i> Cours</a>
+        <a href="notes.html"><i class="fas fa-pencil-alt"></i> Notes</a>
+        <a href="questions.html"><i class=fas fa-question-circle"></i> Quiz</a>
+        <a href="rappels.html"><i class="fas fa-bell"></i> Rappels</a>
+        <a href="projets.html"><i class="fas fa-tasks"></i> Projets</a>
+        <a href="negociation.html"><i class="fas fa-handshake"></i> Négociations</a>
+        <a href="contrat.html"><i class="fas fa-file-signature"></i> Contrats</a>
+        <a href="about.html"><i class="fas fa-info-circle"></i> À propos</a>
+        <a href="comptes.html"><i class="fas fa-user-circle"></i> Compte</a>
+        <a href="carrieres.html"><i class="fas fa-briefcase"></i> Carrières</a>
+        <a href="centre-partenariats.html"><i class="fas fa-handshake"></i> Partenariats</a>
+        <button id="mobile-logout"><i class="fas fa-sign-out-alt"></i> Déconnexion</button>
+    </div>
+
+    <div class="main-content">
+        <div class="container">
+            <!-- Page Header avec fond dégradé -->
+            <div class="page-header">
+                <h1><i class="fas fa-users"></i> À propos de nous</h1>
+                <p>Découvrez notre histoire, notre mission et l'équipe derrière EduLearn Pro</p>
+            </div>
+
+            <!-- Stats Section -->
+            <div class="stats-section">
+                <div class="stat-card"><i class="fas fa-calendar-alt"></i><h3>2026</h3><p>Année de création</p></div>
+                <div class="stat-card"><i class="fas fa-users"></i><h3>10K+</h3><p>Utilisateurs</p></div>
+                <div class="stat-card"><i class="fas fa-graduation-cap"></i><h3>500+</h3><p>Cours créés</p></div>
+                <div class="stat-card"><i class="fas fa-smile"></i><h3>98%</h3><p>Satisfaction</p></div>
+            </div>
+
+            <!-- Story Section -->
+            <div class="story-section">
+                <div class="story-content">
+                    <h2><i class="fas fa-book-open"></i> Notre histoire</h2>
+                    <p>EduLearn Pro est né d'une conviction : l'éducation doit être accessible, intuitive et efficace pour tous. Fondé en 2026 à Douala, Cameroun, notre objectif est de révolutionner la façon dont les étudiants apprennent et révisent.</p>
+                    <p>Notre plateforme combine les dernières technologies avec une pédagogie éprouvée pour offrir une expérience d'apprentissage unique. Aujourd'hui, plus de 10 000 étudiants nous font confiance pour réussir leurs examens et atteindre leurs objectifs académiques.</p>
+                </div>
+                <div class="story-image">
+                    <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=500&h=400&fit=crop" alt="Notre équipe">
+                </div>
+            </div>
+
+            <!-- Values Section -->
+            <div class="values-section">
+                <h2><i class="fas fa-heart"></i> Nos valeurs</h2>
+                <div class="values-grid">
+                    <div class="value-card"><div class="value-icon"><i class="fas fa-lightbulb"></i></div><h3>Innovation</h3><p>Nous repoussons constamment les limites pour offrir les meilleurs outils d'apprentissage.</p></div>
+                    <div class="value-card"><div class="value-icon"><i class="fas fa-users"></i></div><h3>Communauté</h3><p>Nous croyons en la force du partage et de l'entraide entre étudiants.</p></div>
+                    <div class="value-card"><div class="value-icon"><i class="fas fa-star"></i></div><h3>Excellence</h3><p>Nous visons l'excellence dans tout ce que nous faisons pour votre réussite.</p></div>
+                </div>
+            </div>
+
+            <!-- Team Section -->
+            <div class="team-section">
+                <h2><i class="fas fa-user-friends"></i> Notre équipe</h2>
+                <p class="team-subtitle">Des passionnés au service de votre réussite</p>
+                <div class="team-grid">
+                    <div class="team-card">
+                        <img src="Images/128.jpeg" alt="Ngaha Franck">
+                        <h3>Ngaha Franck</h3>
+                        <div class="team-role">Lead Developer</div>
+                        <p class="team-desc">Passionné par l'éducation et la technologie, il a fondé EduLearn Pro pour démocratiser l'apprentissage.</p>
+                        <div class="team-social"><a href="#"><i class="fab fa-linkedin-in"></i></a><a href="#"><i class="fab fa-twitter"></i></a><a href="#"><i class="fab fa-github"></i></a></div>
+                    </div>
+                    <div class="team-card">
+                        <img src="Images/126.jpeg" alt="KEMAYA Ashley">
+                        <h3>KAMAYA Ashley</h3>
+                        <div class="team-role">Directrice Pédagogique</div>
+                        <p class="team-desc">Experte en pédagogie, elle conçoit des contenus éducatifs adaptés à tous les niveaux.</p>
+                        <div class="team-social"><a href="#"><i class="fab fa-linkedin-in"></i></a><a href="#"><i class="fab fa-twitter"></i></a></div>
+                    </div>
+                    <div class="team-card">
+                        <img src="Images/127.jpeg" alt="Madah Elsa">
+                        <h3>Madah Elsa</h3>
+                        <div class="team-role">Directrice Communication</div>
+                        <p class="team-desc">Développeuse full-stack, elle assure la performance et la fiabilité de la plateforme.</p>
+                        <div class="team-social"><a href="#"><i class="fab fa-linkedin-in"></i></a><a href="#"><i class="fab fa-github"></i></a></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CTA Section -->
+            <div class="cta-section">
+                <h2>Prêt à rejoindre l'aventure ?</h2>
+                <p>Rejoignez notre communauté et commencez à transformer votre façon d'apprendre</p>
+                <button class="cta-btn" onclick="window.location.href='index.html'">Créer un compte gratuit</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="logo" style="margin-bottom: 15px;">
+                        <div class="logo-icon"><i class="fas fa-graduation-cap"></i></div>
+                        <h1 style="color:white; font-size:1.2rem;">Edu<span style="color:var(--primary);">Learn</span> Pro</h1>
+                    </div>
+                    <p>Votre compagnon d'études intelligent pour réussir vos examens et atteindre vos objectifs.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h3>Liens rapides</h3>
+                    <a href="dashboard.html">Tableau de bord</a>
+                    <a href="storage.html">Mes fichiers</a>
+                    <a href="cours.html">Mes cours</a>
+                    <a href="notes.html">Mes notes</a>
+                    <a href="questions.html">Quiz</a>
+                </div>
+                <div class="footer-col">
+                    <h3>Ressources</h3>
+                    <a href="about.html">À propos</a>
+                    <a href="blog.html">Blog</a>
+                    <a href="faq.html">FAQ</a>
+                    <a href="contact.html">Contact</a>
+                    <a href="support.html">Support technique</a>
+                </div>
+                <div class="footer-col">
+                    <h3>Légal</h3>
+                    <a href="legal.html">Mentions légales</a>
+                    <a href="cgu.html">CGU</a>
+                    <a href="confidentialite.html">Confidentialité</a>
+                    <a href="cookies.html">Cookies</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 EduLearn Pro - Tous droits réservés | Conçu par Lee Startup - Douala, Cameroun</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        document.getElementById('user-name').innerText = currentUser ? currentUser.name.split(' ')[0] : 'Invité';
+        if (currentUser && currentUser.avatar) document.getElementById('user-avatar').src = currentUser.avatar;
+        
+        document.getElementById('logout-btn').onclick = () => { localStorage.removeItem('currentUser'); window.location.href = 'index.html'; };
+        
+        // Menu responsive
+        const toggleBtn = document.getElementById('mobile-toggle');
+        const mobileNav = document.getElementById('mobile-nav');
+        if (toggleBtn && mobileNav) {
+            toggleBtn.onclick = () => { mobileNav.classList.toggle('open'); toggleBtn.classList.toggle('active'); document.body.style.overflow = mobileNav.classList.contains('open') ? 'hidden' : ''; };
+            document.querySelectorAll('.mobile-nav a, .mobile-nav button').forEach(link => { link.onclick = () => { mobileNav.classList.remove('open'); toggleBtn.classList.remove('active'); document.body.style.overflow = ''; }; });
+            document.addEventListener('click', (e) => { if (!mobileNav.contains(e.target) && !toggleBtn.contains(e.target) && mobileNav.classList.contains('open')) { mobileNav.classList.remove('open'); toggleBtn.classList.remove('active'); document.body.style.overflow = ''; } });
+        }
+        document.getElementById('mobile-logout')?.addEventListener('click', () => { localStorage.removeItem('currentUser'); window.location.href = 'index.html'; });
+    </script>
+</body>
+</html>

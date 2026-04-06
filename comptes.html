@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Mon Compte - EduLearn Pro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; transition: background-color 0.3s, color 0.3s, border-color 0.3s; }
+        
+        /* Thème Clair (défaut) */
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a0ca3;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --info: #3498db;
+            --dark: #1a1a2e;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --gray-light: #e9ecef;
+            --white: #ffffff;
+            --card-bg: #ffffff;
+            --text-dark: #1a1a2e;
+            --border-color: #e9ecef;
+            --shadow: 0 10px 30px rgba(0,0,0,0.1);
+            --shadow-sm: 0 2px 10px rgba(0,0,0,0.05);
+            --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        /* Thème Sombre */
+        body.dark {
+            --primary: #5f7ef2;
+            --primary-dark: #4a5fcc;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --dark: #ecf0f1;
+            --light: #2c3e50;
+            --gray: #95a5a6;
+            --gray-light: #3a3a4a;
+            --white: #1e1e2a;
+            --card-bg: #2d2d3a;
+            --text-dark: #ecf0f1;
+            --border-color: #3a3a4a;
+            --shadow: 0 10px 30px rgba(0,0,0,0.3);
+            --shadow-sm: 0 2px 10px rgba(0,0,0,0.2);
+            --gradient: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        }
+
+        body { background: var(--light); }
+
+        /* Navigation */
+        .navbar { background: var(--card-bg); box-shadow: var(--shadow-sm); position: sticky; top: 0; z-index: 1000; padding: 12px 0; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .navbar .container { display: flex; justify-content: space-between; align-items: center; }
+        .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+        .logo-icon { width: 40px; height: 40px; background: var(--gradient); border-radius: 12px; display: flex; align-items: center; justify-content: center; }
+        .logo-icon i { font-size: 1.3rem; color: white; }
+        .logo h1 { font-size: 1.3rem; font-weight: 700; color: var(--text-dark); }
+        .logo span { color: var(--primary); }
+        .nav-menu { display: flex; gap: 15px; flex-wrap: wrap; }
+        .nav-menu a { text-decoration: none; color: var(--gray); padding: 8px 16px; border-radius: 8px; transition: all 0.3s; font-weight: 500; font-size: 0.9rem; }
+        .nav-menu a:hover, .nav-menu a.active { background: rgba(67,97,238,0.1); color: var(--primary); }
+        .user-info { display: flex; align-items: center; gap: 12px; }
+        .user-info img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
+        .logout-btn { background: none; border: none; color: var(--gray); cursor: pointer; font-size: 1.2rem; transition: all 0.3s; }
+        .logout-btn:hover { color: var(--danger); }
+
+        /* Menu Mobile */
+        .mobile-menu-toggle { display: none; background: none; border: none; font-size: 1.5rem; color: var(--text-dark); cursor: pointer; padding: 8px; border-radius: 8px; z-index: 1001; }
+        .mobile-nav { position: fixed; top: 0; right: -100%; width: 80%; max-width: 320px; height: 100vh; background: var(--card-bg); box-shadow: -5px 0 30px rgba(0,0,0,0.1); z-index: 1000; transition: right 0.3s ease; display: flex; flex-direction: column; padding: 80px 20px 20px; overflow-y: auto; }
+        .mobile-nav.open { right: 0; }
+        .mobile-nav a, .mobile-nav button { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 12px; text-decoration: none; color: var(--text-dark); font-weight: 500; width: 100%; text-align: left; background: none; border: none; cursor: pointer; font-size: 1rem; }
+        .mobile-nav a:hover, .mobile-nav button:hover { background: rgba(67,97,238,0.1); color: var(--primary); }
+        .mobile-nav i { width: 24px; }
+
+        /* Main Content */
+        .main-content { padding: 30px 0; }
+
+        /* Page Header avec fond dégradé */
+        .page-header {
+            background: var(--gradient);
+            border-radius: 24px;
+            padding: 35px 30px;
+            margin-bottom: 30px;
+            color: white;
+        }
+        .page-header h1 { font-size: 1.8rem; display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+        .page-header p { opacity: 0.9; font-size: 0.95rem; }
+
+        /* Profile Header */
+        .profile-header { background: var(--card-bg); border-radius: 24px; padding: 30px; margin-bottom: 30px; display: flex; align-items: center; gap: 30px; flex-wrap: wrap; box-shadow: var(--shadow); }
+        .profile-avatar { position: relative; }
+        .profile-avatar img { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 4px solid var(--primary); }
+        .change-avatar { position: absolute; bottom: 0; right: 0; background: var(--primary); width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; color: white; border: 2px solid var(--card-bg); transition: all 0.3s; }
+        .change-avatar:hover { transform: scale(1.1); }
+        .profile-info h2 { font-size: 1.5rem; margin-bottom: 5px; color: var(--text-dark); }
+        .profile-info p { color: var(--gray); margin-bottom: 5px; }
+        .profile-badge { display: inline-block; padding: 4px 12px; background: rgba(67,97,238,0.1); color: var(--primary); border-radius: 20px; font-size: 0.75rem; margin-left: 10px; }
+
+        /* Stats Mini */
+        .stats-mini { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 30px; }
+        .stat-mini { background: var(--card-bg); padding: 20px; border-radius: 16px; text-align: center; box-shadow: var(--shadow-sm); }
+        .stat-mini h4 { font-size: 1.5rem; color: var(--primary); margin-bottom: 5px; }
+        .stat-mini p { color: var(--gray); font-size: 0.8rem; }
+
+        /* Account Grid */
+        .account-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 25px; margin-bottom: 30px; }
+        .account-card { background: var(--card-bg); border-radius: 20px; padding: 25px; box-shadow: var(--shadow); }
+        .card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid var(--border-color); }
+        .card-header i { font-size: 1.3rem; color: var(--primary); }
+        .card-header h3 { font-size: 1.2rem; color: var(--text-dark); }
+        .info-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border-color); }
+        .info-row:last-child { border-bottom: none; }
+        .info-label { color: var(--gray); display: flex; align-items: center; gap: 8px; }
+        .info-value { color: var(--text-dark); font-weight: 500; }
+        .edit-btn { background: none; border: none; color: var(--primary); cursor: pointer; padding: 5px 10px; border-radius: 6px; transition: all 0.3s; font-size: 0.8rem; }
+        .edit-btn:hover { background: rgba(67,97,238,0.1); }
+        .lang-select { padding: 5px 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-dark); cursor: pointer; }
+
+        /* Danger Zone */
+        .danger-zone { border: 1px solid var(--danger); }
+        .danger-zone .card-header i { color: var(--danger); }
+        .danger-zone .card-header h3 { color: var(--danger); }
+
+        /* Modal */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000; align-items: center; justify-content: center; }
+        .modal-content { background: var(--card-bg); width: 90%; max-width: 500px; border-radius: 24px; overflow: hidden; animation: modalSlide 0.3s ease; }
+        @keyframes modalSlide { from { transform: translateY(-50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .modal-header { padding: 20px; background: var(--light); display: flex; justify-content: space-between; align-items: center; }
+        .modal-header h3 { color: var(--text-dark); }
+        .close-modal { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--gray); }
+        .modal-body { padding: 25px; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 500; color: var(--text-dark); }
+        .form-group input, .form-group select { width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 12px; background: var(--card-bg); color: var(--text-dark); }
+        .avatar-options { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-top: 20px; }
+        .avatar-option { text-align: center; padding: 10px; border-radius: 12px; cursor: pointer; border: 2px solid transparent; transition: all 0.3s; }
+        .avatar-option:hover { background: var(--light); }
+        .avatar-option.selected { border-color: var(--primary); background: rgba(67,97,238,0.1); }
+        .avatar-option img { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; }
+        .btn { padding: 10px 20px; border-radius: 10px; font-weight: 600; cursor: pointer; border: none; transition: all 0.3s; }
+        .btn-primary { background: var(--primary); color: white; width: 100%; }
+        .btn-primary:hover { background: var(--primary-dark); transform: translateY(-2px); }
+
+        /* Message */
+        .message { position: fixed; bottom: 20px; right: 20px; background: var(--dark); color: white; padding: 12px 20px; border-radius: 8px; display: none; z-index: 2000; animation: slideIn 0.3s ease; }
+        .message.show { display: block; }
+        .message.success { background: var(--success); }
+        .message.error { background: var(--danger); }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+        /* Responsive */
+        @media (max-width: 992px) { .account-grid { grid-template-columns: 1fr; } }
+        @media (max-width: 768px) { 
+            .nav-menu { display: none !important; } 
+            .user-info { display: none !important; } 
+            .mobile-menu-toggle { display: block; } 
+            .stats-mini { grid-template-columns: repeat(2, 1fr); }
+            .profile-header { flex-direction: column; text-align: center; }
+            .avatar-options { grid-template-columns: repeat(3, 1fr); }
+            .page-header { padding: 25px 20px; }
+            .page-header h1 { font-size: 1.4rem; }
+        }
+        @media (min-width: 769px) { .mobile-nav, .mobile-menu-toggle { display: none; } .nav-menu { display: flex !important; } .user-info { display: flex !important; } }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="dashboard.html" class="logo"><div class="logo-icon"><i class="fas fa-graduation-cap"></i></div><h1>Edu<span>Learn</span> Pro</h1></a>
+            <div class="nav-menu">
+                <a href="dashboard.html" id="nav-home">Accueil</a>
+                <a href="storage.html" id="nav-files">Fichiers</a>
+                <a href="cours.html" id="nav-courses">Cours</a>
+                <a href="notes.html" id="nav-notes">Notes</a>
+                <a href="questions.html" id="nav-quiz">Quiz</a>
+                <a href="rappels.html" id="nav-reminders">Rappels</a>
+                <a href="projets.html" id="nav-projects">Projets</a>
+                <a href="carrieres.html">Carrières</a>
+                <a href="negociation.html" id="nav-negociations">Négociations</a>
+                <a href="contrat.html" id="nav-contracts">Contrats</a>
+               <a href="centre-partenariats.html">Partenariats</a>
+                <a href="comptes.html" class="active" id="nav-account">Compte</a>
+            </div>
+            <div class="user-info"><img id="user-avatar" src="https://via.placeholder.com/40"><span id="user-name"></span><button class="logout-btn" id="logout-btn"><i class="fas fa-sign-out-alt"></i></button></div>
+            <button class="mobile-menu-toggle" id="mobile-toggle"><i class="fas fa-bars"></i></button>
+        </div>
+    </nav>
+
+    <div class="mobile-nav" id="mobile-nav">
+        <a href="dashboard.html" id="mobile-home"><i class="fas fa-home"></i> <span>Accueil</span></a>
+        <a href="storage.html" id="mobile-files"><i class="fas fa-file-alt"></i> <span>Fichiers</span></a>
+        <a href="cours.html" id="mobile-courses"><i class="fas fa-book"></i> <span>Cours</span></a>
+        <a href="notes.html" id="mobile-notes"><i class="fas fa-pencil-alt"></i> <span>Notes</span></a>
+        <a href="questions.html" id="mobile-quiz"><i class="fas fa-question-circle"></i> <span>Quiz</span></a>
+        <a href="rappels.html" id="mobile-reminders"><i class="fas fa-bell"></i> <span>Rappels</span></a>
+        <a href="projets.html" id="mobile-projects"><i class="fas fa-tasks"></i> <span>Projets</span></a>
+        <a href="negociation.html" id="mobile-negociation"><i class="fas fa-handshake"></i> <span>Négociations</span></a>
+        <a href="contrat.html" id="mobile-contract"><i class="fas fa-file-signature"></i> <span>Contrats</span></a>
+        <a href="comptes.html" id="mobile-account"><i class="fas fa-user-circle"></i> <span>Compte</span></a>
+        <a href="carrieres.html" id="mobile-carrieres"><i class="fas fa-briefcase"></i><span>Carrières</span></a>
+         <a href="centre-partenariats.html" id="mobile-centre-partenariats"><i class="fas fa-handshake"></i> Partenariats</a>
+        <button id="mobile-logout"><i class="fas fa-sign-out-alt"></i> <span>Déconnexion</span></button>
+    </div>
+
+    <div class="main-content">
+        <div class="container">
+            <div class="page-header">
+                <h1><i class="fas fa-user-circle"></i> <span id="page-title">Mon Compte</span></h1>
+                <p id="page-desc">Gérez vos informations personnelles et préférences</p>
+            </div>
+
+            <div class="profile-header">
+                <div class="profile-avatar">
+                    <img id="profile-avatar-img" src="https://via.placeholder.com/100">
+                    <div class="change-avatar" id="change-avatar-btn"><i class="fas fa-camera"></i></div>
+                </div>
+                <div class="profile-info">
+                    <h2 id="profile-name">Chargement...</h2>
+                    <p id="profile-email"><i class="fas fa-envelope"></i> email@exemple.com</p>
+                    <p><span class="profile-badge" id="profile-badge">Étudiant</span> <span id="member-since"></span></p>
+                </div>
+            </div>
+
+            <div class="stats-mini">
+                <div class="stat-mini"><h4 id="stat-docs">0</h4><p id="stat-docs-label">Documents</p></div>
+                <div class="stat-mini"><h4 id="stat-cours">0</h4><p id="stat-cours-label">Cours</p></div>
+                <div class="stat-mini"><h4 id="stat-notes">0</h4><p id="stat-notes-label">Notes</p></div>
+                <div class="stat-mini"><h4 id="stat-quiz">0</h4><p id="stat-quiz-label">Quiz</p></div>
+            </div>
+
+            <div class="account-grid">
+                <div class="account-card">
+                    <div class="card-header"><i class="fas fa-user"></i><h3 id="info-title">Informations personnelles</h3></div>
+                    <div class="info-row"><span class="info-label"><i class="fas fa-user-tag"></i> <span id="label-name">Nom</span></span><span class="info-value" id="display-name">-</span><button class="edit-btn" onclick="editName()"><i class="fas fa-edit"></i> <span id="btn-edit-name">Modifier</span></button></div>
+                    <div class="info-row"><span class="info-label"><i class="fas fa-envelope"></i> <span id="label-email">Email</span></span><span class="info-value" id="display-email">-</span><button class="edit-btn" onclick="editEmail()"><i class="fas fa-edit"></i> <span id="btn-edit-email">Modifier</span></button></div>
+                    <div class="info-row"><span class="info-label"><i class="fas fa-graduation-cap"></i> <span id="label-type">Type</span></span><span class="info-value" id="display-type">-</span></div>
+                    <div class="info-row"><span class="info-label"><i class="fas fa-calendar"></i> <span id="label-since">Membre depuis</span></span><span class="info-value" id="member-date">-</span></div>
+                </div>
+
+                <div class="account-card">
+                    <div class="card-header"><i class="fas fa-lock"></i><h3 id="security-title">Sécurité</h3></div>
+                    <div class="info-row"><span class="info-label"><i class="fas fa-key"></i> <span id="label-password">Mot de passe</span></span><span class="info-value">••••••••</span><button class="edit-btn" onclick="openPasswordModal()"><i class="fas fa-key"></i> <span id="btn-change-pwd">Changer</span></button></div>
+                    <div class="info-row"><span class="info-label"><i class="fas fa-clock"></i> <span id="label-lastlogin">Dernière connexion</span></span><span class="info-value" id="last-login">-</span></div>
+                    <div class="info-row"><span class="info-label"><i class="fas fa-crown"></i> <span id="label-subscription">Abonnement</span></span><span class="info-value" id="subscription-status">Gratuit</span><button class="edit-btn" onclick="window.location.href='tarifs.html'"><i class="fas fa-arrow-up"></i> <span id="btn-upgrade">Upgrade</span></button></div>
+                </div>
+
+                <div class="account-card">
+                    <div class="card-header"><i class="fas fa-palette"></i><h3 id="prefs-title">Préférences</h3></div>
+                    <div class="info-row"><span class="info-label"><i class="fas fa-moon"></i> <span id="label-theme">Thème</span></span><span class="info-value" id="theme-status">Clair</span><button class="edit-btn" onclick="toggleTheme()"><i class="fas fa-sync-alt"></i> <span id="btn-theme">Changer</span></button></div>
+                    <div class="info-row"><span class="info-label"><i class="fas fa-language"></i> <span id="label-lang">Langue</span></span><span class="info-value" id="lang-status">Français</span><select id="lang-select" class="lang-select"><option value="fr">Français</option><option value="en">English</option><option value="es">Español</option><option value="de">Deutsch</option></select></div>
+                    <div class="info-row"><span class="info-label"><i class="fas fa-bell"></i> <span id="label-notif">Notifications</span></span><span class="info-value" id="notif-status">Activées</span><button class="edit-btn" onclick="toggleNotifications()"><i class="fas fa-bell"></i> <span id="btn-notif">Changer</span></button></div>
+                </div>
+
+                <div class="account-card danger-zone">
+                    <div class="card-header"><i class="fas fa-exclamation-triangle"></i><h3 id="danger-title">Zone de danger</h3></div>
+                    <div class="info-row"><span class="info-label"><i class="fas fa-download"></i> <span id="label-export">Exporter mes données</span></span><button class="edit-btn" onclick="exportData()"><i class="fas fa-download"></i> <span id="btn-export">Exporter</span></button></div>
+                    <div class="info-row"><span class="info-label"><i class="fas fa-trash"></i> <span id="label-delete">Supprimer mon compte</span></span><button class="edit-btn" style="color:var(--danger)" onclick="deleteAccount()"><i class="fas fa-trash"></i> <span id="btn-delete">Supprimer</span></button></div>
+                    <p style="font-size:0.7rem; color:var(--gray); margin-top:15px;" id="danger-warning">Cette action est irréversible. Toutes vos données seront supprimées.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modales -->
+    <div class="modal" id="avatar-modal"><div class="modal-content"><div class="modal-header"><h3 id="modal-avatar-title">Changer d'avatar</h3><button class="close-modal">&times;</button></div><div class="modal-body"><div class="avatar-options" id="avatar-options"></div><input type="file" id="avatar-upload" accept="image/*" style="display:none"><button class="btn btn-primary" style="margin-top:15px" onclick="document.getElementById('avatar-upload').click()"><i class="fas fa-upload"></i> <span id="btn-upload">Télécharger une image</span></button></div></div></div>
+    <div class="modal" id="password-modal"><div class="modal-content"><div class="modal-header"><h3 id="modal-pwd-title">Changer le mot de passe</h3><button class="close-modal">&times;</button></div><div class="modal-body"><form id="password-form"><div class="form-group"><label id="label-current">Mot de passe actuel</label><input type="password" id="current-password" required></div><div class="form-group"><label id="label-new">Nouveau mot de passe</label><input type="password" id="new-password" required></div><div class="form-group"><label id="label-confirm">Confirmer</label><input type="password" id="confirm-password" required></div><button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> <span id="btn-change">Changer</span></button></form></div></div></div>
+    <div class="modal" id="edit-name-modal"><div class="modal-content"><div class="modal-header"><h3 id="modal-name-title">Modifier le nom</h3><button class="close-modal">&times;</button></div><div class="modal-body"><form id="edit-name-form"><div class="form-group"><label id="label-new-name">Nouveau nom</label><input type="text" id="new-name" required></div><button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> <span id="btn-save-name">Enregistrer</span></button></form></div></div></div>
+    <div class="modal" id="edit-email-modal"><div class="modal-content"><div class="modal-header"><h3 id="modal-email-title">Modifier l'email</h3><button class="close-modal">&times;</button></div><div class="modal-body"><form id="edit-email-form"><div class="form-group"><label id="label-new-email">Nouvel email</label><input type="email" id="new-email" required></div><button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> <span id="btn-save-email">Enregistrer</span></button></form></div></div></div>
+
+    <div id="message" class="message"></div>
+
+    <script>
+        // ========== TRADUCTIONS COMPLÈTES (Français, Anglais, Espagnol, Allemand) ==========
+        const translations = {
+            fr: {
+                // Page header
+                page_title: "Mon Compte", page_desc: "Gérez vos informations personnelles et préférences",
+                // Cards titles
+                info_title: "Informations personnelles", security_title: "Sécurité", prefs_title: "Préférences", danger_title: "Zone de danger",
+                // Labels
+                label_name: "Nom", label_email: "Email", label_type: "Type", label_since: "Membre depuis",
+                label_password: "Mot de passe", label_lastlogin: "Dernière connexion", label_subscription: "Abonnement",
+                label_theme: "Thème", label_lang: "Langue", label_notif: "Notifications",
+                label_export: "Exporter mes données", label_delete: "Supprimer mon compte",
+                // Buttons
+                btn_edit_name: "Modifier", btn_edit_email: "Modifier", btn_change_pwd: "Changer", btn_upgrade: "Améliorer",
+                btn_export: "Exporter", btn_delete: "Supprimer", btn_theme: "Changer", btn_notif: "Changer",
+                // Status
+                theme_clair: "Clair", theme_sombre: "Sombre",
+                lang_fr: "Français", lang_en: "Anglais", lang_es: "Espagnol", lang_de: "Allemand",
+                notif_on: "Activées", notif_off: "Désactivées",
+                // Stats
+                stat_docs: "Documents", stat_cours: "Cours", stat_notes: "Notes", stat_quiz: "Quiz",
+                // Modal
+                modal_avatar: "Changer d'avatar", modal_pwd: "Changer le mot de passe", modal_name: "Modifier le nom", modal_email: "Modifier l'email",
+                label_current: "Mot de passe actuel", label_new: "Nouveau mot de passe", label_confirm: "Confirmer",
+                label_new_name: "Nouveau nom", label_new_email: "Nouvel email",
+                btn_upload: "Télécharger une image", btn_change: "Changer", btn_save_name: "Enregistrer", btn_save_email: "Enregistrer",
+                // Messages
+                msg_name_updated: "Nom mis à jour !", msg_email_updated: "Email mis à jour !", msg_pwd_updated: "Mot de passe changé !",
+                msg_avatar_updated: "Avatar mis à jour !", msg_export: "Données exportées !", msg_delete_confirm: "Compte supprimé !",
+                msg_wrong_pwd: "Mot de passe incorrect", msg_email_used: "Email déjà utilisé",
+                danger_warning: "Cette action est irréversible. Toutes vos données seront supprimées.",
+                // Navigation
+                nav_home: "Accueil", nav_files: "Fichiers", nav_courses: "Cours", nav_notes: "Notes", nav_quiz: "Quiz",
+                nav_reminders: "Rappels", nav_projects: "Projets", nav_negociations: "Négociations", nav_contracts: "Contrats", nav_account: "Compte",
+                mobile_logout: "Déconnexion"
+            },
+            en: {
+                page_title: "My Account", page_desc: "Manage your personal information and preferences",
+                info_title: "Personal Information", security_title: "Security", prefs_title: "Preferences", danger_title: "Danger Zone",
+                label_name: "Name", label_email: "Email", label_type: "Type", label_since: "Member since",
+                label_password: "Password", label_lastlogin: "Last login", label_subscription: "Subscription",
+                label_theme: "Theme", label_lang: "Language", label_notif: "Notifications",
+                label_export: "Export my data", label_delete: "Delete my account",
+                btn_edit_name: "Edit", btn_edit_email: "Edit", btn_change_pwd: "Change", btn_upgrade: "Upgrade",
+                btn_export: "Export", btn_delete: "Delete", btn_theme: "Change", btn_notif: "Change",
+                theme_clair: "Light", theme_sombre: "Dark",
+                lang_fr: "French", lang_en: "English", lang_es: "Spanish", lang_de: "German",
+                notif_on: "Enabled", notif_off: "Disabled",
+                stat_docs: "Documents", stat_cours: "Courses", stat_notes: "Notes", stat_quiz: "Quizzes",
+                modal_avatar: "Change avatar", modal_pwd: "Change password", modal_name: "Edit name", modal_email: "Edit email",
+                label_current: "Current password", label_new: "New password", label_confirm: "Confirm",
+                label_new_name: "New name", label_new_email: "New email",
+                btn_upload: "Upload image", btn_change: "Change", btn_save_name: "Save", btn_save_email: "Save",
+                msg_name_updated: "Name updated!", msg_email_updated: "Email updated!", msg_pwd_updated: "Password changed!",
+                msg_avatar_updated: "Avatar updated!", msg_export: "Data exported!", msg_delete_confirm: "Account deleted!",
+                msg_wrong_pwd: "Wrong password", msg_email_used: "Email already used",
+                danger_warning: "This action is irreversible. All your data will be deleted.",
+                nav_home: "Home", nav_files: "Files", nav_courses: "Courses", nav_notes: "Notes", nav_quiz: "Quiz",
+                nav_reminders: "Reminders", nav_projects: "Projects", nav_negociations: "Negotiations", nav_contracts: "Contracts", nav_account: "Account",
+                mobile_logout: "Logout"
+            },
+            es: {
+                page_title: "Mi Cuenta", page_desc: "Administra tu información personal y preferencias",
+                info_title: "Información personal", security_title: "Seguridad", prefs_title: "Preferencias", danger_title: "Zona de peligro",
+                label_name: "Nombre", label_email: "Correo", label_type: "Tipo", label_since: "Miembro desde",
+                label_password: "Contraseña", label_lastlogin: "Último acceso", label_subscription: "Suscripción",
+                label_theme: "Tema", label_lang: "Idioma", label_notif: "Notificaciones",
+                label_export: "Exportar mis datos", label_delete: "Eliminar mi cuenta",
+                btn_edit_name: "Editar", btn_edit_email: "Editar", btn_change_pwd: "Cambiar", btn_upgrade: "Mejorar",
+                btn_export: "Exportar", btn_delete: "Eliminar", btn_theme: "Cambiar", btn_notif: "Cambiar",
+                theme_clair: "Claro", theme_sombre: "Oscuro",
+                lang_fr: "Francés", lang_en: "Inglés", lang_es: "Español", lang_de: "Alemán",
+                notif_on: "Activadas", notif_off: "Desactivadas",
+                stat_docs: "Documentos", stat_cours: "Cursos", stat_notes: "Notas", stat_quiz: "Cuestionarios",
+                modal_avatar: "Cambiar avatar", modal_pwd: "Cambiar contraseña", modal_name: "Editar nombre", modal_email: "Editar correo",
+                label_current: "Contraseña actual", label_new: "Nueva contraseña", label_confirm: "Confirmar",
+                label_new_name: "Nuevo nombre", label_new_email: "Nuevo correo",
+                btn_upload: "Subir imagen", btn_change: "Cambiar", btn_save_name: "Guardar", btn_save_email: "Guardar",
+                msg_name_updated: "¡Nombre actualizado!", msg_email_updated: "¡Correo actualizado!", msg_pwd_updated: "¡Contraseña cambiada!",
+                msg_avatar_updated: "¡Avatar actualizado!", msg_export: "¡Datos exportados!", msg_delete_confirm: "¡Cuenta eliminada!",
+                msg_wrong_pwd: "Contraseña incorrecta", msg_email_used: "Correo ya utilizado",
+                danger_warning: "Esta acción es irreversible. Todos tus datos serán eliminados.",
+                nav_home: "Inicio", nav_files: "Archivos", nav_courses: "Cursos", nav_notes: "Notas", nav_quiz: "Cuestionarios",
+                nav_reminders: "Recordatorios", nav_projects: "Proyectos", nav_negociations: "Negociaciones", nav_contracts: "Contratos", nav_account: "Cuenta",
+                mobile_logout: "Cerrar sesión"
+            },
+            de: {
+                page_title: "Mein Konto", page_desc: "Verwalten Sie Ihre persönlichen Daten und Einstellungen",
+                info_title: "Persönliche Informationen", security_title: "Sicherheit", prefs_title: "Einstellungen", danger_title: "Gefahrenzone",
+                label_name: "Name", label_email: "E-Mail", label_type: "Typ", label_since: "Mitglied seit",
+                label_password: "Passwort", label_lastlogin: "Letzte Anmeldung", label_subscription: "Abonnement",
+                label_theme: "Thema", label_lang: "Sprache", label_notif: "Benachrichtigungen",
+                label_export: "Daten exportieren", label_delete: "Konto löschen",
+                btn_edit_name: "Bearbeiten", btn_edit_email: "Bearbeiten", btn_change_pwd: "Ändern", btn_upgrade: "Upgrade",
+                btn_export: "Exportieren", btn_delete: "Löschen", btn_theme: "Ändern", btn_notif: "Ändern",
+                theme_clair: "Hell", theme_sombre: "Dunkel",
+                lang_fr: "Französisch", lang_en: "Englisch", lang_es: "Spanisch", lang_de: "Deutsch",
+                notif_on: "Aktiviert", notif_off: "Deaktiviert",
+                stat_docs: "Dokumente", stat_cours: "Kurse", stat_notes: "Notizen", stat_quiz: "Quiz",
+                modal_avatar: "Avatar ändern", modal_pwd: "Passwort ändern", modal_name: "Name bearbeiten", modal_email: "E-Mail bearbeiten",
+                label_current: "Aktuelles Passwort", label_new: "Neues Passwort", label_confirm: "Bestätigen",
+                label_new_name: "Neuer Name", label_new_email: "Neue E-Mail",
+                btn_upload: "Bild hochladen", btn_change: "Ändern", btn_save_name: "Speichern", btn_save_email: "Speichern",
+                msg_name_updated: "Name aktualisiert!", msg_email_updated: "E-Mail aktualisiert!", msg_pwd_updated: "Passwort geändert!",
+                msg_avatar_updated: "Avatar aktualisiert!", msg_export: "Daten exportiert!", msg_delete_confirm: "Konto gelöscht!",
+                msg_wrong_pwd: "Falsches Passwort", msg_email_used: "E-Mail bereits verwendet",
+                danger_warning: "Diese Aktion ist irreversibel. Alle Ihre Daten werden gelöscht.",
+                nav_home: "Startseite", nav_files: "Dateien", nav_courses: "Kurse", nav_notes: "Notizen", nav_quiz: "Quiz",
+                nav_reminders: "Erinnerungen", nav_projects: "Projekte", nav_negociations: "Verhandlungen", nav_contracts: "Verträge", nav_account: "Konto",
+                mobile_logout: "Abmelden"
+            }
+        };
+
+        // ========== VARIABLES GLOBALES ==========
+        let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        if (!currentUser) window.location.href = 'index.html';
+        
+        let currentLang = localStorage.getItem('app_lang') || 'fr';
+        let currentTheme = localStorage.getItem('app_theme') || 'light';
+        let notificationsEnabled = localStorage.getItem('notifications_enabled') !== 'false';
+
+        // ========== APPLIQUER THÈME ==========
+        function applyTheme() {
+            if (currentTheme === 'dark') {
+                document.body.classList.add('dark');
+            } else {
+                document.body.classList.remove('dark');
+            }
+            const themeText = currentTheme === 'dark' ? translations[currentLang].theme_sombre : translations[currentLang].theme_clair;
+            document.getElementById('theme-status').innerText = themeText;
+        }
+
+        function toggleTheme() {
+            currentTheme = currentTheme === 'light' ? 'dark' : 'light';
+            localStorage.setItem('app_theme', currentTheme);
+            applyTheme();
+            updateUI();
+            const msg = currentLang === 'fr' ? `Thème ${currentTheme === 'dark' ? 'sombre' : 'clair'} activé` : 
+                       currentLang === 'en' ? `${currentTheme === 'dark' ? 'Dark' : 'Light'} theme activated` :
+                       currentLang === 'es' ? `Tema ${currentTheme === 'dark' ? 'oscuro' : 'claro'} activado` :
+                       `${currentTheme === 'dark' ? 'Dunkles' : 'Helles'} Thema aktiviert`;
+            showMessage(msg);
+        }
+
+        // ========== APPLIQUER LANGUE ==========
+        function updateUI() {
+            const t = translations[currentLang];
+            
+            // Page header
+            document.getElementById('page-title').innerText = t.page_title;
+            document.getElementById('page-desc').innerText = t.page_desc;
+            
+            // Cards titles
+            document.getElementById('info-title').innerText = t.info_title;
+            document.getElementById('security-title').innerText = t.security_title;
+            document.getElementById('prefs-title').innerText = t.prefs_title;
+            document.getElementById('danger-title').innerText = t.danger_title;
+            
+            // Labels
+            document.getElementById('label-name').innerText = t.label_name;
+            document.getElementById('label-email').innerText = t.label_email;
+            document.getElementById('label-type').innerText = t.label_type;
+            document.getElementById('label-since').innerText = t.label_since;
+            document.getElementById('label-password').innerText = t.label_password;
+            document.getElementById('label-lastlogin').innerText = t.label_lastlogin;
+            document.getElementById('label-subscription').innerText = t.label_subscription;
+            document.getElementById('label-theme').innerText = t.label_theme;
+            document.getElementById('label-lang').innerText = t.label_lang;
+            document.getElementById('label-notif').innerText = t.label_notif;
+            document.getElementById('label-export').innerText = t.label_export;
+            document.getElementById('label-delete').innerText = t.label_delete;
+            document.getElementById('danger-warning').innerText = t.danger_warning;
+            
+            // Buttons
+            document.getElementById('btn-edit-name').innerText = t.btn_edit_name;
+            document.getElementById('btn-edit-email').innerText = t.btn_edit_email;
+            document.getElementById('btn-change-pwd').innerText = t.btn_change_pwd;
+            document.getElementById('btn-upgrade').innerText = t.btn_upgrade;
+            document.getElementById('btn-export').innerText = t.btn_export;
+            document.getElementById('btn-delete').innerText = t.btn_delete;
+            document.getElementById('btn-theme').innerText = t.btn_theme;
+            document.getElementById('btn-notif').innerText = t.btn_notif;
+            
+            // Stats labels
+            document.getElementById('stat-docs-label').innerText = t.stat_docs;
+            document.getElementById('stat-cours-label').innerText = t.stat_cours;
+            document.getElementById('stat-notes-label').innerText = t.stat_notes;
+            document.getElementById('stat-quiz-label').innerText = t.stat_quiz;
+            
+            // Modal titles
+            document.getElementById('modal-avatar-title').innerText = t.modal_avatar;
+            document.getElementById('modal-pwd-title').innerText = t.modal_pwd;
+            document.getElementById('modal-name-title').innerText = t.modal_name;
+            document.getElementById('modal-email-title').innerText = t.modal_email;
+            
+            // Modal labels
+            document.getElementById('label-current').innerText = t.label_current;
+            document.getElementById('label-new').innerText = t.label_new;
+            document.getElementById('label-confirm').innerText = t.label_confirm;
+            document.getElementById('label-new-name').innerText = t.label_new_name;
+            document.getElementById('label-new-email').innerText = t.label_new_email;
+            
+            // Modal buttons
+            document.getElementById('btn-upload').innerText = t.btn_upload;
+            document.getElementById('btn-change').innerText = t.btn_change;
+            document.getElementById('btn-save-name').innerText = t.btn_save_name;
+            document.getElementById('btn-save-email').innerText = t.btn_save_email;
+            
+            // Status values
+            document.getElementById('lang-status').innerText = t[`lang_${currentLang}`];
+            document.getElementById('notif-status').innerText = notificationsEnabled ? t.notif_on : t.notif_off;
+            
+            // Navigation desktop
+            document.getElementById('nav-home').innerText = t.nav_home;
+            document.getElementById('nav-files').innerText = t.nav_files;
+            document.getElementById('nav-courses').innerText = t.nav_courses;
+            document.getElementById('nav-notes').innerText = t.nav_notes;
+            document.getElementById('nav-quiz').innerText = t.nav_quiz;
+            document.getElementById('nav-reminders').innerText = t.nav_reminders;
+            document.getElementById('nav-projects').innerText = t.nav_projects;
+            document.getElementById('nav-negociations').innerText = t.nav_negociations;
+            document.getElementById('nav-contracts').innerText = t.nav_contracts;
+            document.getElementById('nav-account').innerText = t.nav_account;
+            
+            // Navigation mobile
+            document.getElementById('mobile-home').querySelector('span').innerText = t.nav_home;
+            document.getElementById('mobile-files').querySelector('span').innerText = t.nav_files;
+            document.getElementById('mobile-courses').querySelector('span').innerText = t.nav_courses;
+            document.getElementById('mobile-notes').querySelector('span').innerText = t.nav_notes;
+            document.getElementById('mobile-quiz').querySelector('span').innerText = t.nav_quiz;
+            document.getElementById('mobile-reminders').querySelector('span').innerText = t.nav_reminders;
+            document.getElementById('mobile-projects').querySelector('span').innerText = t.nav_projects;
+            document.getElementById('mobile-negociations').querySelector('span').innerText = t.nav_negociations;
+            document.getElementById('mobile-contracts').querySelector('span').innerText = t.nav_contracts;
+            document.getElementById('mobile-account').querySelector('span').innerText = t.nav_account;
+            document.getElementById('mobile-logout').querySelector('span').innerText = t.mobile_logout;
+            
+            // Select langue
+            document.getElementById('lang-select').value = currentLang;
+            
+            applyTheme();
+            loadUserData();
+            loadStats();
+        }
+
+        function toggleLanguage() {
+            currentLang = document.getElementById('lang-select').value;
+            localStorage.setItem('app_lang', currentLang);
+            updateUI();
+            const msg = currentLang === 'fr' ? 'Langue changée en français' : 
+                       currentLang === 'en' ? 'Language changed to English' :
+                       currentLang === 'es' ? 'Idioma cambiado a español' :
+                       'Sprache geändert auf Deutsch';
+            showMessage(msg);
+        }
+
+        function toggleNotifications() {
+            notificationsEnabled = !notificationsEnabled;
+            localStorage.setItem('notifications_enabled', notificationsEnabled);
+            const t = translations[currentLang];
+            document.getElementById('notif-status').innerText = notificationsEnabled ? t.notif_on : t.notif_off;
+            const msg = notificationsEnabled ? 
+                (currentLang === 'fr' ? 'Notifications activées' : currentLang === 'en' ? 'Notifications enabled' : currentLang === 'es' ? 'Notificaciones activadas' : 'Benachrichtigungen aktiviert') :
+                (currentLang === 'fr' ? 'Notifications désactivées' : currentLang === 'en' ? 'Notifications disabled' : currentLang === 'es' ? 'Notificaciones desactivadas' : 'Benachrichtigungen deaktiviert');
+            showMessage(msg);
+        }
+
+        // ========== FONCTIONS UTILISATEUR ==========
+        function showMessage(msg, type = 'success') { 
+            const m = document.getElementById('message'); 
+            m.textContent = msg; 
+            m.className = `message show ${type}`; 
+            setTimeout(() => m.classList.remove('show'), 3000); 
+        }
+        
+        function saveUser() { 
+            localStorage.setItem('currentUser', JSON.stringify(currentUser)); 
+            let users = JSON.parse(localStorage.getItem('users') || '[]'); 
+            const idx = users.findIndex(u => u.id === currentUser.id); 
+            if (idx !== -1) users[idx] = currentUser; 
+            localStorage.setItem('users', JSON.stringify(users)); 
+        }
+        
+        function loadUserData() {
+            document.getElementById('user-name').innerText = currentUser.name.split(' ')[0];
+            if (currentUser.avatar) { 
+                document.getElementById('user-avatar').src = currentUser.avatar; 
+                document.getElementById('profile-avatar-img').src = currentUser.avatar; 
+            }
+            document.getElementById('profile-name').innerText = currentUser.name;
+            document.getElementById('profile-email').innerHTML = `<i class="fas fa-envelope"></i> ${currentUser.email}`;
+            document.getElementById('display-name').innerText = currentUser.name;
+            document.getElementById('display-email').innerText = currentUser.email;
+            const typeText = currentUser.type === 'etudiant' ? 
+                (currentLang === 'fr' ? 'Étudiant' : currentLang === 'en' ? 'Student' : currentLang === 'es' ? 'Estudiante' : 'Student') : 
+                (currentLang === 'fr' ? 'Enseignant' : currentLang === 'en' ? 'Teacher' : currentLang === 'es' ? 'Profesor' : 'Lehrer');
+            document.getElementById('profile-badge').innerText = typeText;
+            document.getElementById('display-type').innerText = typeText;
+            document.getElementById('member-date').innerText = new Date(currentUser.joined).toLocaleDateString(
+                currentLang === 'fr' ? 'fr-FR' : currentLang === 'en' ? 'en-US' : currentLang === 'es' ? 'es-ES' : 'de-DE'
+            );
+            document.getElementById('last-login').innerText = new Date().toLocaleString(
+                currentLang === 'fr' ? 'fr-FR' : currentLang === 'en' ? 'en-US' : currentLang === 'es' ? 'es-ES' : 'de-DE'
+            );
+            const sub = JSON.parse(localStorage.getItem(`subscription_${currentUser.id}`));
+            document.getElementById('subscription-status').innerHTML = (sub && sub.active) ? 
+                `<span style="color:var(--success)">${currentLang === 'fr' ? 'Premium' : 'Premium'} <i class="fas fa-crown"></i></span>` : 
+                (currentLang === 'fr' ? 'Gratuit' : 'Free');
+        }
+
+        function loadStats() {
+            let docs = JSON.parse(localStorage.getItem(`documents_${currentUser.id}`) || '[]');
+            let cours = JSON.parse(localStorage.getItem(`cours_${currentUser.id}`) || '[]');
+            let notes = JSON.parse(localStorage.getItem(`notes_${currentUser.id}`) || '[]');
+            let quiz = JSON.parse(localStorage.getItem(`quiz_${currentUser.id}`) || '[]');
+            document.getElementById('stat-docs').innerText = docs.length;
+            document.getElementById('stat-cours').innerText = cours.length;
+            document.getElementById('stat-notes').innerText = notes.length;
+            document.getElementById('stat-quiz').innerText = quiz.length;
+        }
+
+        // ========== AVATARS ==========
+        const avatars = ['https://cdn-icons-png.flaticon.com/512/3135/3135715.png','https://cdn-icons-png.flaticon.com/512/3135/3135768.png','https://cdn-icons-png.flaticon.com/512/3135/3135823.png','https://cdn-icons-png.flaticon.com/512/3135/3135790.png','https://cdn-icons-png.flaticon.com/512/3135/3135815.png','https://cdn-icons-png.flaticon.com/512/3135/3135747.png','https://cdn-icons-png.flaticon.com/512/3135/3135789.png','https://cdn-icons-png.flaticon.com/512/3135/3135739.png'];
+        function loadAvatars() { 
+            document.getElementById('avatar-options').innerHTML = avatars.map(url => 
+                `<div class="avatar-option" onclick="changeAvatar('${url}')"><img src="${url}"><span>Avatar</span></div>`
+            ).join(''); 
+        }
+        function changeAvatar(url) { 
+            currentUser.avatar = url; 
+            saveUser(); 
+            loadUserData(); 
+            document.getElementById('avatar-modal').style.display = 'none'; 
+            showMessage(translations[currentLang].msg_avatar_updated); 
+        }
+        document.getElementById('avatar-upload').addEventListener('change', (e) => { 
+            if (e.target.files[0]) { 
+                const r = new FileReader(); 
+                r.onload = (ev) => changeAvatar(ev.target.result); 
+                r.readAsDataURL(e.target.files[0]); 
+            } 
+        });
+
+        // ========== MODIFIER NOM ==========
+        function editName() { 
+            document.getElementById('new-name').value = currentUser.name; 
+            document.getElementById('edit-name-modal').style.display = 'flex'; 
+        }
+        document.getElementById('edit-name-form').addEventListener('submit', (e) => { 
+            e.preventDefault(); 
+            const newName = document.getElementById('new-name').value.trim(); 
+            if (!newName) { 
+                showMessage(translations[currentLang].msg_wrong_pwd, 'error'); 
+                return; 
+            } 
+            currentUser.name = newName; 
+            saveUser(); 
+            loadUserData(); 
+            document.getElementById('edit-name-modal').style.display = 'none'; 
+            showMessage(translations[currentLang].msg_name_updated); 
+        });
+
+        // ========== MODIFIER EMAIL ==========
+        function editEmail() { 
+            document.getElementById('new-email').value = currentUser.email; 
+            document.getElementById('edit-email-modal').style.display = 'flex'; 
+        }
+        document.getElementById('edit-email-form').addEventListener('submit', (e) => { 
+            e.preventDefault(); 
+            const newEmail = document.getElementById('new-email').value.trim(); 
+            if (!newEmail) { 
+                showMessage('Email invalide', 'error'); 
+                return; 
+            } 
+            let users = JSON.parse(localStorage.getItem('users') || '[]'); 
+            if (users.some(u => u.email === newEmail && u.id !== currentUser.id)) { 
+                showMessage(translations[currentLang].msg_email_used, 'error'); 
+                return; 
+            } 
+            currentUser.email = newEmail; 
+            saveUser(); 
+            loadUserData(); 
+            document.getElementById('edit-email-modal').style.display = 'none'; 
+            showMessage(translations[currentLang].msg_email_updated); 
+        });
+
+        // ========== MOT DE PASSE ==========
+        function openPasswordModal() { 
+            document.getElementById('password-modal').style.display = 'flex'; 
+            document.getElementById('password-form').reset(); 
+        }
+        document.getElementById('password-form').addEventListener('submit', (e) => { 
+            e.preventDefault(); 
+            const current = document.getElementById('current-password').value; 
+            const newPwd = document.getElementById('new-password').value; 
+            const confirm = document.getElementById('confirm-password').value; 
+            if (current !== currentUser.password) { 
+                showMessage(translations[currentLang].msg_wrong_pwd, 'error'); 
+                return; 
+            } 
+            if (newPwd.length < 6) { 
+                showMessage(currentLang === 'fr' ? '6 caractères minimum' : 'Minimum 6 characters', 'error'); 
+                return; 
+            } 
+            if (newPwd !== confirm) { 
+                showMessage(currentLang === 'fr' ? 'Les mots de passe ne correspondent pas' : 'Passwords do not match', 'error'); 
+                return; 
+            } 
+            currentUser.password = newPwd; 
+            saveUser(); 
+            document.getElementById('password-modal').style.display = 'none'; 
+            showMessage(translations[currentLang].msg_pwd_updated); 
+        });
+
+        // ========== EXPORT DONNÉES ==========
+        function exportData() { 
+            const data = { 
+                user: currentUser, 
+                documents: JSON.parse(localStorage.getItem(`documents_${currentUser.id}`) || '[]'), 
+                cours: JSON.parse(localStorage.getItem(`cours_${currentUser.id}`) || '[]'), 
+                notes: JSON.parse(localStorage.getItem(`notes_${currentUser.id}`) || '[]'), 
+                quiz: JSON.parse(localStorage.getItem(`quiz_${currentUser.id}`) || '[]'), 
+                rappels: JSON.parse(localStorage.getItem(`rappels_${currentUser.id}`) || '[]'), 
+                projets: JSON.parse(localStorage.getItem(`projets_${currentUser.id}`) || '[]'), 
+                negociations: JSON.parse(localStorage.getItem(`negociations_${currentUser.id}`) || '[]'), 
+                contrats: JSON.parse(localStorage.getItem(`contrats_${currentUser.id}`) || '[]'), 
+                exportDate: new Date().toISOString() 
+            }; 
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }); 
+            const url = URL.createObjectURL(blob); 
+            const a = document.createElement('a'); 
+            a.href = url; 
+            a.download = `edulearn_export_${currentUser.id}.json`; 
+            a.click(); 
+            URL.revokeObjectURL(url); 
+            showMessage(translations[currentLang].msg_export); 
+        }
+
+        // ========== SUPPRIMER COMPTE ==========
+        function deleteAccount() { 
+            const t = translations[currentLang]; 
+            if (confirm(t.label_delete + ' ?')) { 
+                const confirmText = currentLang === 'fr' ? 'SUPPRIMER' : currentLang === 'en' ? 'DELETE' : currentLang === 'es' ? 'ELIMINAR' : 'LÖSCHEN';
+                const promptText = currentLang === 'fr' ? 'Tapez "SUPPRIMER" pour confirmer' : 
+                                  currentLang === 'en' ? 'Type "DELETE" to confirm' : 
+                                  currentLang === 'es' ? 'Escribe "ELIMINAR" para confirmar' : 
+                                  'Geben Sie "LÖSCHEN" ein um zu bestätigen';
+                if (prompt(promptText) === confirmText) { 
+                    localStorage.removeItem(`documents_${currentUser.id}`); 
+                    localStorage.removeItem(`cours_${currentUser.id}`); 
+                    localStorage.removeItem(`notes_${currentUser.id}`); 
+                    localStorage.removeItem(`quiz_${currentUser.id}`); 
+                    localStorage.removeItem(`rappels_${currentUser.id}`); 
+                    localStorage.removeItem(`projets_${currentUser.id}`); 
+                    localStorage.removeItem(`negociations_${currentUser.id}`); 
+                    localStorage.removeItem(`contrats_${currentUser.id}`); 
+                    let users = JSON.parse(localStorage.getItem('users') || '[]'); 
+                    users = users.filter(u => u.id !== currentUser.id); 
+                    localStorage.setItem('users', JSON.stringify(users)); 
+                    localStorage.removeItem('currentUser'); 
+                    showMessage(t.msg_delete_confirm); 
+                    setTimeout(() => window.location.href = 'index.html', 1500); 
+                } 
+            } 
+        }
+
+        // ========== INITIALISATION ==========
+        document.getElementById('change-avatar-btn').onclick = () => document.getElementById('avatar-modal').style.display = 'flex';
+        document.querySelectorAll('.close-modal').forEach(btn => { 
+            btn.onclick = () => { 
+                document.querySelectorAll('.modal').forEach(m => m.style.display = 'none'); 
+            }; 
+        });
+        window.onclick = (e) => { 
+            document.querySelectorAll('.modal').forEach(m => { 
+                if (e.target === m) m.style.display = 'none'; 
+            }); 
+        };
+        document.getElementById('logout-btn').onclick = () => { 
+            localStorage.removeItem('currentUser'); 
+            window.location.href = 'index.html'; 
+        };
+        
+        // Écouteurs d'événements
+        document.getElementById('lang-select').addEventListener('change', toggleLanguage);
+        
+        // Menu responsive
+        const toggleBtn = document.getElementById('mobile-toggle');
+        const mobileNav = document.getElementById('mobile-nav');
+        if (toggleBtn && mobileNav) {
+            toggleBtn.onclick = () => { 
+                mobileNav.classList.toggle('open'); 
+                toggleBtn.classList.toggle('active'); 
+                document.body.style.overflow = mobileNav.classList.contains('open') ? 'hidden' : ''; 
+            };
+            document.querySelectorAll('.mobile-nav a, .mobile-nav button').forEach(link => { 
+                link.onclick = () => { 
+                    mobileNav.classList.remove('open'); 
+                    toggleBtn.classList.remove('active'); 
+                    document.body.style.overflow = ''; 
+                }; 
+            });
+            document.addEventListener('click', (e) => { 
+                if (!mobileNav.contains(e.target) && !toggleBtn.contains(e.target) && mobileNav.classList.contains('open')) { 
+                    mobileNav.classList.remove('open'); 
+                    toggleBtn.classList.remove('active'); 
+                    document.body.style.overflow = ''; 
+                } 
+            });
+        }
+        document.getElementById('mobile-logout')?.addEventListener('click', () => { 
+            localStorage.removeItem('currentUser'); 
+            window.location.href = 'index.html'; 
+        });
+        
+        window.editName = editName; 
+        window.editEmail = editEmail; 
+        window.openPasswordModal = openPasswordModal; 
+        window.exportData = exportData; 
+        window.deleteAccount = deleteAccount;
+        window.toggleTheme = toggleTheme;
+        window.toggleNotifications = toggleNotifications;
+        
+        loadAvatars(); 
+        loadUserData(); 
+        loadStats(); 
+        updateUI();
+    </script>
+</body>
+</html>

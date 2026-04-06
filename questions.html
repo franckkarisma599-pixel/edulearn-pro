@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Quiz - EduLearn Pro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a0ca3;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --info: #3498db;
+            --dark: #1a1a2e;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --gray-light: #e9ecef;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0,0,0,0.1);
+            --shadow-sm: 0 2px 10px rgba(0,0,0,0.05);
+            --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        body { background: #f5f7ff; }
+
+        /* Navigation */
+        .navbar { background: var(--white); box-shadow: var(--shadow-sm); position: sticky; top: 0; z-index: 1000; padding: 12px 0; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .navbar .container { display: flex; justify-content: space-between; align-items: center; }
+        .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+        .logo-icon { width: 40px; height: 40px; background: var(--gradient); border-radius: 12px; display: flex; align-items: center; justify-content: center; }
+        .logo-icon i { font-size: 1.3rem; color: white; }
+        .logo h1 { font-size: 1.3rem; font-weight: 700; color: var(--dark); }
+        .logo span { color: var(--primary); }
+        .nav-menu { display: flex; gap: 15px; flex-wrap: wrap; }
+        .nav-menu a { text-decoration: none; color: var(--gray); padding: 8px 16px; border-radius: 8px; transition: all 0.3s; font-weight: 500; font-size: 0.9rem; }
+        .nav-menu a:hover, .nav-menu a.active { background: rgba(67,97,238,0.1); color: var(--primary); }
+        .user-info { display: flex; align-items: center; gap: 12px; }
+        .user-info img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
+        .logout-btn { background: none; border: none; color: var(--gray); cursor: pointer; font-size: 1.2rem; transition: all 0.3s; }
+        .logout-btn:hover { color: var(--danger); }
+
+        /* Menu Mobile */
+        .mobile-menu-toggle { display: none; background: none; border: none; font-size: 1.5rem; color: var(--dark); cursor: pointer; padding: 8px; border-radius: 8px; z-index: 1001; }
+        .mobile-nav { position: fixed; top: 0; right: -100%; width: 80%; max-width: 320px; height: 100vh; background: var(--white); box-shadow: -5px 0 30px rgba(0,0,0,0.1); z-index: 1000; transition: right 0.3s ease; display: flex; flex-direction: column; padding: 80px 20px 20px; overflow-y: auto; }
+        .mobile-nav.open { right: 0; }
+        .mobile-nav a, .mobile-nav button { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 12px; text-decoration: none; color: var(--dark); font-weight: 500; width: 100%; text-align: left; background: none; border: none; cursor: pointer; font-size: 1rem; }
+        .mobile-nav a:hover, .mobile-nav button:hover { background: rgba(67,97,238,0.1); color: var(--primary); }
+        .mobile-nav i { width: 24px; }
+
+        /* Main Content */
+        .main-content { padding: 30px 0; }
+
+        /* Page Header */
+        .page-header {
+            background: var(--gradient);
+            border-radius: 24px;
+            padding: 35px 30px;
+            margin-bottom: 30px;
+            color: white;
+        }
+        .page-header h1 {
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+        .page-header p {
+            opacity: 0.9;
+            font-size: 0.95rem;
+        }
+
+        /* Subjects Grid */
+        .subjects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        .subject-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--gray-light);
+        }
+        .subject-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow);
+            border-color: transparent;
+        }
+        .subject-icon {
+            width: 70px;
+            height: 70px;
+            background: rgba(67,97,238,0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+        .subject-icon i { font-size: 2rem; color: var(--primary); }
+        .subject-card h3 { font-size: 1.2rem; margin-bottom: 10px; color: var(--dark); }
+        .subject-card p { color: var(--gray); font-size: 0.85rem; margin-bottom: 5px; }
+        .subject-stats { margin-top: 15px; padding-top: 15px; border-top: 1px solid var(--gray-light); display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--gray); }
+
+        /* Quiz Container */
+        .quiz-container {
+            background: var(--white);
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+        }
+        .quiz-header { text-align: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 2px solid var(--gray-light); }
+        .quiz-header h2 { font-size: 1.8rem; color: var(--dark); margin-bottom: 10px; }
+        .quiz-meta { display: flex; justify-content: center; gap: 30px; color: var(--gray); font-size: 0.9rem; flex-wrap: wrap; }
+        .question { font-size: 1.2rem; font-weight: 600; margin-bottom: 25px; padding: 20px; background: var(--light); border-radius: 16px; color: var(--dark); line-height: 1.5; }
+        .options { display: flex; flex-direction: column; gap: 12px; margin-bottom: 30px; }
+        .option { display: flex; align-items: center; gap: 12px; padding: 15px; border: 2px solid var(--gray-light); border-radius: 12px; cursor: pointer; transition: all 0.3s; }
+        .option:hover { border-color: var(--primary); background: rgba(67,97,238,0.05); }
+        .option.selected { border-color: var(--primary); background: rgba(67,97,238,0.1); }
+        .option input { width: 18px; height: 18px; cursor: pointer; }
+        .option label { flex: 1; cursor: pointer; font-size: 1rem; }
+
+        /* Quiz Navigation */
+        .quiz-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--gray-light); }
+        .progress-bar { flex: 1; height: 8px; background: var(--light); border-radius: 4px; margin: 0 20px; overflow: hidden; }
+        .progress-fill { height: 100%; background: var(--primary); transition: width 0.3s; }
+        .btn { padding: 12px 24px; border-radius: 12px; font-weight: 600; cursor: pointer; border: none; transition: all 0.3s; font-size: 0.9rem; }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: var(--primary-dark); transform: translateY(-2px); }
+        .btn-secondary { background: transparent; color: var(--primary); border: 2px solid var(--primary); }
+        .btn-secondary:hover { background: rgba(67,97,238,0.1); }
+
+        /* Results */
+        .results { text-align: center; padding: 40px; }
+        .score-circle { width: 150px; height: 150px; border-radius: 50%; margin: 20px auto; display: flex; align-items: center; justify-content: center; position: relative; }
+        .score-circle::before { content: ''; position: absolute; width: 120px; height: 120px; background: white; border-radius: 50%; }
+        .score-text { position: relative; font-size: 2rem; font-weight: bold; color: var(--primary); }
+        .results-actions { display: flex; gap: 15px; justify-content: center; margin-top: 30px; flex-wrap: wrap; }
+
+        /* Correction Details */
+        .correction-details { margin-top: 30px; padding: 25px; background: var(--light); border-radius: 20px; }
+        .correction-item { padding: 20px; margin-bottom: 15px; background: var(--white); border-radius: 12px; border-left: 4px solid var(--gray); }
+        .correction-item.correct { border-left-color: var(--success); }
+        .correction-item.wrong { border-left-color: var(--danger); }
+        .correction-question { font-weight: 600; margin-bottom: 10px; color: var(--dark); }
+        .correction-answer { color: var(--gray); font-size: 0.9rem; margin-bottom: 5px; }
+        .correction-good { color: var(--success); font-weight: 500; }
+        .correction-bad { color: var(--danger); font-weight: 500; }
+
+        /* History Section */
+        .history-section { background: var(--white); border-radius: 20px; padding: 25px; box-shadow: var(--shadow-sm); margin-top: 30px; }
+        .history-item { display: flex; justify-content: space-between; align-items: center; padding: 15px; border-bottom: 1px solid var(--gray-light); }
+        .history-item:last-child { border-bottom: none; }
+        .history-score { font-weight: bold; padding: 4px 12px; border-radius: 20px; }
+        .history-score.good { background: rgba(46,204,113,0.2); color: var(--success); }
+        .history-score.medium { background: rgba(243,156,18,0.2); color: var(--warning); }
+        .history-score.bad { background: rgba(231,76,60,0.2); color: var(--danger); }
+
+        /* Back Button */
+        .back-button { display: inline-flex; align-items: center; gap: 10px; background: var(--white); color: var(--primary); padding: 12px 24px; border-radius: 50px; text-decoration: none; font-weight: 500; transition: all 0.3s; margin-top: 20px; box-shadow: var(--shadow-sm); }
+        .back-button:hover { background: var(--primary); color: white; transform: translateY(-2px); }
+
+        /* Message */
+        .message { position: fixed; bottom: 20px; right: 20px; background: var(--dark); color: white; padding: 12px 20px; border-radius: 8px; display: none; z-index: 2000; animation: slideIn 0.3s ease; }
+        .message.show { display: block; }
+        .message.success { background: var(--success); }
+        .message.error { background: var(--danger); }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+        /* Responsive */
+        @media (max-width: 768px) { 
+            .nav-menu { display: none !important; } 
+            .user-info { display: none !important; } 
+            .mobile-menu-toggle { display: block; } 
+            .subjects-grid { grid-template-columns: 1fr; }
+            .quiz-nav { flex-direction: column; gap: 15px; }
+            .progress-bar { margin: 10px 0; width: 100%; }
+            .results-actions { flex-direction: column; }
+            .page-header { padding: 25px 20px; }
+            .page-header h1 { font-size: 1.4rem; }
+            .quiz-header h2 { font-size: 1.4rem; }
+            .question { font-size: 1rem; }
+        }
+        @media (min-width: 769px) { .mobile-nav, .mobile-menu-toggle { display: none; } .nav-menu { display: flex !important; } .user-info { display: flex !important; } }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="dashboard.html" class="logo"><div class="logo-icon"><i class="fas fa-graduation-cap"></i></div><h1>Edu<span>Learn</span> Pro</h1></a>
+            <div class="nav-menu">
+                <a href="dashboard.html">Accueil</a>
+                <a href="storage.html">Fichiers</a>
+                <a href="cours.html">Cours</a>
+                <a href="notes.html">Notes</a>
+                <a href="questions.html" class="active">Quiz</a>
+                <a href="rappels.html">Rappels</a>
+                <a href="projets.html">Projets</a>
+                <a href="carrieres.html">Carrières</a>
+                <a href="negociation.html">Négociations</a>
+                <a href="contrat.html">Contrats</a>
+                 <a href="centre-partenariats.html">Partenariats</a>
+                <a href="comptes.html">Compte</a>
+            </div>
+            <div class="user-info"><img id="user-avatar" src="https://via.placeholder.com/40"><span id="user-name"></span><button class="logout-btn" id="logout-btn"><i class="fas fa-sign-out-alt"></i></button></div>
+            <button class="mobile-menu-toggle" id="mobile-toggle"><i class="fas fa-bars"></i></button>
+        </div>
+    </nav>
+
+    <div class="mobile-nav" id="mobile-nav">
+        <a href="dashboard.html"><i class="fas fa-home"></i> Accueil</a>
+        <a href="storage.html"><i class="fas fa-file-alt"></i> Fichiers</a>
+        <a href="cours.html"><i class="fas fa-book"></i> Cours</a>
+        <a href="notes.html"><i class="fas fa-pencil-alt"></i> Notes</a>
+        <a href="questions.html"><i class="fas fa-question-circle"></i> Quiz</a>
+        <a href="rappels.html"><i class="fas fa-bell"></i> Rappels</a>
+        <a href="projets.html"><i class="fas fa-tasks"></i> Projets</a>
+        <a href="negociations.html"><i class="fas fa-handshake"></i> Négociations</a>
+        <a href="contrats.html"><i class="fas fa-file-signature"></i> Contrats</a>
+        <a href="comptes.html"><i class="fas fa-user-circle"></i> Compte</a>
+        <a href="carrieres.html"><i class="fas fa-briefcase"></i> Carrières</a> 
+         <a href="centre-partenariats.html"><i class="fas fa-handshake"></i> Partenariats</a>
+        <button id="mobile-logout"><i class="fas fa-sign-out-alt"></i> Déconnexion</button>
+    </div>
+
+    <div class="main-content">
+        <div class="container">
+            <div id="quiz-content"></div>
+        </div>
+    </div>
+
+    <div id="message" class="message"></div>
+
+    <script>
+        let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        if (!currentUser) window.location.href = 'index.html';
+        document.getElementById('user-name').innerText = currentUser.name.split(' ')[0];
+        if (currentUser.avatar) document.getElementById('user-avatar').src = currentUser.avatar;
+
+        // ========== BASE DE DONNÉES DES 12 MATIÈRES AVEC 10 QUESTIONS CHACUNE ==========
+        const questionsBank = {
+            "Architecture Environnement": {
+                icon: "fa-microchip", color: "#3498db",
+                questions: [
+                    { texte: "Que signifie CPU ?", options: ["Central Processing Unit", "Computer Personal Unit", "Central Program Unit", "Core Processing Unit"], correct: 0, explication: "CPU = Central Processing Unit, le processeur." },
+                    { texte: "La RAM est une mémoire :", options: ["Volatile", "Permanente", "Externe", "Lente"], correct: 0, explication: "La RAM perd ses données à l'extinction." },
+                    { texte: "Le disque dur est une mémoire :", options: ["De masse", "Vive", "Cache", "Registre"], correct: 0, explication: "Le disque dur est une mémoire de masse." },
+                    { texte: "Qu'est-ce que le BIOS ?", options: ["Basic Input Output System", "Binary Input Output System", "Basic Internal Operating System", "Boot Input Output System"], correct: 0, explication: "Le BIOS gère le démarrage." },
+                    { texte: "L'ALU fait partie :", options: ["Du CPU", "De la RAM", "Du disque dur", "De la carte mère"], correct: 0, explication: "L'ALU est dans le processeur." },
+                    { texte: "Un bus sert à :", options: ["Transporter des données", "Stocker des données", "Afficher", "Saisir"], correct: 0, explication: "Le bus transporte les données." },
+                    { texte: "Le cache L1 est :", options: ["Le plus rapide", "Le plus lent", "Le plus grand", "Le plus petit"], correct: 0, explication: "Le cache L1 est le plus rapide." },
+                    { texte: "Qu'est-ce qu'un registre ?", options: ["Mémoire interne CPU", "Mémoire externe", "Périphérique", "Logiciel"], correct: 0, explication: "Registre = mémoire interne du CPU." },
+                    { texte: "La carte mère contient :", options: ["Le chipset", "Le processeur", "La RAM", "Tous ces éléments"], correct: 3, explication: "La carte mère contient tous ces composants." },
+                    { texte: "L'horloge système mesure :", options: ["La fréquence", "La tension", "La température", "La capacité"], correct: 0, explication: "L'horloge donne la fréquence." }
+                ]
+            },
+            "Environnement Ordinateur": {
+                icon: "fa-desktop", color: "#1abc9c",
+                questions: [
+                    { texte: "Windows est un :", options: ["Système d'exploitation", "Logiciel", "Navigateur", "Antivirus"], correct: 0, explication: "Windows est un OS." },
+                    { texte: "Linux est :", options: ["Open source", "Propriétaire", "Payant", "Microsoft"], correct: 0, explication: "Linux est open source." },
+                    { texte: "Que signifie GUI ?", options: ["Graphical User Interface", "General User Interface", "Graphic Unit Input", "General Utility Interface"], correct: 0, explication: "GUI = Interface graphique." },
+                    { texte: "Un pilote (driver) sert à :", options: ["Gérer un périphérique", "Stocker", "Naviguer", "Calculer"], correct: 0, explication: "Le pilote gère le matériel." },
+                    { texte: "Le système de fichiers organise :", options: ["Les données", "La RAM", "Le CPU", "Le réseau"], correct: 0, explication: "Il organise les données sur le disque." },
+                    { texte: "NTFS est un :", options: ["Système de fichiers", "OS", "Logiciel", "Périphérique"], correct: 0, explication: "NTFS est un système de fichiers." },
+                    { texte: "Un processus est :", options: ["Un programme en exécution", "Un fichier", "Un dossier", "Un périphérique"], correct: 0, explication: "Un processus est un programme en cours d'exécution." },
+                    { texte: "Le multitâche permet :", options: ["Exécuter plusieurs programmes", "Plusieurs utilisateurs", "Plusieurs écrans", "Plusieurs processeurs"], correct: 0, explication: "Le multitâche exécute plusieurs programmes." },
+                    { texte: "Le bureau est :", options: ["L'interface principale", "Un meuble", "Un logiciel", "Un périphérique"], correct: 0, explication: "Le bureau est l'interface principale." },
+                    { texte: "Une extension indique :", options: ["Le type de fichier", "La taille", "La date", "L'auteur"], correct: 0, explication: "L'extension indique le format du fichier." }
+                ]
+            },
+            "Comptabilité": {
+                icon: "fa-book", color: "#2ecc71",
+                questions: [
+                    { texte: "Que signifie Bilan ?", options: ["Situation patrimoniale", "Compte de résultat", "Flux de trésorerie", "Journal"], correct: 0, explication: "Le bilan présente le patrimoine." },
+                    { texte: "L'actif représente :", options: ["Ce qu'on possède", "Ce qu'on doit", "Le CA", "Les bénéfices"], correct: 0, explication: "L'actif = biens et créances." },
+                    { texte: "Le passif représente :", options: ["Les dettes", "Les biens", "Les revenus", "Les charges"], correct: 0, explication: "Le passif = dettes et capitaux." },
+                    { texte: "Le compte de résultat donne :", options: ["Le résultat net", "Le patrimoine", "La trésorerie", "Les investissements"], correct: 0, explication: "Il donne le bénéfice ou la perte." },
+                    { texte: "TVA signifie :", options: ["Taxe sur la Valeur Ajoutée", "Taxe sur les Ventes", "Taxe Variable", "Taux de Valeur"], correct: 0, explication: "TVA = Taxe sur la Valeur Ajoutée." },
+                    { texte: "L'amortissement est :", options: ["Une charge", "Un produit", "Une dette", "Un actif"], correct: 0, explication: "L'amortissement est une charge." },
+                    { texte: "Un bilan est équilibré car :", options: ["Actif = Passif", "Actif > Passif", "Actif < Passif", "Total = 0"], correct: 0, explication: "Actif = Passif toujours." },
+                    { texte: "Le chiffre d'affaires est :", options: ["Les ventes", "Les bénéfices", "Les charges", "La trésorerie"], correct: 0, explication: "CA = montant des ventes." },
+                    { texte: "Le journal comptable enregistre :", options: ["Les opérations jour par jour", "Le bilan", "Les impôts", "Les salaires"], correct: 0, explication: "Le journal enregistre chronologiquement." },
+                    { texte: "La marge brute = ?", options: ["CA - Achats consommés", "CA - Charges", "CA - Impôts", "CA - Salaires"], correct: 0, explication: "Marge brute = CA - achats consommés." }
+                ]
+            },
+            "Économie Générale": {
+                icon: "fa-chart-line", color: "#e74c3c",
+                questions: [
+                    { texte: "Qu'est-ce que le PIB ?", options: ["Produit Intérieur Brut", "Produit International Brut", "Prix Intérieur de Base", "Produit Interne Brutal"], correct: 0, explication: "PIB = richesse créée." },
+                    { texte: "La loi de l'offre et de la demande :", options: ["Prix ↑ → Demande ↓", "Prix ↑ → Demande ↑", "Prix ↓ → Offre ↑", "Prix ↓ → Demande ↓"], correct: 0, explication: "Prix élevé = demande faible." },
+                    { texte: "L'inflation est :", options: ["Hausse des prix", "Baisse des prix", "Stagnation", "Augmentation du PIB"], correct: 0, explication: "Inflation = hausse générale des prix." },
+                    { texte: "Le rôle de la BCE :", options: ["Politique monétaire", "Politique fiscale", "Politique budgétaire", "Politique sociale"], correct: 0, explication: "BCE = politique monétaire." },
+                    { texte: "Le chômage structurel est dû à :", options: ["La structure économique", "La conjoncture", "Les saisons", "Les grèves"], correct: 0, explication: "Lié à la structure de l'économie." },
+                    { texte: "La microéconomie étudie :", options: ["Les comportements individuels", "L'économie globale", "Les marchés", "Le commerce"], correct: 0, explication: "Micro = comportements individuels." },
+                    { texte: "La balance commerciale = ?", options: ["Export - Import", "Import - Export", "Export + Import", "PIB - Export"], correct: 0, explication: "Balance commerciale = exportations - importations." },
+                    { texte: "Taux de chômage = ?", options: ["Chômeurs / Population active", "Chômeurs / Population totale", "Actifs / Population", "Inactifs / Population"], correct: 0, explication: "Rapport chômeurs/population active." },
+                    { texte: "Un monopole est :", options: ["Un seul vendeur", "Plusieurs vendeurs", "Aucun vendeur", "Marché parfait"], correct: 0, explication: "Monopole = un seul offreur." },
+                    { texte: "La politique budgétaire est menée par :", options: ["L'État", "La BCE", "Les banques", "Les entreprises"], correct: 0, explication: "Politique budgétaire = État." }
+                ]
+            },
+            "Anglais": {
+                icon: "fa-language", color: "#f39c12",
+                questions: [
+                    { texte: "What does 'understand' mean ?", options: ["Comprendre", "Parler", "Écrire", "Lire"], correct: 0, explication: "Understand = comprendre." },
+                    { texte: "Opposite of 'big' ?", options: ["Small", "Large", "Huge", "Tall"], correct: 0, explication: "Small = petit." },
+                    { texte: "'Computer' means ?", options: ["Ordinateur", "Calculatrice", "Écran", "Clavier"], correct: 0, explication: "Computer = ordinateur." },
+                    { texte: "'Beautiful' means ?", options: ["Beau/belle", "Laid", "Grand", "Petit"], correct: 0, explication: "Beautiful = beau/belle." },
+                    { texte: "Plural of 'child' ?", options: ["Children", "Childs", "Childes", "Childeren"], correct: 0, explication: "Children est le pluriel." },
+                    { texte: "'Thank you' means ?", options: ["Merci", "S'il vous plaît", "Désolé", "Bonjour"], correct: 0, explication: "Thank you = merci." },
+                    { texte: "'Quickly' means ?", options: ["Rapidement", "Lentement", "Doucement", "Fort"], correct: 0, explication: "Quickly = rapidement." },
+                    { texte: "Past of 'go' ?", options: ["Went", "Gone", "Goed", "Going"], correct: 0, explication: "Went est le passé de go." },
+                    { texte: "'Today' means ?", options: ["Aujourd'hui", "Demain", "Hier", "Maintenant"], correct: 0, explication: "Today = aujourd'hui." },
+                    { texte: "'Friend' means ?", options: ["Ami", "Ennemi", "Famille", "Collègue"], correct: 0, explication: "Friend = ami." }
+                ]
+            },
+            "Français": {
+                icon: "fa-book-open", color: "#9b59b6",
+                questions: [
+                    { texte: "Nature de 'maison' ?", options: ["Nom commun", "Verbe", "Adjectif", "Adverbe"], correct: 0, explication: "Maison est un nom commun." },
+                    { texte: "Le verbe 'aller' est du :", options: ["3ème groupe", "1er groupe", "2ème groupe", "4ème groupe"], correct: 0, explication: "Aller est du 3ème groupe." },
+                    { texte: "'Je mange' est à quel temps ?", options: ["Présent", "Passé", "Futur", "Imparfait"], correct: 0, explication: "Présent de l'indicatif." },
+                    { texte: "L'adjectif s'accorde en :", options: ["Genre et nombre", "Temps", "Personne", "Mode"], correct: 0, explication: "Accord en genre et nombre." },
+                    { texte: "Pluriel de 'cheval' :", options: ["Chevaux", "Chevals", "Chevalx", "Chevaus"], correct: 0, explication: "Chevaux est le pluriel." },
+                    { texte: "Féminin de 'acteur' :", options: ["Actrice", "Acteure", "Acteuse", "Actrice"], correct: 0, explication: "Actrice est le féminin." },
+                    { texte: "Une phrase interrogative :", options: ["Pose une question", "Donne un ordre", "Exprime un sentiment", "Affirme"], correct: 0, explication: "Elle pose une question." },
+                    { texte: "Le sujet du verbe est :", options: ["Ce qui fait l'action", "Ce qui subit", "Le lieu", "Le temps"], correct: 0, explication: "Le sujet fait ou subit l'action." },
+                    { texte: "Un complément circonstanciel indique :", options: ["Circonstances", "L'objet", "Le sujet", "Le verbe"], correct: 0, explication: "Il donne les circonstances." },
+                    { texte: "L'imparfait exprime :", options: ["Une action habituelle passée", "Une action future", "Un ordre", "Un souhait"], correct: 0, explication: "Action habituelle dans le passé." }
+                ]
+            },
+            "Mathématiques": {
+                icon: "fa-calculator", color: "#e67e22",
+                questions: [
+                    { texte: "2x + 5 = 13, x = ?", options: ["4", "5", "3", "6"], correct: 0, explication: "2x = 8, x = 4" },
+                    { texte: "3² × 2³ = ?", options: ["72", "54", "36", "48"], correct: 0, explication: "9 × 8 = 72" },
+                    { texte: "Dérivée de x²", options: ["2x", "x", "2", "0"], correct: 0, explication: "dérivée de x^n = n×x^(n-1)" },
+                    { texte: "log₁₀(100) = ?", options: ["2", "1", "10", "100"], correct: 0, explication: "10² = 100" },
+                    { texte: "√144 = ?", options: ["12", "10", "11", "13"], correct: 0, explication: "12×12=144" },
+                    { texte: "x² - 4 = 0, x = ?", options: ["2 ou -2", "4", "0", "16"], correct: 0, explication: "x² = 4, x = ±2" },
+                    { texte: "Valeur de π ?", options: ["3.14", "3.16", "3.12", "3.18"], correct: 0, explication: "π ≈ 3.14" },
+                    { texte: "7 × 8 = ?", options: ["56", "48", "64", "72"], correct: 0, explication: "7×8=56" },
+                    { texte: "Aire d'un carré de côté 5", options: ["25", "20", "10", "15"], correct: 0, explication: "5×5=25" },
+                    { texte: "15% de 200 = ?", options: ["30", "20", "25", "35"], correct: 0, explication: "200×0.15=30" }
+                ]
+            },
+            "Circuit Numérique": {
+                icon: "fa-microchip", color: "#16a085",
+                questions: [
+                    { texte: "En binaire, 1 + 1 = ?", options: ["10", "2", "11", "0"], correct: 0, explication: "1+1=10 en binaire" },
+                    { texte: "Base du binaire ?", options: ["2", "10", "16", "8"], correct: 0, explication: "Base 2" },
+                    { texte: "Porte AND donne 1 quand :", options: ["Les deux sont 1", "Une est 1", "Les deux 0", "Une est 0"], correct: 0, explication: "AND = 1 si les deux sont 1" },
+                    { texte: "Porte OR donne 1 quand :", options: ["Au moins une est 1", "Les deux 1", "Les deux 0", "Une est 0"], correct: 0, explication: "OR = 1 si au moins une est 1" },
+                    { texte: "Le complément à 2 sert à :", options: ["Représenter les négatifs", "Additionner", "Multiplier", "Diviser"], correct: 0, explication: "Pour les nombres négatifs" },
+                    { texte: "Un bit peut prendre :", options: ["2 valeurs", "10 valeurs", "16 valeurs", "8 valeurs"], correct: 0, explication: "0 ou 1" },
+                    { texte: "Un octet = ? bits", options: ["8", "4", "16", "32"], correct: 0, explication: "1 octet = 8 bits" },
+                    { texte: "La porte NOT :", options: ["Inverse l'entrée", "Ajoute", "Multiplie", "Compare"], correct: 0, explication: "NOT inverse : 0→1, 1→0" },
+                    { texte: "La table de vérité donne :", options: ["Toutes les sorties", "Les entrées", "Les résultats", "Les calculs"], correct: 0, explication: "Liste toutes les combinaisons" },
+                    { texte: "Un demi-additionneur additionne :", options: ["2 bits", "3 bits", "4 bits", "8 bits"], correct: 0, explication: "Additionne 2 bits" }
+                ]
+            },
+            "Négociations Informatique": {
+                icon: "fa-handshake", color: "#e84393",
+                questions: [
+                    { texte: "La négociation est :", options: ["Un processus d'échange", "Un conflit", "Un contrat", "Une vente"], correct: 0, explication: "Échange pour un accord" },
+                    { texte: "BATNA signifie :", options: ["Meilleure alternative", "Budget total", "Besoin client", "Base technique"], correct: 0, explication: "Best Alternative To Negotiated Agreement" },
+                    { texte: "La ZOPA est :", options: ["L'espace de négociation", "Le contrat", "Le budget", "Le délai"], correct: 0, explication: "Zone d'accord potentiel" },
+                    { texte: "Un argumentaire doit être :", options: ["Persuasif", "Long", "Complexe", "Technique"], correct: 0, explication: "Persuasif et clair" },
+                    { texte: "La concession est :", options: ["Un compromis", "Une victoire", "Une défaite", "Un refus"], correct: 0, explication: "Compromis dans la négociation" },
+                    { texte: "Le rapport de force influence :", options: ["La négociation", "Le prix", "Le délai", "Le produit"], correct: 0, explication: "Affecte le résultat" },
+                    { texte: "La préparation est :", options: ["Essentielle", "Optionnelle", "Inutile", "Secondaire"], correct: 0, explication: "Cruciale pour négocier" },
+                    { texte: "L'écoute active permet :", options: ["Comprendre l'autre", "Parler plus", "Gagner du temps", "Imposer ses idées"], correct: 0, explication: "Améliore la compréhension" },
+                    { texte: "Le silence peut être :", options: ["Une tactique", "Une faiblesse", "Inutile", "Interdit"], correct: 0, explication: "Tactique de négociation" },
+                    { texte: "La relation client est :", options: ["Importante", "Secondaire", "Inutile", "Optionnelle"], correct: 0, explication: "Facilite la négociation" }
+                ]
+            },
+            "Introduction Génie Logiciel": {
+                icon: "fa-code-branch", color: "#34495e",
+                questions: [
+                    { texte: "Le cycle en V est un :", options: ["Modèle de développement", "Langage", "Base de données", "Système"], correct: 0, explication: "Modèle de développement logiciel" },
+                    { texte: "Agile est une :", options: ["Méthodologie", "Langage", "Base de données", "Système"], correct: 0, explication: "Méthodologie itérative" },
+                    { texte: "Scrum est :", options: ["Un framework Agile", "Un langage", "Une base", "Un système"], correct: 0, explication: "Framework Agile populaire" },
+                    { texte: "DevOps combine :", options: ["Développement et Opérations", "Design et Code", "Test et Déploiement", "Analyse et Conception"], correct: 0, explication: "Dev + Ops" },
+                    { texte: "Un sprint dure généralement :", options: ["1-4 semaines", "1 jour", "1 an", "1 mois"], correct: 0, explication: "2 à 4 semaines" },
+                    { texte: "Le product owner gère :", options: ["Le backlog", "Le code", "Les tests", "La documentation"], correct: 0, explication: "Priorise les fonctionnalités" },
+                    { texte: "La revue de code permet :", options: ["Améliorer la qualité", "Ralentir", "Complexifier", "Cacher"], correct: 0, explication: "Améliore la qualité" },
+                    { texte: "Un bug est :", options: ["Une erreur logicielle", "Une fonctionnalité", "Un document", "Un test"], correct: 0, explication: "Erreur dans le programme" },
+                    { texte: "Le refactoring est :", options: ["Améliorer le code", "Ajouter des bugs", "Supprimer", "Copier"], correct: 0, explication: "Améliore la structure" },
+                    { texte: "Git est un :", options: ["Système de contrôle de version", "Langage", "Base", "Framework"], correct: 0, explication: "Gère les versions du code" }
+                ]
+            },
+            "Algorithme de Base": {
+                icon: "fa-code", color: "#f1c40f",
+                questions: [
+                    { texte: "Qu'est-ce qu'un algorithme ?", options: ["Une suite d'instructions", "Un langage", "Un programme", "Une donnée"], correct: 0, explication: "Suite d'instructions pour résoudre un problème" },
+                    { texte: "Une variable sert à :", options: ["Stocker une valeur", "Afficher", "Lire", "Calculer"], correct: 0, explication: "Stocke des données" },
+                    { texte: "Une condition 'si' permet :", options: ["Exécuter selon une condition", "Répéter", "Stocker", "Afficher"], correct: 0, explication: "Exécution conditionnelle" },
+                    { texte: "Une boucle 'pour' permet :", options: ["Répéter des instructions", "Tester", "Stocker", "Afficher"], correct: 0, explication: "Répète un nombre de fois" },
+                    { texte: "Que signifie 'entier' ?", options: ["Nombre sans virgule", "Nombre décimal", "Caractère", "Booléen"], correct: 0, explication: "Type entier" },
+                    { texte: "Un tableau permet de :", options: ["Stocker plusieurs valeurs", "Stocker une valeur", "Afficher", "Lire"], correct: 0, explication: "Collection de valeurs" },
+                    { texte: "Une fonction est :", options: ["Un bloc de code réutilisable", "Une variable", "Une boucle", "Une condition"], correct: 0, explication: "Bloc de code appelable" },
+                    { texte: "Le pseudo-code est :", options: ["Une description algorithmique", "Un langage", "Un programme", "Une donnée"], correct: 0, explication: "Description lisible par l'homme" },
+                    { texte: "Un algorithme de tri sert à :", options: ["Ordonner des éléments", "Chercher", "Stocker", "Afficher"], correct: 0, explication: "Ordonne des données" },
+                    { texte: "La complexité algorithmique mesure :", options: ["Le temps d'exécution", "La taille", "La mémoire", "Le code"], correct: 0, explication: "Mesure l'efficacité" }
+                ]
+            },
+            "Outils Bureautique": {
+                icon: "fa-file-word", color: "#27ae60",
+                questions: [
+                    { texte: "Word sert à :", options: ["Traitement de texte", "Tableur", "Présentation", "Email"], correct: 0, explication: "Word = traitement de texte" },
+                    { texte: "Excel sert à :", options: ["Tableur", "Texte", "Présentation", "Email"], correct: 0, explication: "Excel = tableur" },
+                    { texte: "PowerPoint sert à :", options: ["Présentation", "Texte", "Tableau", "Email"], correct: 0, explication: "PowerPoint = présentation" },
+                    { texte: "Outlook sert à :", options: ["Email", "Texte", "Tableau", "Présentation"], correct: 0, explication: "Outlook = messagerie" },
+                    { texte: "Une formule Excel commence par :", options: ["=", "+", "-", "*"], correct: 0, explication: "Une formule commence par =" },
+                    { texte: "La fonction SOMME() sert à :", options: ["Additionner", "Moyenne", "Compter", "Max"], correct: 0, explication: "SOMME = addition" },
+                    { texte: "Un tableau croisé dynamique sert à :", options: ["Analyser des données", "Trier", "Filtrer", "Calculer"], correct: 0, explication: "Analyse de données" },
+                    { texte: "Une mise en forme conditionnelle :", options: ["Colorie selon des conditions", "Trie", "Filtre", "Calcule"], correct: 0, explication: "Formatage conditionnel" },
+                    { texte: "Un graphique permet :", options: ["Visualiser des données", "Calculer", "Trier", "Filtrer"], correct: 0, explication: "Visualisation de données" },
+                    { texte: "Le presse-papier permet :", options: ["Copier/Coller", "Enregistrer", "Imprimer", "Envoyer"], correct: 0, explication: "Stockage temporaire" }
+                ]
+            }
+        };
+
+        // Variables du quiz
+        let currentSubject = null;
+        let currentQuestions = [];
+        let currentIndex = 0;
+        let userAnswers = [];
+        let quizCompleted = false;
+        let quizScore = 0;
+
+        function showSubjects() {
+            const container = document.getElementById('quiz-content');
+            const subjects = Object.keys(questionsBank);
+            const history = getQuizHistory();
+            
+            container.innerHTML = `
+                <div class="page-header">
+                    <h1><i class="fas fa-question-circle"></i> Quiz & Évaluations</h1>
+                    <p>Testez vos connaissances par matière - 10 questions aléatoires par session</p>
+                </div>
+                <div class="subjects-grid">
+                    ${subjects.map(s => `
+                        <div class="subject-card" onclick="startQuiz('${s}')">
+                            <div class="subject-icon"><i class="fas ${questionsBank[s].icon}" style="color: ${questionsBank[s].color}"></i></div>
+                            <h3>${s}</h3>
+                            <p>${questionsBank[s].questions.length} questions</p>
+                            <div class="subject-stats"><span><i class="fas fa-clock"></i> 15 min</span><span><i class="fas fa-random"></i> Aléatoire</span></div>
+                        </div>
+                    `).join('')}
+                </div>
+                <div class="history-section">
+                    <h3><i class="fas fa-history"></i> Historique des quiz</h3>
+                    <div id="history-list">${renderHistory(history)}</div>
+                </div>
+            `;
+        }
+
+        function getQuizHistory() {
+            try {
+                return JSON.parse(localStorage.getItem(`quiz_${currentUser.id}`)) || [];
+            } catch(e) { return []; }
+        }
+
+        function saveQuizHistory(history) {
+            localStorage.setItem(`quiz_${currentUser.id}`, JSON.stringify(history));
+        }
+
+        function renderHistory(history) {
+            if (history.length === 0) return '<div style="text-align:center;padding:20px;color:var(--gray);">Aucun quiz complété</div>';
+            return history.slice(-8).reverse().map(h => {
+                let scoreClass = 'bad';
+                if (h.score >= 70) scoreClass = 'good';
+                else if (h.score >= 50) scoreClass = 'medium';
+                return `<div class="history-item"><div><strong>${h.subject}</strong><div style="font-size:0.8rem;color:var(--gray);">${new Date(h.date).toLocaleDateString('fr-FR')}</div></div><div class="history-score ${scoreClass}">${h.score}%</div></div>`;
+            }).join('');
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function startQuiz(subject) {
+            currentSubject = subject;
+            currentQuestions = shuffleArray([...questionsBank[subject].questions]).slice(0, 10);
+            currentIndex = 0;
+            userAnswers = new Array(currentQuestions.length).fill(null);
+            quizCompleted = false;
+            renderQuiz();
+        }
+
+        function renderQuiz() {
+            if (quizCompleted) { showResults(); return; }
+            
+            const q = currentQuestions[currentIndex];
+            const currentAnswer = userAnswers[currentIndex];
+            const progress = ((currentIndex + 1) / currentQuestions.length) * 100;
+            
+            const container = document.getElementById('quiz-content');
+            container.innerHTML = `
+                <div class="quiz-container">
+                    <div class="quiz-header">
+                        <h2>${currentSubject}</h2>
+                        <div class="quiz-meta"><span><i class="fas fa-question-circle"></i> Question ${currentIndex+1}/${currentQuestions.length}</span><span><i class="fas fa-check-circle"></i> ${userAnswers.filter(a => a !== null).length} répondues</span></div>
+                    </div>
+                    <div class="question">${q.texte}</div>
+                    <div class="options">${q.options.map((opt, i) => `<div class="option ${currentAnswer === i ? 'selected' : ''}" onclick="selectAnswer(${i})"><input type="radio" name="question" ${currentAnswer === i ? 'checked' : ''}><label>${opt}</label></div>`).join('')}</div>
+                    <div class="quiz-nav"><button class="btn btn-secondary" onclick="prevQuestion()" ${currentIndex === 0 ? 'disabled style="opacity:0.5;"' : ''}>Précédent</button><div class="progress-bar"><div class="progress-fill" style="width: ${progress}%"></div></div><button class="btn btn-primary" onclick="nextQuestion()">${currentIndex === currentQuestions.length-1 ? 'Terminer' : 'Suivant'}</button></div>
+                </div>
+            `;
+        }
+
+        function selectAnswer(index) { userAnswers[currentIndex] = index; renderQuiz(); }
+        function prevQuestion() { if (currentIndex > 0) { currentIndex--; renderQuiz(); } }
+        
+        function nextQuestion() {
+            if (userAnswers[currentIndex] === null) { alert('Veuillez sélectionner une réponse'); return; }
+            if (currentIndex === currentQuestions.length - 1) completeQuiz();
+            else { currentIndex++; renderQuiz(); }
+        }
+
+        function completeQuiz() {
+            let correct = 0;
+            const correction = [];
+            currentQuestions.forEach((q, i) => {
+                const isCorrect = userAnswers[i] === q.correct;
+                if (isCorrect) correct++;
+                correction.push({ question: q.texte, userAnswer: q.options[userAnswers[i]], correctAnswer: q.options[q.correct], isCorrect, explanation: q.explication });
+            });
+            quizScore = Math.round((correct / currentQuestions.length) * 100);
+            
+            const history = getQuizHistory();
+            history.push({ subject: currentSubject, score: quizScore, correct: correct, total: currentQuestions.length, date: new Date().toISOString() });
+            saveQuizHistory(history);
+            
+            quizCompleted = true;
+            showResults(correct, correction);
+        }
+
+        function showResults(correct, correction) {
+            const angle = (quizScore / 100) * 360;
+            let message = quizScore >= 80 ? "Excellent ! 🎉" : quizScore >= 60 ? "Très bien ! 👍" : quizScore >= 40 ? "Continuez vos révisions 📚" : "Besoin de révision 💪";
+            
+            const correctionsHtml = correction.map(c => `
+                <div class="correction-item ${c.isCorrect ? 'correct' : 'wrong'}">
+                    <div class="correction-question">${c.question}</div>
+                    <div class="correction-answer"><span class="${c.isCorrect ? 'correction-good' : 'correction-bad'}">${c.isCorrect ? '✓ Votre réponse: ' : '✗ Votre réponse: '}</span> ${c.userAnswer}</div>
+                    <div class="correction-answer"><span class="correction-good">✓ Bonne réponse: </span> ${c.correctAnswer}</div>
+                    <div class="correction-answer" style="margin-top:8px;color:var(--info);"><i class="fas fa-info-circle"></i> ${c.explication}</div>
+                </div>
+            `).join('');
+            
+            const container = document.getElementById('quiz-content');
+            container.innerHTML = `
+                <div class="quiz-container">
+                    <div class="quiz-header"><h2>Résultats du quiz</h2><p>${currentSubject}</p></div>
+                    <div class="results"><div class="score-circle" style="background: conic-gradient(var(--primary) ${angle}deg, var(--light) ${angle}deg)"><div class="score-text">${quizScore}%</div></div><h3>${correct}/${currentQuestions.length} réponses correctes</h3><p>${message}</p><div class="results-actions"><button class="btn btn-primary" onclick="startQuiz('${currentSubject}')"><i class="fas fa-redo"></i> Refaire</button><button class="btn btn-secondary" onclick="showSubjects()"><i class="fas fa-th-large"></i> Autres matières</button></div></div>
+                    <div class="correction-details"><h3><i class="fas fa-graduation-cap"></i> Corrigé détaillé</h3>${correctionsHtml}</div>
+                </div>
+                <div class="history-section"><h3><i class="fas fa-history"></i> Historique des quiz</h3><div id="history-list">${renderHistory(getQuizHistory())}</div></div>
+            `;
+        }
+
+        window.startQuiz = startQuiz;
+        window.selectAnswer = selectAnswer;
+        window.prevQuestion = prevQuestion;
+        window.nextQuestion = nextQuestion;
+        window.showSubjects = showSubjects;
+
+        // Menu responsive
+        const toggleBtn = document.getElementById('mobile-toggle');
+        const mobileNav = document.getElementById('mobile-nav');
+        if (toggleBtn && mobileNav) {
+            toggleBtn.onclick = () => { mobileNav.classList.toggle('open'); toggleBtn.classList.toggle('active'); document.body.style.overflow = mobileNav.classList.contains('open') ? 'hidden' : ''; };
+            document.querySelectorAll('.mobile-nav a, .mobile-nav button').forEach(link => { link.onclick = () => { mobileNav.classList.remove('open'); toggleBtn.classList.remove('active'); document.body.style.overflow = ''; }; });
+            document.addEventListener('click', (e) => { if (!mobileNav.contains(e.target) && !toggleBtn.contains(e.target) && mobileNav.classList.contains('open')) { mobileNav.classList.remove('open'); toggleBtn.classList.remove('active'); document.body.style.overflow = ''; } });
+        }
+        document.getElementById('mobile-logout')?.addEventListener('click', () => { localStorage.removeItem('currentUser'); window.location.href = 'index.html'; });
+        document.getElementById('logout-btn').onclick = () => { localStorage.removeItem('currentUser'); window.location.href = 'index.html'; };
+
+        showSubjects();
+    </script>
+</body>
+</html>

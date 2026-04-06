@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Négociations - EduLearn Pro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a0ca3;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --info: #3498db;
+            --dark: #1a1a2e;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --gray-light: #e9ecef;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0,0,0,0.1);
+            --shadow-sm: 0 2px 10px rgba(0,0,0,0.05);
+            --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        body { background: #f5f7ff; }
+
+        /* Navigation */
+        .navbar { background: var(--white); box-shadow: var(--shadow-sm); position: sticky; top: 0; z-index: 1000; padding: 12px 0; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .navbar .container { display: flex; justify-content: space-between; align-items: center; }
+        .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+        .logo-icon { width: 40px; height: 40px; background: var(--gradient); border-radius: 12px; display: flex; align-items: center; justify-content: center; }
+        .logo-icon i { font-size: 1.3rem; color: white; }
+        .logo h1 { font-size: 1.3rem; font-weight: 700; color: var(--dark); }
+        .logo span { color: var(--primary); }
+        .nav-menu { display: flex; gap: 15px; flex-wrap: wrap; }
+        .nav-menu a { text-decoration: none; color: var(--gray); padding: 8px 16px; border-radius: 8px; transition: all 0.3s; font-weight: 500; font-size: 0.9rem; }
+        .nav-menu a:hover, .nav-menu a.active { background: rgba(67,97,238,0.1); color: var(--primary); }
+        .user-info { display: flex; align-items: center; gap: 12px; }
+        .user-info img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
+        .logout-btn { background: none; border: none; color: var(--gray); cursor: pointer; font-size: 1.2rem; transition: all 0.3s; }
+        .logout-btn:hover { color: var(--danger); }
+
+        /* Menu Mobile */
+        .mobile-menu-toggle { display: none; background: none; border: none; font-size: 1.5rem; color: var(--dark); cursor: pointer; padding: 8px; border-radius: 8px; z-index: 1001; }
+        .mobile-nav { position: fixed; top: 0; right: -100%; width: 80%; max-width: 320px; height: 100vh; background: var(--white); box-shadow: -5px 0 30px rgba(0,0,0,0.1); z-index: 1000; transition: right 0.3s ease; display: flex; flex-direction: column; padding: 80px 20px 20px; overflow-y: auto; }
+        .mobile-nav.open { right: 0; }
+        .mobile-nav a, .mobile-nav button { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 12px; text-decoration: none; color: var(--dark); font-weight: 500; width: 100%; text-align: left; background: none; border: none; cursor: pointer; font-size: 1rem; }
+        .mobile-nav a:hover, .mobile-nav button:hover { background: rgba(67,97,238,0.1); color: var(--primary); }
+        .mobile-nav i { width: 24px; }
+
+        /* Main Content */
+        .main-content { padding: 30px 0; }
+
+        /* Page Header avec fond dégradé */
+        .page-header {
+            background: var(--gradient);
+            border-radius: 24px;
+            padding: 35px 30px;
+            margin-bottom: 30px;
+            color: white;
+        }
+        .page-header h1 {
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+        .page-header p {
+            opacity: 0.9;
+            font-size: 0.95rem;
+        }
+
+        /* Stats Cards */
+        .stats-cards {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .stat-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s;
+            border: 1px solid var(--gray-light);
+        }
+        .stat-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+        .stat-card i { font-size: 2rem; color: var(--primary); margin-bottom: 10px; }
+        .stat-card h3 { font-size: 1.5rem; font-weight: 700; color: var(--dark); margin-bottom: 5px; }
+        .stat-card p { color: var(--gray); font-size: 0.8rem; }
+
+        /* Layout Grid */
+        .negociations-layout {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 30px;
+        }
+
+        /* Formulaire */
+        .form-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 100px;
+        }
+        .form-card h2 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--gray-light);
+        }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 500; color: var(--dark); }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--gray-light);
+            border-radius: 12px;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            background: var(--white);
+        }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67,97,238,0.1);
+        }
+        .btn {
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+        .btn-primary { background: var(--primary); color: white; width: 100%; justify-content: center; }
+        .btn-primary:hover { background: var(--primary-dark); transform: translateY(-2px); }
+
+        /* Liste des négociations */
+        .negociations-list {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+        }
+        .negociations-list h2 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .negociations-list h2 span {
+            margin-left: auto;
+            font-size: 0.8rem;
+            background: var(--light);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: normal;
+        }
+
+        /* Search & Filters */
+        .search-bar {
+            margin-bottom: 20px;
+            position: relative;
+        }
+        .search-bar input {
+            width: 100%;
+            padding: 12px 40px 12px 15px;
+            border: 1px solid var(--gray-light);
+            border-radius: 12px;
+        }
+        .search-bar i {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+        }
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .filter-btn {
+            padding: 8px 16px;
+            border: none;
+            background: var(--light);
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        .filter-btn:hover { background: rgba(67,97,238,0.1); color: var(--primary); }
+        .filter-btn.active { background: var(--primary); color: white; }
+
+        /* Carte de négociation */
+        .negociation-card {
+            background: var(--white);
+            border-radius: 16px;
+            margin-bottom: 20px;
+            border: 1px solid var(--gray-light);
+            transition: all 0.3s;
+            overflow: hidden;
+        }
+        .negociation-card:hover { transform: translateX(5px); box-shadow: var(--shadow-sm); border-color: var(--primary); }
+        
+        .negociation-header {
+            padding: 20px;
+            background: var(--light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            border-bottom: 1px solid var(--gray-light);
+        }
+        .negociation-partner {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .negociation-partner i { font-size: 1.5rem; color: var(--primary); }
+        .negociation-partner h3 { font-size: 1rem; font-weight: 600; color: var(--dark); }
+        .negociation-partner p { font-size: 0.7rem; color: var(--gray); }
+        
+        .negociation-status {
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .status-en_cours { background: rgba(52,152,219,0.1); color: var(--info); }
+        .status-accepte { background: rgba(46,204,113,0.1); color: var(--success); }
+        .status-rejete { background: rgba(231,76,60,0.1); color: var(--danger); }
+        
+        .negociation-body { padding: 20px; }
+        .negociation-object { font-size: 1rem; font-weight: 500; color: var(--dark); margin-bottom: 10px; }
+        .negociation-object i { color: var(--primary); margin-right: 8px; }
+        .negociation-details { color: var(--gray); font-size: 0.85rem; line-height: 1.5; margin-bottom: 15px; }
+        .negociation-meta { display: flex; gap: 20px; font-size: 0.7rem; color: var(--gray); margin-bottom: 15px; flex-wrap: wrap; }
+        .negociation-meta span { display: flex; align-items: center; gap: 5px; }
+        
+        .negociation-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            padding-top: 15px;
+            border-top: 1px solid var(--gray-light);
+        }
+        .negociation-actions button {
+            background: none;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.8rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .negociation-actions .accept { background: rgba(46,204,113,0.1); color: var(--success); }
+        .negociation-actions .accept:hover { background: var(--success); color: white; }
+        .negociation-actions .reject { background: rgba(231,76,60,0.1); color: var(--danger); }
+        .negociation-actions .reject:hover { background: var(--danger); color: white; }
+        .negociation-actions .view { background: rgba(67,97,238,0.1); color: var(--primary); }
+        .negociation-actions .view:hover { background: var(--primary); color: white; }
+        .negociation-actions .delete { background: rgba(127,140,141,0.1); color: var(--gray); }
+        .negociation-actions .delete:hover { background: var(--danger); color: white; }
+
+        /* Empty State */
+        .empty-state { text-align: center; padding: 60px; color: var(--gray); }
+        .empty-state i { font-size: 4rem; margin-bottom: 15px; opacity: 0.5; }
+
+        /* Modal */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000; align-items: center; justify-content: center; }
+        .modal-content { background: var(--white); width: 90%; max-width: 550px; border-radius: 24px; overflow: hidden; animation: modalSlide 0.3s ease; }
+        @keyframes modalSlide { from { transform: translateY(-50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .modal-header { padding: 20px; background: var(--light); display: flex; justify-content: space-between; align-items: center; }
+        .modal-header h3 { font-size: 1.2rem; }
+        .close-modal { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--gray); }
+        .modal-body { padding: 25px; max-height: 500px; overflow-y: auto; }
+        .modal-body p { margin-bottom: 12px; line-height: 1.6; color: var(--gray); }
+        .modal-body strong { color: var(--dark); }
+
+        /* Message */
+        .message { position: fixed; bottom: 20px; right: 20px; background: var(--dark); color: white; padding: 12px 20px; border-radius: 8px; display: none; z-index: 2000; animation: slideIn 0.3s ease; }
+        .message.show { display: block; }
+        .message.success { background: var(--success); }
+        .message.error { background: var(--danger); }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .negociations-layout { grid-template-columns: 1fr; }
+            .form-card { position: static; }
+            .stats-cards { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 768px) { 
+            .nav-menu { display: none !important; } 
+            .user-info { display: none !important; } 
+            .mobile-menu-toggle { display: block; } 
+            .stats-cards { grid-template-columns: 1fr; }
+            .negociation-header { flex-direction: column; align-items: flex-start; }
+            .negociation-actions { flex-wrap: wrap; justify-content: center; }
+            .page-header { padding: 25px 20px; }
+            .page-header h1 { font-size: 1.4rem; }
+        }
+        @media (min-width: 769px) { .mobile-nav, .mobile-menu-toggle { display: none; } .nav-menu { display: flex !important; } .user-info { display: flex !important; } }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="dashboard.html" class="logo"><div class="logo-icon"><i class="fas fa-graduation-cap"></i></div><h1>Edu<span>Learn</span> Pro</h1></a>
+            <div class="nav-menu">
+                <a href="dashboard.html">Accueil</a>
+                <a href="storage.html">Fichiers</a>
+                <a href="cours.html">Cours</a>
+                <a href="notes.html">Notes</a>
+                <a href="questions.html">Quiz</a>
+                <a href="rappels.html">Rappels</a>
+                <a href="projets.html">Projets</a>
+                <a href="negociation.html" class="active">Négociations</a>
+                <a href="contrat.html">Contrats</a>
+                 <a href="centre-partenariats.html">Partenariats</a>
+                <a href="comptes.html">Compte</a>
+            </div>
+            <div class="user-info"><img id="user-avatar" src="https://via.placeholder.com/40"><span id="user-name"></span><button class="logout-btn" id="logout-btn"><i class="fas fa-sign-out-alt"></i></button></div>
+            <button class="mobile-menu-toggle" id="mobile-toggle"><i class="fas fa-bars"></i></button>
+        </div>
+    </nav>
+
+    <div class="mobile-nav" id="mobile-nav">
+        <a href="dashboard.html"><i class="fas fa-home"></i> Accueil</a>
+        <a href="storages.html"><i class="fas fa-file-alt"></i> Fichiers</a>
+        <a href="cours.html"><i class="fas fa-book"></i> Cours</a>
+        <a href="notes.html"><i class="fas fa-pencil-alt"></i> Notes</a>
+        <a href="questions.html"><i class="fas fa-question-circle"></i> Quiz</a>
+        <a href="rappels.html"><i class="fas fa-bell"></i> Rappels</a>
+        <a href="projets.html"><i class="fas fa-tasks"></i> Projets</a>
+        <a href="negociation.html"><i class="fas fa-handshake"></i> Négociations</a>
+        <a href="contrat.html"><i class="fas fa-file-signature"></i> Contrats</a>
+        <a href="comptes.html"><i class="fas fa-user-circle"></i> Compte</a>
+        <a href="carrieres.html"><i class="fas fa-briefcase"></i> Carrières</a>
+         <a href="centre-partenariats.html"><i class="fas fa-handshake"></i> Partenariats</a>
+        <button id="mobile-logout"><i class="fas fa-sign-out-alt"></i> Déconnexion</button>
+    </div>
+
+    <div class="main-content">
+        <div class="container">
+            <!-- Page Header avec fond dégradé -->
+            <div class="page-header">
+                <h1><i class="fas fa-handshake"></i> Négociations</h1>
+                <p>Gérez vos partenariats, contrats et discussions professionnelles</p>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="stats-cards">
+                <div class="stat-card"><i class="fas fa-chart-line"></i><h3 id="stat-total">0</h3><p>Total négociations</p></div>
+                <div class="stat-card"><i class="fas fa-clock"></i><h3 id="stat-en-cours">0</h3><p>En cours</p></div>
+                <div class="stat-card"><i class="fas fa-check-circle"></i><h3 id="stat-acceptees">0</h3><p>Acceptées</p></div>
+                <div class="stat-card"><i class="fas fa-chart-simple"></i><h3 id="stat-taux">0%</h3><p>Taux de réussite</p></div>
+            </div>
+
+            <div class="negociations-layout">
+                <!-- Formulaire -->
+                <div class="form-card">
+                    <h2><i class="fas fa-plus-circle"></i> Nouvelle négociation</h2>
+                    <form id="negociation-form">
+                        <div class="form-group"><label><i class="fas fa-building"></i> Partenaire *</label><input type="text" id="partenaire" required placeholder="Nom de l'entreprise ou du partenaire"></div>
+                        <div class="form-group"><label><i class="fas fa-tag"></i> Objet *</label><input type="text" id="objet" required placeholder="Ex: Partenariat éducatif, Licence logicielle..."></div>
+                        <div class="form-group"><label><i class="fas fa-file-alt"></i> Détails</label><textarea id="details" rows="4" placeholder="Décrivez les termes de la négociation..."></textarea></div>
+                        <div class="form-group"><label><i class="fas fa-file-contract"></i> Type de contrat</label><select id="type-contrat"><option value="partenariat">🤝 Partenariat</option><option value="licence">📜 Licence logicielle</option><option value="maintenance">🔧 Maintenance</option><option value="formation">🎓 Formation</option></select></div>
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Démarrer la négociation</button>
+                    </form>
+                </div>
+
+                <!-- Liste des négociations -->
+                <div class="negociations-list">
+                    <h2><i class="fas fa-list"></i> Mes négociations <span id="negociations-count">0</span></h2>
+                    
+                    <div class="search-bar">
+                        <input type="text" id="search-input" placeholder="Rechercher une négociation...">
+                        <i class="fas fa-search"></i>
+                    </div>
+
+                    <div class="filter-buttons">
+                        <button class="filter-btn active" data-filter="all">Tous</button>
+                        <button class="filter-btn" data-filter="en_cours">En cours</button>
+                        <button class="filter-btn" data-filter="accepte">Acceptés</button>
+                        <button class="filter-btn" data-filter="rejete">Rejetés</button>
+                    </div>
+
+                    <div id="negociations-container"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="message" class="message"></div>
+
+    <script>
+        let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        if (!currentUser) window.location.href = 'index.html';
+        document.getElementById('user-name').innerText = currentUser.name.split(' ')[0];
+        if (currentUser.avatar) document.getElementById('user-avatar').src = currentUser.avatar;
+        
+        let negociations = JSON.parse(localStorage.getItem(`negociations_${currentUser.id}`)) || [];
+        let currentFilter = 'all';
+        let searchTerm = '';
+        
+        function saveNegociations() { localStorage.setItem(`negociations_${currentUser.id}`, JSON.stringify(negociations)); }
+        function showMessage(msg, type = 'success') { const m = document.getElementById('message'); m.textContent = msg; m.className = `message show ${type}`; setTimeout(() => m.classList.remove('show'), 3000); }
+        
+        function updateStats() {
+            const total = negociations.length;
+            const enCours = negociations.filter(n => n.statut === 'en_cours').length;
+            const acceptees = negociations.filter(n => n.statut === 'accepte').length;
+            const taux = total > 0 ? Math.round((acceptees / total) * 100) : 0;
+            document.getElementById('stat-total').innerText = total;
+            document.getElementById('stat-en-cours').innerText = enCours;
+            document.getElementById('stat-acceptees').innerText = acceptees;
+            document.getElementById('stat-taux').innerText = taux;
+            document.getElementById('negociations-count').innerText = total;
+        }
+        
+        function formatDate(dateStr) {
+            const d = new Date(dateStr);
+            return d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+        }
+        
+        function getStatusLabel(statut) {
+            const labels = {
+                en_cours: { text: 'En cours', icon: 'fa-clock', class: 'status-en_cours' },
+                accepte: { text: 'Acceptée', icon: 'fa-check-circle', class: 'status-accepte' },
+                rejete: { text: 'Rejetée', icon: 'fa-times-circle', class: 'status-rejete' }
+            };
+            return labels[statut] || labels.en_cours;
+        }
+        
+        function escapeHtml(text) { const div = document.createElement('div'); div.textContent = text; return div.innerHTML; }
+        
+        function renderNegociations() {
+            let filtered = negociations;
+            if (currentFilter !== 'all') filtered = filtered.filter(n => n.statut === currentFilter);
+            if (searchTerm) filtered = filtered.filter(n => n.partenaire.toLowerCase().includes(searchTerm.toLowerCase()) || n.objet.toLowerCase().includes(searchTerm.toLowerCase()));
+            
+            const container = document.getElementById('negociations-container');
+            if (filtered.length === 0) {
+                container.innerHTML = '<div class="empty-state"><i class="fas fa-handshake"></i><p>Aucune négociation trouvée</p><small>Créez votre première négociation</small></div>';
+                return;
+            }
+            
+            container.innerHTML = filtered.map(n => {
+                const status = getStatusLabel(n.statut);
+                return `
+                    <div class="negociation-card">
+                        <div class="negociation-header">
+                            <div class="negociation-partner">
+                                <i class="fas fa-building"></i>
+                                <div>
+                                    <h3>${escapeHtml(n.partenaire)}</h3>
+                                    <p>${n.type === 'partenariat' ? '🤝 Partenariat' : n.type === 'licence' ? '📜 Licence' : n.type === 'maintenance' ? '🔧 Maintenance' : '🎓 Formation'}</p>
+                                </div>
+                            </div>
+                            <span class="negociation-status ${status.class}"><i class="fas ${status.icon}"></i> ${status.text}</span>
+                        </div>
+                        <div class="negociation-body">
+                            <div class="negociation-object"><i class="fas fa-tag"></i> ${escapeHtml(n.objet)}</div>
+                            ${n.details ? `<div class="negociation-details">${escapeHtml(n.details.substring(0, 150))}${n.details.length > 150 ? '...' : ''}</div>` : ''}
+                            <div class="negociation-meta">
+                                <span><i class="fas fa-calendar-alt"></i> Créée le ${formatDate(n.date_debut)}</span>
+                                ${n.date_fin ? `<span><i class="fas fa-flag-checkered"></i> Terminée le ${formatDate(n.date_fin)}</span>` : ''}
+                            </div>
+                            <div class="negociation-actions">
+                                ${n.statut === 'en_cours' ? `
+                                    <button class="accept" onclick="updateStatut(${n.id}, 'accepte')"><i class="fas fa-check-circle"></i> Accepter</button>
+                                    <button class="reject" onclick="updateStatut(${n.id}, 'rejete')"><i class="fas fa-times-circle"></i> Rejeter</button>
+                                ` : ''}
+                                <button class="view" onclick="viewNegociation(${n.id})"><i class="fas fa-eye"></i> Détails</button>
+                                <button class="delete" onclick="deleteNegociation(${n.id})"><i class="fas fa-trash"></i> Supprimer</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            updateStats();
+        }
+        
+        function addNegociation(e) {
+            e.preventDefault();
+            const partenaire = document.getElementById('partenaire').value.trim();
+            const objet = document.getElementById('objet').value.trim();
+            const details = document.getElementById('details').value;
+            const type = document.getElementById('type-contrat').value;
+            if (!partenaire || !objet) { showMessage('Veuillez remplir tous les champs obligatoires', 'error'); return; }
+            const nouvelle = { id: Date.now(), partenaire, objet, details, type, statut: 'en_cours', date_debut: new Date().toISOString() };
+            negociations.unshift(nouvelle); saveNegociations(); renderNegociations(); document.getElementById('negociation-form').reset(); showMessage('Négociation créée avec succès');
+        }
+        
+        function updateStatut(id, nouveauStatut) {
+            const index = negociations.findIndex(n => n.id === id);
+            if (index !== -1) { negociations[index].statut = nouveauStatut; negociations[index].date_fin = new Date().toISOString(); saveNegociations(); renderNegociations(); showMessage(`Négociation ${nouveauStatut === 'accepte' ? 'acceptée' : 'rejetée'}`); }
+        }
+        
+        function deleteNegociation(id) { if (confirm('Supprimer cette négociation ?')) { negociations = negociations.filter(n => n.id !== id); saveNegociations(); renderNegociations(); showMessage('Négociation supprimée'); } }
+        
+        function viewNegociation(id) {
+            const n = negociations.find(n => n.id === id);
+            if (!n) return;
+            const status = getStatusLabel(n.statut);
+            const modal = document.createElement('div');
+            modal.className = 'modal';
+            modal.style.display = 'flex';
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <div class="modal-header"><h3><i class="fas fa-handshake"></i> Détails de la négociation</h3><button class="close-modal" onclick="this.closest('.modal').remove()">&times;</button></div>
+                    <div class="modal-body">
+                        <p><strong><i class="fas fa-building"></i> Partenaire :</strong> ${escapeHtml(n.partenaire)}</p>
+                        <p><strong><i class="fas fa-tag"></i> Objet :</strong> ${escapeHtml(n.objet)}</p>
+                        <p><strong><i class="fas fa-file-contract"></i> Type :</strong> ${n.type === 'partenariat' ? '🤝 Partenariat' : n.type === 'licence' ? '📜 Licence' : n.type === 'maintenance' ? '🔧 Maintenance' : '🎓 Formation'}</p>
+                        <p><strong><i class="fas fa-flag-checkered"></i> Statut :</strong> <span class="negociation-status ${status.class}"><i class="fas ${status.icon}"></i> ${status.text}</span></p>
+                        <p><strong><i class="fas fa-calendar-alt"></i> Date de début :</strong> ${formatDate(n.date_debut)}</p>
+                        ${n.date_fin ? `<p><strong><i class="fas fa-calendar-check"></i> Date de fin :</strong> ${formatDate(n.date_fin)}</p>` : ''}
+                        ${n.details ? `<p><strong><i class="fas fa-file-alt"></i> Détails :</strong><br>${escapeHtml(n.details)}</p>` : ''}
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            modal.querySelector('.close-modal').onclick = () => modal.remove();
+            modal.onclick = (e) => { if (e.target === modal) modal.remove(); };
+        }
+        
+        document.getElementById('negociation-form').addEventListener('submit', addNegociation);
+        document.getElementById('search-input').addEventListener('input', (e) => { searchTerm = e.target.value; renderNegociations(); });
+        document.querySelectorAll('.filter-btn').forEach(btn => { btn.addEventListener('click', () => { document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); currentFilter = btn.dataset.filter; renderNegociations(); }); });
+        document.getElementById('logout-btn').onclick = () => { localStorage.removeItem('currentUser'); window.location.href = 'index.html'; };
+        
+        // Menu responsive
+        const toggleBtn = document.getElementById('mobile-toggle');
+        const mobileNav = document.getElementById('mobile-nav');
+        if (toggleBtn && mobileNav) {
+            toggleBtn.onclick = () => { mobileNav.classList.toggle('open'); toggleBtn.classList.toggle('active'); document.body.style.overflow = mobileNav.classList.contains('open') ? 'hidden' : ''; };
+            document.querySelectorAll('.mobile-nav a, .mobile-nav button').forEach(link => { link.onclick = () => { mobileNav.classList.remove('open'); toggleBtn.classList.remove('active'); document.body.style.overflow = ''; }; });
+            document.addEventListener('click', (e) => { if (!mobileNav.contains(e.target) && !toggleBtn.contains(e.target) && mobileNav.classList.contains('open')) { mobileNav.classList.remove('open'); toggleBtn.classList.remove('active'); document.body.style.overflow = ''; } });
+        }
+        document.getElementById('mobile-logout')?.addEventListener('click', () => { localStorage.removeItem('currentUser'); window.location.href = 'index.html'; });
+        
+        renderNegociations();
+    </script>
+</body>
+</html>

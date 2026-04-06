@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Centre Partenariats - EduLearn Pro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a0ca3;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --info: #3498db;
+            --dark: #1a1a2e;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --gray-light: #e9ecef;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0,0,0,0.1);
+            --shadow-sm: 0 2px 10px rgba(0,0,0,0.05);
+            --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        body { background: #f5f7ff; }
+
+        /* Navigation */
+        .navbar { background: var(--white); box-shadow: var(--shadow-sm); position: sticky; top: 0; z-index: 1000; padding: 12px 0; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .navbar .container { display: flex; justify-content: space-between; align-items: center; }
+        .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+        .logo-icon { width: 40px; height: 40px; background: var(--gradient); border-radius: 12px; display: flex; align-items: center; justify-content: center; }
+        .logo-icon i { font-size: 1.3rem; color: white; }
+        .logo h1 { font-size: 1.3rem; font-weight: 700; color: var(--dark); }
+        .logo span { color: var(--primary); }
+        .nav-menu { display: flex; gap: 15px; flex-wrap: wrap; }
+        .nav-menu a { text-decoration: none; color: var(--gray); padding: 8px 16px; border-radius: 8px; transition: all 0.3s; font-weight: 500; font-size: 0.9rem; }
+        .nav-menu a:hover, .nav-menu a.active { background: rgba(67,97,238,0.1); color: var(--primary); }
+        .user-info { display: flex; align-items: center; gap: 12px; }
+        .user-info img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
+        .logout-btn { background: none; border: none; color: var(--gray); cursor: pointer; font-size: 1.2rem; transition: all 0.3s; }
+        .logout-btn:hover { color: var(--danger); }
+
+        /* Menu Mobile */
+        .mobile-menu-toggle { display: none; background: none; border: none; font-size: 1.5rem; color: var(--dark); cursor: pointer; padding: 8px; border-radius: 8px; z-index: 1001; }
+        .mobile-nav { position: fixed; top: 0; right: -100%; width: 80%; max-width: 320px; height: 100vh; background: var(--white); box-shadow: -5px 0 30px rgba(0,0,0,0.1); z-index: 1000; transition: right 0.3s ease; display: flex; flex-direction: column; padding: 80px 20px 20px; overflow-y: auto; }
+        .mobile-nav.open { right: 0; }
+        .mobile-nav a, .mobile-nav button { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 12px; text-decoration: none; color: var(--dark); font-weight: 500; width: 100%; text-align: left; background: none; border: none; cursor: pointer; font-size: 1rem; }
+        .mobile-nav a:hover, .mobile-nav button:hover { background: rgba(67,97,238,0.1); color: var(--primary); }
+        .mobile-nav i { width: 24px; }
+
+        /* Main Content */
+        .main-content { padding: 30px 0 60px; }
+
+        /* Page Header avec fond dégradé */
+        .page-header {
+            background: var(--gradient);
+            border-radius: 24px;
+            padding: 40px 35px;
+            margin-bottom: 40px;
+            color: white;
+        }
+        .page-header h1 {
+            font-size: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 12px;
+        }
+        .page-header p {
+            opacity: 0.9;
+            font-size: 1rem;
+            line-height: 1.5;
+            max-width: 600px;
+        }
+
+        /* Stats Cards */
+        .stats-cards {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        .stat-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 25px 20px;
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s;
+            border: 1px solid var(--gray-light);
+        }
+        .stat-card:hover { transform: translateY(-5px); box-shadow: var(--shadow); border-color: transparent; }
+        .stat-card i { font-size: 2rem; color: var(--primary); margin-bottom: 12px; }
+        .stat-card h3 { font-size: 1.8rem; font-weight: 700; color: var(--dark); margin-bottom: 5px; }
+        .stat-card p { color: var(--gray); font-size: 0.8rem; }
+
+        /* Section Partenaires Éducatifs */
+        .partenaires-section {
+            background: var(--white);
+            border-radius: 24px;
+            padding: 35px;
+            margin-bottom: 40px;
+            box-shadow: var(--shadow);
+        }
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .section-subtitle {
+            color: var(--gray);
+            margin-bottom: 30px;
+            font-size: 0.9rem;
+        }
+        .partenaires-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        .partenaire-card {
+            background: var(--white);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--gray-light);
+            transition: all 0.3s;
+        }
+        .partenaire-card:hover { transform: translateY(-5px); box-shadow: var(--shadow); }
+        .partenaire-image {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+        .partenaire-info { padding: 20px; }
+        .partenaire-nom { font-size: 1.2rem; font-weight: 700; color: var(--dark); margin-bottom: 5px; }
+        .partenaire-type { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: 500; margin-bottom: 12px; }
+        .type-education { background: rgba(46,204,113,0.1); color: var(--success); }
+        .type-entreprise { background: rgba(52,152,219,0.1); color: var(--info); }
+        .type-organisme { background: rgba(243,156,18,0.1); color: var(--warning); }
+        .partenaire-description { color: var(--gray); font-size: 0.85rem; line-height: 1.5; margin-bottom: 15px; }
+        .partenaire-contact { font-size: 0.8rem; color: var(--primary); margin-bottom: 15px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+        .partenaire-contact i { width: 20px; color: var(--gray); }
+        .btn-partenaire { width: 100%; padding: 10px; background: var(--primary); color: white; border: none; border-radius: 12px; cursor: pointer; transition: all 0.3s; font-weight: 500; }
+        .btn-partenaire:hover { background: var(--primary-dark); transform: translateY(-2px); }
+        .btn-outline-partenaire { width: 100%; padding: 10px; background: transparent; color: var(--primary); border: 2px solid var(--primary); border-radius: 12px; cursor: pointer; transition: all 0.3s; font-weight: 500; margin-top: 10px; }
+        .btn-outline-partenaire:hover { background: var(--primary); color: white; }
+
+        /* Formulaire Devenir Partenaire */
+        .become-partner-card {
+            background: var(--gradient);
+            border-radius: 24px;
+            padding: 35px;
+            margin-bottom: 40px;
+            color: white;
+        }
+        .become-partner-card h2 { font-size: 1.5rem; margin-bottom: 10px; display: flex; align-items: center; gap: 12px; }
+        .become-partner-card p { opacity: 0.9; margin-bottom: 25px; }
+        .become-form { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+        .become-form input, .become-form select, .become-form textarea {
+            padding: 12px 16px; border: none; border-radius: 14px; font-size: 0.9rem;
+        }
+        .become-form textarea { resize: vertical; }
+        .btn-white { background: white; color: var(--primary); border: none; padding: 12px; border-radius: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s; }
+        .btn-white:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+
+        /* Layout Grid pour les partenariats personnels */
+        .partenariats-layout {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 35px;
+            margin-top: 40px;
+        }
+
+        /* Formulaire */
+        .form-card {
+            background: var(--white);
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 100px;
+        }
+        .form-card h2 {
+            font-size: 1.4rem;
+            margin-bottom: 25px;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--gray-light);
+        }
+        .form-card h2 i { color: var(--primary); }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 500; color: var(--dark); }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%; padding: 12px 16px; border: 1px solid var(--gray-light); border-radius: 14px;
+            font-size: 0.9rem; transition: all 0.3s; background: var(--white);
+        }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(67,97,238,0.1);
+        }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .btn { padding: 12px 20px; border-radius: 14px; font-weight: 600; cursor: pointer; border: none; transition: all 0.3s; display: inline-flex; align-items: center; gap: 8px; font-size: 0.9rem; }
+        .btn-primary { background: var(--primary); color: white; width: 100%; justify-content: center; }
+        .btn-primary:hover { background: var(--primary-dark); transform: translateY(-2px); }
+
+        /* Liste des partenariats personnels */
+        .partenariats-list {
+            background: var(--white);
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+        }
+        .partenariats-list h2 {
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .partenariats-list h2 span {
+            font-size: 0.8rem;
+            background: var(--light);
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-weight: normal;
+            color: var(--gray);
+        }
+        .search-bar { margin-bottom: 20px; position: relative; }
+        .search-bar input {
+            width: 100%; padding: 12px 45px 12px 18px; border: 1px solid var(--gray-light);
+            border-radius: 50px; font-size: 0.9rem;
+        }
+        .search-bar input:focus { outline: none; border-color: var(--primary); }
+        .search-bar i { position: absolute; right: 18px; top: 50%; transform: translateY(-50%); color: var(--gray); }
+        
+        .filter-buttons { display: flex; gap: 12px; margin-bottom: 25px; flex-wrap: wrap; }
+        .filter-btn {
+            padding: 8px 20px; border: none; background: var(--light); border-radius: 50px;
+            cursor: pointer; transition: all 0.3s; font-size: 0.85rem; font-weight: 500; color: var(--gray);
+        }
+        .filter-btn:hover { background: rgba(67,97,238,0.1); color: var(--primary); }
+        .filter-btn.active { background: var(--primary); color: white; }
+
+        /* Carte de partenariat personnel */
+        .partenariat-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 22px;
+            margin-bottom: 18px;
+            border: 1px solid var(--gray-light);
+            transition: all 0.3s;
+        }
+        .partenariat-card:hover { transform: translateX(5px); border-color: var(--primary); box-shadow: var(--shadow-sm); }
+        .partenariat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .partenariat-nom {
+            font-size: 1.1rem; font-weight: 700; color: var(--dark);
+            display: flex; align-items: center; gap: 10px;
+        }
+        .partenariat-nom i { color: var(--primary); font-size: 1.2rem; }
+        .partenariat-type {
+            padding: 5px 14px; border-radius: 50px; font-size: 0.7rem; font-weight: 600;
+        }
+        .type-partenaire { background: rgba(46,204,113,0.1); color: var(--success); }
+        .type-sponsor { background: rgba(52,152,219,0.1); color: var(--info); }
+        .type-ecole { background: rgba(243,156,18,0.1); color: var(--warning); }
+        .type-institution { background: rgba(155,89,182,0.1); color: #9b59b6; }
+        
+        .partenariat-statut {
+            padding: 5px 14px; border-radius: 50px; font-size: 0.7rem; font-weight: 600;
+        }
+        .statut-actif { background: rgba(46,204,113,0.1); color: var(--success); }
+        .statut-attente { background: rgba(243,156,18,0.1); color: var(--warning); }
+        .statut-termine { background: rgba(127,140,141,0.1); color: var(--gray); }
+        
+        .partenariat-date { font-size: 0.7rem; color: var(--gray); margin-bottom: 12px; display: flex; align-items: center; gap: 15px; flex-wrap: wrap; }
+        .partenariat-description { color: var(--gray); font-size: 0.85rem; line-height: 1.5; margin-bottom: 15px; }
+        .partenariat-actions {
+            display: flex; gap: 15px; justify-content: flex-end; border-top: 1px solid var(--gray-light);
+            padding-top: 15px; margin-top: 5px;
+        }
+        .partenariat-actions button {
+            background: none; border: none; cursor: pointer; color: var(--gray); font-size: 0.8rem;
+            transition: all 0.3s; display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px;
+            border-radius: 8px;
+        }
+        .partenariat-actions button:hover { background: var(--light); }
+        .partenariat-actions .edit:hover { color: var(--info); }
+        .partenariat-actions .delete:hover { color: var(--danger); }
+
+        /* Empty State */
+        .empty-state { text-align: center; padding: 60px 20px; color: var(--gray); }
+        .empty-state i { font-size: 4rem; margin-bottom: 15px; opacity: 0.5; }
+
+        /* Modal */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000; align-items: center; justify-content: center; }
+        .modal-content { background: var(--white); width: 90%; max-width: 550px; border-radius: 24px; overflow: hidden; animation: modalSlide 0.3s ease; }
+        @keyframes modalSlide { from { transform: translateY(-50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .modal-header { padding: 20px; background: var(--light); display: flex; justify-content: space-between; align-items: center; }
+        .modal-header h3 { font-size: 1.2rem; }
+        .close-modal { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--gray); }
+        .modal-body { padding: 25px; }
+
+        /* Message */
+        .message { position: fixed; bottom: 20px; right: 20px; background: var(--dark); color: white; padding: 12px 20px; border-radius: 8px; display: none; z-index: 2000; animation: slideIn 0.3s ease; }
+        .message.show { display: block; }
+        .message.success { background: var(--success); }
+        .message.error { background: var(--danger); }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .partenariats-layout { grid-template-columns: 1fr; }
+            .form-card { position: static; margin-bottom: 30px; }
+            .become-form { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 768px) {
+            .nav-menu { display: none !important; }
+            .user-info { display: none !important; }
+            .mobile-menu-toggle { display: block; }
+            .stats-cards { grid-template-columns: repeat(2, 1fr); }
+            .form-row { grid-template-columns: 1fr; }
+            .page-header { padding: 30px 25px; }
+            .page-header h1 { font-size: 1.5rem; }
+            .partenaires-grid { grid-template-columns: 1fr; }
+            .filter-buttons { justify-content: center; }
+        }
+        @media (min-width: 769px) { .mobile-nav, .mobile-menu-toggle { display: none; } .nav-menu { display: flex !important; } .user-info { display: flex !important; } }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="dashboard.html" class="logo"><div class="logo-icon"><i class="fas fa-graduation-cap"></i></div><h1>Edu<span>Learn</span> Pro</h1></a>
+            <div class="nav-menu">
+                <a href="dashboard.html">Accueil</a>
+                <a href="storage.html">Fichiers</a>
+                <a href="cours.html">Cours</a>
+                <a href="notes.html">Notes</a>
+                <a href="questions.html">Quiz</a>
+                <a href="rappels.html">Rappels</a>
+                <a href="projets.html">Projets</a>
+                <a href="negociations.html">Négociations</a>
+                <a href="centre-partenariats.html" class="active">Partenariats</a>
+                <a href="contrats.html">Contrats</a>
+                <a href="compte.html">Compte</a>
+            </div>
+            <div class="user-info"><img id="user-avatar" src="https://via.placeholder.com/40"><span id="user-name"></span><button class="logout-btn" id="logout-btn"><i class="fas fa-sign-out-alt"></i></button></div>
+            <button class="mobile-menu-toggle" id="mobile-toggle"><i class="fas fa-bars"></i></button>
+        </div>
+    </nav>
+
+    <div class="mobile-nav" id="mobile-nav">
+        <a href="dashboard.html"><i class="fas fa-home"></i> Accueil</a>
+        <a href="storage.html"><i class="fas fa-file-alt"></i> Fichiers</a>
+        <a href="cours.html"><i class="fas fa-book"></i> Cours</a>
+        <a href="notes.html"><i class="fas fa-pencil-alt"></i> Notes</a>
+        <a href="questions.html"><i class="fas fa-question-circle"></i> Quiz</a>
+        <a href="rappels.html"><i class="fas fa-bell"></i> Rappels</a>
+        <a href="projets.html"><i class="fas fa-tasks"></i> Projets</a>
+        <a href="negociations.html"><i class="fas fa-handshake"></i> Négociations</a>
+        <a href="centre-partenariats.html"><i class="fas fa-handshake"></i> Partenariats</a>
+        <a href="contrats.html"><i class="fas fa-file-signature"></i> Contrats</a>
+        <a href="compte.html"><i class="fas fa-user-circle"></i> Compte</a>
+        <button id="mobile-logout"><i class="fas fa-sign-out-alt"></i> Déconnexion</button>
+    </div>
+
+    <div class="main-content">
+        <div class="container">
+            <!-- Page Header avec fond dégradé -->
+            <div class="page-header">
+                <h1><i class="fas fa-handshake"></i> Centre Partenariats</h1>
+                <p>Développez votre réseau, collaborez avec des partenaires et créez des opportunités durables</p>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="stats-cards">
+                <div class="stat-card"><i class="fas fa-building"></i><h3 id="stat-total">0</h3><p>Partenaires</p></div>
+                <div class="stat-card"><i class="fas fa-check-circle"></i><h3 id="stat-actifs">0</h3><p>Actifs</p></div>
+                <div class="stat-card"><i class="fas fa-clock"></i><h3 id="stat-attente">0</h3><p>En attente</p></div>
+                <div class="stat-card"><i class="fas fa-chart-line"></i><h3 id="stat-taux">0%</h3><p>Taux succès</p></div>
+            </div>
+
+            <!-- Section Partenaires Éducatifs -->
+            <div class="partenaires-section">
+                <h2 class="section-title"><i class="fas fa-graduation-cap"></i> Nos Partenaires Éducatifs</h2>
+                <p class="section-subtitle">Découvrez les institutions et entreprises qui collaborent avec EduLearn Pro pour votre réussite</p>
+                <div class="partenaires-grid" id="partenaires-grid"></div>
+            </div>
+
+            <!-- Section Devenir Partenaire -->
+            <div class="become-partner-card">
+                <h2><i class="fas fa-star-of-life"></i> Devenir Partenaire</h2>
+                <p>Rejoignez notre réseau de partenaires et contribuez à transformer l'éducation en Afrique</p>
+                <form id="become-partner-form" class="become-form">
+                    <input type="text" id="partner-name" placeholder="Nom de l'organisation *" required>
+                    <input type="email" id="partner-email" placeholder="Email de contact *" required>
+                    <input type="tel" id="partner-phone" placeholder="Téléphone">
+                    <select id="partner-type" required>
+                        <option value="">Type de partenariat *</option>
+                        <option value="education">🏫 Institution éducative</option>
+                        <option value="entreprise">🏢 Entreprise</option>
+                        <option value="organisme">🤝 Organisme</option>
+                        <option value="sponsor">⭐ Sponsor</option>
+                    </select>
+                    <textarea id="partner-message" rows="3" placeholder="Message / Proposition de partenariat *" required></textarea>
+                    <button type="submit" class="btn-white">📩 Envoyer ma candidature</button>
+                </form>
+            </div>
+
+            <!-- Mes Partenariats -->
+            <div class="partenariats-layout">
+                <div class="form-card">
+                    <h2><i class="fas fa-plus-circle"></i> Nouveau partenariat</h2>
+                    <form id="partenariat-form">
+                        <div class="form-group"><label>Nom du partenaire *</label><input type="text" id="nom" required placeholder="Nom de l'entreprise ou organisation"></div>
+                        <div class="form-row"><div class="form-group"><label>Type *</label><select id="type"><option value="partenaire">🤝 Partenaire</option><option value="sponsor">⭐ Sponsor</option><option value="ecole">🏫 École/Université</option><option value="institution">🏛️ Institution</option></select></div><div class="form-group"><label>Statut</label><select id="statut"><option value="actif">Actif</option><option value="attente">En attente</option><option value="termine">Terminé</option></select></div></div>
+                        <div class="form-group"><label>Description</label><textarea id="description" rows="3" placeholder="Décrivez le partenariat..."></textarea></div>
+                        <div class="form-row"><div class="form-group"><label>Date début</label><input type="date" id="date-debut"></div><div class="form-group"><label>Date fin (optionnel)</label><input type="date" id="date-fin"></div></div>
+                        <div class="form-group"><label>Contact</label><input type="text" id="contact" placeholder="Nom du contact / Email / Téléphone"></div>
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Créer le partenariat</button>
+                    </form>
+                </div>
+
+                <div class="partenariats-list">
+                    <h2><i class="fas fa-list"></i> Mes partenariats <span id="partenariats-count">0</span></h2>
+                    <div class="search-bar"><input type="text" id="search-input" placeholder="Rechercher un partenaire..."><i class="fas fa-search"></i></div>
+                    <div class="filter-buttons"><button class="filter-btn active" data-filter="all">Tous</button><button class="filter-btn" data-filter="actif">Actifs</button><button class="filter-btn" data-filter="attente">En attente</button><button class="filter-btn" data-filter="termine">Terminés</button></div>
+                    <div id="partenariats-container"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="edit-modal">
+        <div class="modal-content">
+            <div class="modal-header"><h3>Modifier le partenariat</h3><button class="close-modal">&times;</button></div>
+            <div class="modal-body">
+                <form id="edit-form">
+                    <div class="form-group"><label>Nom</label><input type="text" id="edit-nom" required></div>
+                    <div class="form-row"><div class="form-group"><label>Type</label><select id="edit-type"><option value="partenaire">🤝 Partenaire</option><option value="sponsor">⭐ Sponsor</option><option value="ecole">🏫 École/Université</option><option value="institution">🏛️ Institution</option></select></div><div class="form-group"><label>Statut</label><select id="edit-statut"><option value="actif">Actif</option><option value="attente">En attente</option><option value="termine">Terminé</option></select></div></div>
+                    <div class="form-group"><label>Description</label><textarea id="edit-description" rows="3"></textarea></div>
+                    <div class="form-row"><div class="form-group"><label>Date début</label><input type="date" id="edit-date-debut"></div><div class="form-group"><label>Date fin</label><input type="date" id="edit-date-fin"></div></div>
+                    <div class="form-group"><label>Contact</label><input type="text" id="edit-contact"></div>
+                    <button type="submit" class="btn btn-primary" style="width:100%"><i class="fas fa-save"></i> Mettre à jour</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="message" class="message"></div>
+
+    <script>
+        let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        if (!currentUser) window.location.href = 'index.html';
+        document.getElementById('user-name').innerText = currentUser.name.split(' ')[0];
+        if (currentUser.avatar) document.getElementById('user-avatar').src = currentUser.avatar;
+        
+        // Liste des 10 partenaires éducatifs
+        const partenairesEducatifs = [
+            { id: 1, nom: "Université de Douala", type: "education", image: "Images/222.jpeg", description: "La plus grande université du Cameroun, partenaire officiel pour les formations continues et les certifications.", contact: "contact@univ-douala.cm | +237 233 42 10 00", site: "www.univ-douala.cm" },
+            { id: 2, nom: "Cisco Networking Academy", type: "entreprise", image: "Images/666.jpeg", description: "Programme de formation en réseaux et cybersécurité, certifications internationales.", contact: "academy@cisco.com | +1 408 526 4000", site: "www.netacad.com" },
+            { id: 3, nom: "Orange Digital Center", type: "entreprise", image: "Images/444.jpeg", description: "Centre de formation aux métiers du numérique et de l'innovation technologique.", contact: "digital@orange.com | +237 222 22 22 22", site: "www.orange.com" },
+            { id: 4, nom: "Institut Africain d'Informatique", type: "education", image: "Images/555.jpeg", description: "Formation en génie logiciel, data science et intelligence artificielle.", contact: "info@iai-cameroun.com | +237 233 43 12 34", site: "www.iai-cameroun.com" },
+            { id: 5, nom: "Google for Education", type: "entreprise", image: "Images/333.jpeg", description: "Outils et ressources numériques pour l'éducation, certifications Google.", contact: "education@google.com | +1 650 253 0000", site: "edu.google.com" },
+            { id: 6, nom: "UNESCO Cameroun", type: "organisme", image: "Images/777.jpeg", description: "Programmes éducatifs et initiatives pour l'éducation de qualité.", contact: "yaounde@unesco.org | +237 222 20 15 00", site: "www.unesco.org" },
+            { id: 7, nom: "Microsoft Learn", type: "entreprise", image: "Images/888.jpeg", description: "Plateforme de formation gratuite aux technologies Microsoft, certification.", contact: "learn@microsoft.com | +1 425 882 8080", site: "learn.microsoft.com" },
+            { id: 8, nom: "École Supérieure des Sciences Économiques", type: "education", image: "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=400&h=200&fit=crop", description: "Formation en économie, finance et management.", contact: "info@esse-cameroun.com | +237 233 42 55 66", site: "www.esse-cameroun.com" },
+            { id: 9, nom: "AFD (Agence Française de Développement)", type: "organisme", image: "Images/999.jpeg", description: "Soutien aux projets éducatifs et entrepreneuriaux en Afrique.", contact: "cameroun@afd.fr | +237 222 23 45 67", site: "www.afd.fr" },
+            { id: 10, nom: "IBM SkillsBuild", type: "entreprise", image: "Images/129.jpeg", description: "Programme de formation gratuit en IA, cloud computing et cybersécurité.", contact: "skillsbuild@ibm.com | +1 914 499 1900", site: "www.ibm.com/skillsbuild" }
+        ];
+
+        let partenariats = JSON.parse(localStorage.getItem(`partenariats_${currentUser.id}`)) || [];
+        let editId = null;
+        let currentFilter = 'all';
+        let searchTerm = '';
+        
+        function savePartenariats() { localStorage.setItem(`partenariats_${currentUser.id}`, JSON.stringify(partenariats)); }
+        function showMessage(msg, type = 'success') { const m = document.getElementById('message'); m.textContent = msg; m.className = `message show ${type}`; setTimeout(() => m.classList.remove('show'), 3000); }
+        
+        function updateStats() {
+            const total = partenariats.length;
+            const actifs = partenariats.filter(p => p.statut === 'actif').length;
+            const attente = partenariats.filter(p => p.statut === 'attente').length;
+            const taux = total > 0 ? Math.round((actifs / total) * 100) : 0;
+            document.getElementById('stat-total').innerText = total;
+            document.getElementById('stat-actifs').innerText = actifs;
+            document.getElementById('stat-attente').innerText = attente;
+            document.getElementById('stat-taux').innerText = taux;
+            document.getElementById('partenariats-count').innerText = total;
+        }
+        
+        function getTypeLabel(type) {
+            const labels = { partenaire: '🤝 Partenaire', sponsor: '⭐ Sponsor', ecole: '🏫 École', institution: '🏛️ Institution' };
+            return labels[type] || type;
+        }
+        
+        function getTypeClass(type) {
+            const classes = { partenaire: 'type-partenaire', sponsor: 'type-sponsor', ecole: 'type-ecole', institution: 'type-institution' };
+            return classes[type] || 'type-partenaire';
+        }
+        
+        function getStatutClass(statut) {
+            const classes = { actif: 'statut-actif', attente: 'statut-attente', termine: 'statut-termine' };
+            return classes[statut] || 'statut-attente';
+        }
+        
+        function getStatutLabel(statut) {
+            const labels = { actif: 'Actif', attente: 'En attente', termine: 'Terminé' };
+            return labels[statut] || statut;
+        }
+        
+        function getPartnerTypeClass(type) {
+            const classes = { education: 'type-education', entreprise: 'type-entreprise', organisme: 'type-organisme' };
+            return classes[type] || 'type-education';
+        }
+        
+        function getPartnerTypeLabel(type) {
+            const labels = { education: '🏫 Institution éducative', entreprise: '🏢 Entreprise', organisme: '🤝 Organisme' };
+            return labels[type] || type;
+        }
+        
+        function formatDate(dateStr) { if (!dateStr) return 'Non définie'; const d = new Date(dateStr); return d.toLocaleDateString('fr-FR'); }
+        
+        function renderPartenairesEducatifs() {
+            const container = document.getElementById('partenaires-grid');
+            container.innerHTML = partenairesEducatifs.map(p => `
+                <div class="partenaire-card">
+                    <img class="partenaire-image" src="${p.image}" alt="${p.nom}">
+                    <div class="partenaire-info">
+                        <div class="partenaire-nom">${p.nom}</div>
+                        <span class="partenaire-type ${getPartnerTypeClass(p.type)}">${getPartnerTypeLabel(p.type)}</span>
+                        <div class="partenaire-description">${p.description}</div>
+                        <div class="partenaire-contact"><i class="fas fa-envelope"></i> ${p.contact}</div>
+                        <button class="btn-partenaire" onclick="postulerPartenaire(${p.id})"><i class="fas fa-paper-plane"></i> Postuler / Contacter</button>
+                        <button class="btn-outline-partenaire" onclick="window.open('https://${p.site}', '_blank')"><i class="fas fa-external-link-alt"></i> Visiter le site</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function postulerPartenaire(id) {
+            const p = partenairesEducatifs.find(p => p.id === id);
+            if (p) {
+                const message = `📧 *Candidature au partenariat - EduLearn Pro* 📧\n\n📌 *Organisation:* ${p.nom}\n👤 *Candidat:* ${currentUser.name}\n📧 *Email:* ${currentUser.email}\n\n📝 *Message:* Je souhaite collaborer avec votre organisation dans le cadre d'un partenariat éducatif. Pourriez-vous me contacter pour discuter des opportunités de collaboration ?\n\n---\n📖 EduLearn Pro - Mise en relation`;
+                window.location.href = `mailto:${p.contact.split('|')[0].trim()}?subject=Candidature Partenariat EduLearn Pro&body=${encodeURIComponent(message)}`;
+                showMessage(`Ouverture de l'email pour contacter ${p.nom}`, 'success');
+            }
+        }
+        
+        function renderPartenariats() {
+            let filtered = partenariats;
+            if (currentFilter !== 'all') filtered = filtered.filter(p => p.statut === currentFilter);
+            if (searchTerm) filtered = filtered.filter(p => p.nom.toLowerCase().includes(searchTerm.toLowerCase()) || (p.description && p.description.toLowerCase().includes(searchTerm.toLowerCase())));
+            
+            const container = document.getElementById('partenariats-container');
+            if (filtered.length === 0) {
+                container.innerHTML = '<div class="empty-state"><i class="fas fa-handshake"></i><p>Aucun partenariat trouvé</p><small>Créez votre premier partenariat</small></div>';
+                return;
+            }
+            
+            container.innerHTML = filtered.map(p => `
+                <div class="partenariat-card">
+                    <div class="partenariat-header">
+                        <div class="partenariat-nom"><i class="fas fa-building"></i> ${escapeHtml(p.nom)}</div>
+                        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                            <span class="partenariat-type ${getTypeClass(p.type)}">${getTypeLabel(p.type)}</span>
+                            <span class="partenariat-statut ${getStatutClass(p.statut)}">${getStatutLabel(p.statut)}</span>
+                        </div>
+                    </div>
+                    <div class="partenariat-date"><span><i class="fas fa-calendar-alt"></i> Début: ${formatDate(p.dateDebut)}</span>${p.dateFin ? `<span><i class="fas fa-calendar-check"></i> Fin: ${formatDate(p.dateFin)}</span>` : ''}</div>
+                    ${p.description ? `<div class="partenariat-description">${escapeHtml(p.description)}</div>` : ''}
+                    ${p.contact ? `<div class="partenariat-description" style="margin-top:-5px;"><i class="fas fa-user"></i> Contact: ${escapeHtml(p.contact)}</div>` : ''}
+                    <div class="partenariat-actions"><button class="edit" onclick="editPartenariat(${p.id})"><i class="fas fa-edit"></i> Modifier</button><button class="delete" onclick="deletePartenariat(${p.id})"><i class="fas fa-trash"></i> Supprimer</button></div>
+                </div>
+            `).join('');
+            updateStats();
+        }
+        
+        function escapeHtml(text) { const div = document.createElement('div'); div.textContent = text; return div.innerHTML; }
+        
+        document.getElementById('partenariat-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const nom = document.getElementById('nom').value.trim();
+            const type = document.getElementById('type').value;
+            const statut = document.getElementById('statut').value;
+            const description = document.getElementById('description').value;
+            const dateDebut = document.getElementById('date-debut').value;
+            const dateFin = document.getElementById('date-fin').value;
+            const contact = document.getElementById('contact').value;
+            if (!nom) { showMessage('Veuillez entrer un nom', 'error'); return; }
+            const nouveau = { id: Date.now(), nom, type, statut, description, dateDebut, dateFin, contact, dateCreation: new Date().toISOString() };
+            partenariats.unshift(nouveau); savePartenariats(); renderPartenariats(); document.getElementById('partenariat-form').reset(); showMessage('Partenariat créé avec succès');
+        });
+        
+        function editPartenariat(id) { const p = partenariats.find(p => p.id === id); if (p) { editId = id; document.getElementById('edit-nom').value = p.nom; document.getElementById('edit-type').value = p.type; document.getElementById('edit-statut').value = p.statut; document.getElementById('edit-description').value = p.description || ''; document.getElementById('edit-date-debut').value = p.dateDebut || ''; document.getElementById('edit-date-fin').value = p.dateFin || ''; document.getElementById('edit-contact').value = p.contact || ''; document.getElementById('edit-modal').style.display = 'flex'; } }
+        
+        document.getElementById('edit-form').addEventListener('submit', (e) => {
+            e.preventDefault(); const idx = partenariats.findIndex(p => p.id === editId); if (idx !== -1) { partenariats[idx] = { ...partenariats[idx], nom: document.getElementById('edit-nom').value, type: document.getElementById('edit-type').value, statut: document.getElementById('edit-statut').value, description: document.getElementById('edit-description').value, dateDebut: document.getElementById('edit-date-debut').value, dateFin: document.getElementById('edit-date-fin').value, contact: document.getElementById('edit-contact').value, dateModif: new Date().toISOString() }; savePartenariats(); renderPartenariats(); showMessage('Partenariat modifié'); } document.getElementById('edit-modal').style.display = 'none';
+        });
+        
+        function deletePartenariat(id) { if (confirm('Supprimer ce partenariat ?')) { partenariats = partenariats.filter(p => p.id !== id); savePartenariats(); renderPartenariats(); showMessage('Partenariat supprimé'); } }
+        
+        document.getElementById('search-input').addEventListener('input', (e) => { searchTerm = e.target.value; renderPartenariats(); });
+        document.querySelectorAll('.filter-btn').forEach(btn => { if (btn.dataset.filter) { btn.addEventListener('click', () => { document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); currentFilter = btn.dataset.filter; renderPartenariats(); }); } });
+        document.querySelectorAll('.close-modal').forEach(btn => { btn.onclick = () => document.getElementById('edit-modal').style.display = 'none'; });
+        window.onclick = (e) => { if (e.target === document.getElementById('edit-modal')) document.getElementById('edit-modal').style.display = 'none'; };
+        document.getElementById('logout-btn').onclick = () => { localStorage.removeItem('currentUser'); window.location.href = 'index.html'; };
+        
+        // Formulaire Devenir Partenaire
+        document.getElementById('become-partner-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('partner-name').value;
+            const email = document.getElementById('partner-email').value;
+            const phone = document.getElementById('partner-phone').value;
+            const type = document.getElementById('partner-type').value;
+            const message = document.getElementById('partner-message').value;
+            if (name && email && type && message) {
+                showMessage(`Merci ${name} ! Votre candidature a été envoyée. Nous vous contacterons sous 48h.`, 'success');
+                document.getElementById('become-partner-form').reset();
+            } else {
+                showMessage('Veuillez remplir tous les champs obligatoires', 'error');
+            }
+        });
+        
+        // Menu responsive
+        const toggleBtn = document.getElementById('mobile-toggle');
+        const mobileNav = document.getElementById('mobile-nav');
+        if (toggleBtn && mobileNav) {
+            toggleBtn.onclick = () => { mobileNav.classList.toggle('open'); toggleBtn.classList.toggle('active'); document.body.style.overflow = mobileNav.classList.contains('open') ? 'hidden' : ''; };
+            document.querySelectorAll('.mobile-nav a, .mobile-nav button').forEach(link => { link.onclick = () => { mobileNav.classList.remove('open'); toggleBtn.classList.remove('active'); document.body.style.overflow = ''; }; });
+            document.addEventListener('click', (e) => { if (!mobileNav.contains(e.target) && !toggleBtn.contains(e.target) && mobileNav.classList.contains('open')) { mobileNav.classList.remove('open'); toggleBtn.classList.remove('active'); document.body.style.overflow = ''; } });
+        }
+        document.getElementById('mobile-logout')?.addEventListener('click', () => { localStorage.removeItem('currentUser'); window.location.href = 'index.html'; });
+        
+        renderPartenairesEducatifs();
+        renderPartenariats();
+    </script>
+</body>
+</html>

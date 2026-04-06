@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Fonctionnalités - EduLearn Pro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a0ca3;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --info: #3498db;
+            --dark: #1a1a2e;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --gray-light: #e9ecef;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0,0,0,0.1);
+            --shadow-sm: 0 2px 10px rgba(0,0,0,0.05);
+            --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        body { background: #f5f7ff; }
+
+        /* Navigation */
+        .navbar { background: var(--white); box-shadow: var(--shadow-sm); position: sticky; top: 0; z-index: 1000; padding: 12px 0; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .navbar .container { display: flex; justify-content: space-between; align-items: center; }
+        .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+        .logo-icon { width: 40px; height: 40px; background: var(--gradient); border-radius: 12px; display: flex; align-items: center; justify-content: center; }
+        .logo-icon i { font-size: 1.3rem; color: white; }
+        .logo h1 { font-size: 1.3rem; font-weight: 700; color: var(--dark); }
+        .logo span { color: var(--primary); }
+        .nav-menu { display: flex; gap: 15px; flex-wrap: wrap; }
+        .nav-menu a { text-decoration: none; color: var(--gray); padding: 8px 16px; border-radius: 8px; transition: all 0.3s; font-weight: 500; font-size: 0.9rem; }
+        .nav-menu a:hover, .nav-menu a.active { background: rgba(67,97,238,0.1); color: var(--primary); }
+        .user-info { display: flex; align-items: center; gap: 12px; }
+        .user-info img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
+        .logout-btn { background: none; border: none; color: var(--gray); cursor: pointer; font-size: 1.2rem; transition: all 0.3s; }
+        .logout-btn:hover { color: var(--danger); }
+
+        /* Menu Mobile */
+        .mobile-menu-toggle { display: none; background: none; border: none; font-size: 1.5rem; color: var(--dark); cursor: pointer; padding: 8px; border-radius: 8px; z-index: 1001; }
+        .mobile-nav { position: fixed; top: 0; right: -100%; width: 80%; max-width: 320px; height: 100vh; background: var(--white); box-shadow: -5px 0 30px rgba(0,0,0,0.1); z-index: 1000; transition: right 0.3s ease; display: flex; flex-direction: column; padding: 80px 20px 20px; overflow-y: auto; }
+        .mobile-nav.open { right: 0; }
+        .mobile-nav a, .mobile-nav button { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 12px; text-decoration: none; color: var(--dark); font-weight: 500; width: 100%; text-align: left; background: none; border: none; cursor: pointer; font-size: 1rem; }
+        .mobile-nav a:hover, .mobile-nav button:hover { background: rgba(67,97,238,0.1); color: var(--primary); }
+        .mobile-nav i { width: 24px; }
+
+        /* Main Content */
+        .main-content { padding: 30px 0 60px; }
+
+        /* Page Header avec fond dégradé */
+        .page-header {
+            background: var(--gradient);
+            border-radius: 24px;
+            padding: 40px 30px;
+            margin-bottom: 50px;
+            color: white;
+            text-align: center;
+        }
+        .page-header h1 {
+            font-size: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+        .page-header p {
+            opacity: 0.9;
+            font-size: 1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+        .feature-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s;
+            border: 1px solid var(--gray-light);
+        }
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow);
+            border-color: transparent;
+        }
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background: rgba(67,97,238,0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+        .feature-icon i {
+            font-size: 2rem;
+            color: var(--primary);
+        }
+        .feature-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+        .feature-card p {
+            color: var(--gray);
+            line-height: 1.6;
+            font-size: 0.9rem;
+        }
+
+        /* Section Titre */
+        .section-title {
+            text-align: center;
+            margin: 60px 0 40px;
+        }
+        .section-title h2 {
+            font-size: 2rem;
+            color: var(--dark);
+            margin-bottom: 10px;
+        }
+        .section-title p {
+            color: var(--gray);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Avantages Grid */
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+            margin-bottom: 60px;
+        }
+        .benefit-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s;
+        }
+        .benefit-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow);
+        }
+        .benefit-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(67,97,238,0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+        }
+        .benefit-icon i {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+        .benefit-card h4 {
+            font-size: 1rem;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+        .benefit-card p {
+            color: var(--gray);
+            font-size: 0.8rem;
+        }
+
+        /* Comparatif Table */
+        .comparison-table {
+            background: var(--white);
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+            margin-bottom: 50px;
+            overflow-x: auto;
+        }
+        .comparison-table h3 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: var(--dark);
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 15px;
+            text-align: center;
+            border-bottom: 1px solid var(--gray-light);
+        }
+        th {
+            background: var(--light);
+            font-weight: 600;
+            color: var(--dark);
+        }
+        td {
+            color: var(--gray);
+        }
+        .check { color: var(--success); font-size: 1.2rem; }
+        .times { color: var(--danger); font-size: 1.2rem; }
+        .featured {
+            background: rgba(67,97,238,0.05);
+            position: relative;
+        }
+        .popular-badge {
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+        }
+
+        /* CTA */
+        .cta-section {
+            background: var(--gradient);
+            border-radius: 30px;
+            padding: 50px;
+            text-align: center;
+            color: white;
+            margin-top: 30px;
+        }
+        .cta-section h2 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+        }
+        .cta-section p {
+            margin-bottom: 25px;
+            opacity: 0.9;
+        }
+        .cta-btn {
+            background: white;
+            color: var(--primary);
+            border: none;
+            padding: 14px 35px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .cta-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        /* Message */
+        .message { position: fixed; bottom: 20px; right: 20px; background: var(--dark); color: white; padding: 12px 20px; border-radius: 8px; display: none; z-index: 2000; animation: slideIn 0.3s ease; }
+        .message.show { display: block; }
+        .message.success { background: var(--success); }
+        .message.error { background: var(--danger); }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .features-grid { grid-template-columns: repeat(2, 1fr); }
+            .benefits-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 768px) { 
+            .nav-menu { display: none !important; } 
+            .user-info { display: none !important; } 
+            .mobile-menu-toggle { display: block; } 
+            .features-grid { grid-template-columns: 1fr; }
+            .benefits-grid { grid-template-columns: 1fr; }
+            .page-header { padding: 30px 20px; }
+            .page-header h1 { font-size: 1.5rem; }
+            .comparison-table { padding: 15px; }
+            th, td { padding: 10px 5px; font-size: 0.8rem; }
+            .cta-section { padding: 30px 20px; }
+            .cta-section h2 { font-size: 1.3rem; }
+        }
+        @media (min-width: 769px) { .mobile-nav, .mobile-menu-toggle { display: none; } .nav-menu { display: flex !important; } .user-info { display: flex !important; } }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="dashboard.html" class="logo"><div class="logo-icon"><i class="fas fa-graduation-cap"></i></div><h1>Edu<span>Learn</span> Pro</h1></a>
+            <div class="nav-menu">
+                <a href="dashboard.html">Accueil</a>
+                <a href="storage.html">Fichiers</a>
+                <a href="cours.html">Cours</a>
+                <a href="notes.html">Notes</a>
+                <a href="questions.html">Quiz</a>
+                <a href="rappels.html">Rappels</a>
+                <a href="projets.html">Projets</a>
+                <a href="contrat.html">Carrières</a>
+                <a href="features.html" class="active">Fonctionnalités</a>
+                <a href="negociation.html">Négociations</a>
+                <a href="contrat.html">Contrats</a>
+                <a href="centre-partenariats.html">Partenariats</a>
+                <a href="tarifs.html">Tarifs</a>
+                <a href="comptes.html">Compte</a>
+            </div>
+            <div class="user-info"><img id="user-avatar" src="https://via.placeholder.com/40"><span id="user-name"></span><button class="logout-btn" id="logout-btn"><i class="fas fa-sign-out-alt"></i></button></div>
+            <button class="mobile-menu-toggle" id="mobile-toggle"><i class="fas fa-bars"></i></button>
+        </div>
+    </nav>
+
+    <div class="mobile-nav" id="mobile-nav">
+        <a href="dashboard.html"><i class="fas fa-home"></i> Accueil</a>
+        <a href="storage.html"><i class="fas fa-file-alt"></i> Fichiers</a>
+        <a href="cours.html"><i class="fas fa-book"></i> Cours</a>
+        <a href="notes.html"><i class="fas fa-pencil-alt"></i> Notes</a>
+        <a href="questions.html"><i class="fas fa-question-circle"></i> Quiz</a>
+        <a href="rappels.html"><i class="fas fa-bell"></i> Rappels</a>
+        <a href="projets.html"><i class="fas fa-tasks"></i> Projets</a>
+        <a href="features.html"><i class="fas fa-star"></i> Fonctionnalités</a>
+        <a href="negociation.html"><i class="fas fa-handshake"></i> Négociations</a>
+        <a href="contrat.html"><i class="fas fa-file-signature"></i> Contrats</a>
+        <a href="comptes.html"><i class="fas fa-user-circle"></i> Compte</a>
+        <a href="carrieres.html"><i class="fas fa-briefcase"></i> Carrières</a>
+         <a href="centre-partenariats.html"><i class="fas fa-handshake"></i> Partenariats</a>
+        <button id="mobile-logout"><i class="fas fa-sign-out-alt"></i> Déconnexion</button>
+    </div>
+
+    <div class="main-content">
+        <div class="container">
+            <!-- Page Header avec fond dégradé -->
+            <div class="page-header">
+                <h1><i class="fas fa-star"></i> Fonctionnalités</h1>
+                <p>Découvrez tous les outils puissants pour réussir vos études</p>
+            </div>
+
+            <!-- Features Grid -->
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+                    <h3>Stockage illimité</h3>
+                    <p>Enregistrez tous vos documents, cours et fichiers en toute sécurité. Accédez-y où que vous soyez.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fab fa-whatsapp"></i></div>
+                    <h3>Partage WhatsApp</h3>
+                    <p>Envoyez vos cours instantanément à vos camarades via WhatsApp. Le partage n'a jamais été aussi simple.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-question-circle"></i></div>
+                    <h3>Quiz intelligents</h3>
+                    <p>Testez vos connaissances avec des questions adaptées à votre niveau. Suivez votre progression.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-bell"></i></div>
+                    <h3>Rappels automatiques</h3>
+                    <p>Ne manquez plus aucun examen ou révision avec nos notifications personnalisées.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-tasks"></i></div>
+                    <h3>Gestion de projets</h3>
+                    <p>Organisez vos travaux, suivez votre progression et respectez vos délais facilement.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
+                    <h3>Statistiques avancées</h3>
+                    <p>Analysez vos performances et identifiez vos points d'amélioration avec des graphiques détaillés.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-file-signature"></i></div>
+                    <h3>Contrats & Négociations</h3>
+                    <p>Gérez vos contrats et négociations professionnelles directement depuis la plateforme.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-mobile-alt"></i></div>
+                    <h3>Application mobile</h3>
+                    <p>Accédez à votre espace depuis votre téléphone, tablette ou ordinateur. Synchronisation automatique.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
+                    <h3>Sécurité renforcée</h3>
+                    <p>Vos données sont protégées par le chiffrement SSL et des sauvegardes automatiques quotidiennes.</p>
+                </div>
+            </div>
+
+            <!-- Section Avantages -->
+            <div class="section-title">
+                <h2>Pourquoi choisir EduLearn Pro ?</h2>
+                <p>Des avantages qui font la différence</p>
+            </div>
+            <div class="benefits-grid">
+                <div class="benefit-card"><div class="benefit-icon"><i class="fas fa-clock"></i></div><h4>Gain de temps</h4><p>Organisez vos études en un clin d'œil</p></div>
+                <div class="benefit-card"><div class="benefit-icon"><i class="fas fa-graduation-cap"></i></div><h4>Meilleures notes</h4><p>Révisez efficacement</p></div>
+                <div class="benefit-card"><div class="benefit-icon"><i class="fas fa-users"></i></div><h4>Collaboration</h4><p>Travaillez en groupe facilement</p></div>
+                <div class="benefit-card"><div class="benefit-icon"><i class="fas fa-headset"></i></div><h4>Support 24/7</h4><p>Une équipe toujours disponible</p></div>
+            </div>
+
+            <!-- Section Comparatif -->
+            <div class="section-title">
+                <h2>Comparez nos offres</h2>
+                <p>Choisissez le plan qui vous correspond</p>
+            </div>
+            <div class="comparison-table">
+                <h3>Gratuit vs Premium</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Fonctionnalités</th>
+                            <th>Gratuit</th>
+                            <th class="featured">Premium <span class="popular-badge">POPULAIRE</span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Stockage</td><td>500 Mo</td><td class="featured">Illimité</td></tr>
+                        <tr><td>Quiz</td><td>10 par mois</td><td class="featured">Illimité</td></tr>
+                        <tr><td>Cours</td><td>5 maximum</td><td class="featured">Illimité</td></tr>
+                        <tr><td>Export WhatsApp</td><td><i class="fas fa-times times"></i></td><td class="featured"><i class="fas fa-check check"></i></td></tr>
+                        <tr><td>Statistiques avancées</td><td><i class="fas fa-times times"></i></td><td class="featured"><i class="fas fa-check check"></i></td></tr>
+                        <tr><td>Support prioritaire</td><td><i class="fas fa-times times"></i></td><td class="featured"><i class="fas fa-check check"></i></td></tr>
+                        <tr><td><strong>Prix</strong></td><td><strong>Gratuit</strong></td><td class="featured"><strong>4 500 FCFA/mois</strong></td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- CTA Section -->
+            <div class="cta-section">
+                <h2>Prêt à passer à la vitesse supérieure ?</h2>
+                <p>Rejoignez des milliers d'étudiants qui utilisent déjà EduLearn Pro</p>
+                <button class="cta-btn" onclick="window.location.href='tarifs.html'">Découvrir les offres <i class="fas fa-arrow-right"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <div id="message" class="message"></div>
+
+    <script>
+        let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        if (currentUser) {
+            document.getElementById('user-name').innerText = currentUser.name.split(' ')[0];
+            if (currentUser.avatar) document.getElementById('user-avatar').src = currentUser.avatar;
+        }
+        
+        function showMessage(msg, type = 'success') {
+            const m = document.getElementById('message');
+            m.textContent = msg;
+            m.className = `message show ${type}`;
+            setTimeout(() => m.classList.remove('show'), 3000);
+        }
+        
+        document.getElementById('logout-btn').onclick = () => {
+            localStorage.removeItem('currentUser');
+            window.location.href = 'index.html';
+        };
+        
+        // Menu responsive
+        const toggleBtn = document.getElementById('mobile-toggle');
+        const mobileNav = document.getElementById('mobile-nav');
+        if (toggleBtn && mobileNav) {
+            toggleBtn.onclick = () => {
+                mobileNav.classList.toggle('open');
+                toggleBtn.classList.toggle('active');
+                document.body.style.overflow = mobileNav.classList.contains('open') ? 'hidden' : '';
+            };
+            document.querySelectorAll('.mobile-nav a, .mobile-nav button').forEach(link => {
+                link.onclick = () => {
+                    mobileNav.classList.remove('open');
+                    toggleBtn.classList.remove('active');
+                    document.body.style.overflow = '';
+                };
+            });
+            document.addEventListener('click', (e) => {
+                if (!mobileNav.contains(e.target) && !toggleBtn.contains(e.target) && mobileNav.classList.contains('open')) {
+                    mobileNav.classList.remove('open');
+                    toggleBtn.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            });
+        }
+        document.getElementById('mobile-logout')?.addEventListener('click', () => {
+            localStorage.removeItem('currentUser');
+            window.location.href = 'index.html';
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Mes Contrats - EduLearn Pro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a0ca3;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --info: #3498db;
+            --dark: #1a1a2e;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --gray-light: #e9ecef;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0,0,0,0.1);
+            --shadow-sm: 0 2px 10px rgba(0,0,0,0.05);
+            --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        body { background: #f5f7ff; }
+
+        /* Navigation */
+        .navbar { background: var(--white); box-shadow: var(--shadow-sm); position: sticky; top: 0; z-index: 1000; padding: 12px 0; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .navbar .container { display: flex; justify-content: space-between; align-items: center; }
+        .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+        .logo-icon { width: 40px; height: 40px; background: var(--gradient); border-radius: 12px; display: flex; align-items: center; justify-content: center; }
+        .logo-icon i { font-size: 1.3rem; color: white; }
+        .logo h1 { font-size: 1.3rem; font-weight: 700; color: var(--dark); }
+        .logo span { color: var(--primary); }
+        .nav-menu { display: flex; gap: 15px; flex-wrap: wrap; }
+        .nav-menu a { text-decoration: none; color: var(--gray); padding: 8px 16px; border-radius: 8px; transition: all 0.3s; font-weight: 500; font-size: 0.9rem; }
+        .nav-menu a:hover, .nav-menu a.active { background: rgba(67,97,238,0.1); color: var(--primary); }
+        .user-info { display: flex; align-items: center; gap: 12px; }
+        .user-info img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
+        .logout-btn { background: none; border: none; color: var(--gray); cursor: pointer; font-size: 1.2rem; transition: all 0.3s; }
+        .logout-btn:hover { color: var(--danger); }
+
+        /* Menu Mobile */
+        .mobile-menu-toggle { display: none; background: none; border: none; font-size: 1.5rem; color: var(--dark); cursor: pointer; padding: 8px; border-radius: 8px; z-index: 1001; }
+        .mobile-nav { position: fixed; top: 0; right: -100%; width: 80%; max-width: 320px; height: 100vh; background: var(--white); box-shadow: -5px 0 30px rgba(0,0,0,0.1); z-index: 1000; transition: right 0.3s ease; display: flex; flex-direction: column; padding: 80px 20px 20px; overflow-y: auto; }
+        .mobile-nav.open { right: 0; }
+        .mobile-nav a, .mobile-nav button { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 12px; text-decoration: none; color: var(--dark); font-weight: 500; width: 100%; text-align: left; background: none; border: none; cursor: pointer; font-size: 1rem; }
+        .mobile-nav a:hover, .mobile-nav button:hover { background: rgba(67,97,238,0.1); color: var(--primary); }
+        .mobile-nav i { width: 24px; }
+
+        /* Main Content */
+        .main-content { padding: 30px 0; }
+
+        /* Page Header avec fond dégradé */
+        .page-header {
+            background: var(--gradient);
+            border-radius: 24px;
+            padding: 35px 30px;
+            margin-bottom: 30px;
+            color: white;
+        }
+        .page-header h1 {
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+        .page-header p {
+            opacity: 0.9;
+            font-size: 0.95rem;
+        }
+
+        /* Stats Cards */
+        .stats-cards {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .stat-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s;
+            border: 1px solid var(--gray-light);
+        }
+        .stat-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+        .stat-card i { font-size: 2rem; color: var(--primary); margin-bottom: 10px; }
+        .stat-card h3 { font-size: 1.5rem; font-weight: 700; color: var(--dark); margin-bottom: 5px; }
+        .stat-card p { color: var(--gray); font-size: 0.8rem; }
+
+        /* Layout Grid */
+        .contrats-layout {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 30px;
+        }
+
+        /* Formulaire */
+        .form-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 100px;
+        }
+        .form-card h2 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--gray-light);
+        }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 500; color: var(--dark); }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--gray-light);
+            border-radius: 12px;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            background: var(--white);
+        }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67,97,238,0.1);
+        }
+        .btn {
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+        .btn-primary { background: var(--primary); color: white; width: 100%; justify-content: center; }
+        .btn-primary:hover { background: var(--primary-dark); transform: translateY(-2px); }
+
+        /* Liste des contrats */
+        .contrats-list {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+        }
+        .contrats-list h2 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .search-bar {
+            margin-bottom: 20px;
+            position: relative;
+        }
+        .search-bar input {
+            width: 100%;
+            padding: 12px 40px 12px 15px;
+            border: 1px solid var(--gray-light);
+            border-radius: 12px;
+        }
+        .search-bar i {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+        }
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .filter-btn {
+            padding: 8px 16px;
+            border: none;
+            background: var(--light);
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        .filter-btn:hover { background: rgba(67,97,238,0.1); color: var(--primary); }
+        .filter-btn.active { background: var(--primary); color: white; }
+
+        /* Carte contrat */
+        .contrat-card {
+            background: var(--light);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: all 0.3s;
+            border: 1px solid var(--gray-light);
+        }
+        .contrat-card:hover { transform: translateX(5px); border-color: var(--primary); background: white; }
+        .contrat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .contrat-type {
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .type-partenariat { background: rgba(52,152,219,0.1); color: var(--info); }
+        .type-licence { background: rgba(46,204,113,0.1); color: var(--success); }
+        .type-maintenance { background: rgba(243,156,18,0.1); color: var(--warning); }
+        .type-formation { background: rgba(155,89,182,0.1); color: #9b59b6; }
+        .contrat-status {
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+        .status-signe { background: rgba(46,204,113,0.1); color: var(--success); }
+        .status-attente { background: rgba(243,156,18,0.1); color: var(--warning); }
+        .contrat-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 8px;
+        }
+        .contrat-date {
+            font-size: 0.7rem;
+            color: var(--gray);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .contrat-content {
+            color: var(--gray);
+            font-size: 0.85rem;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+        .contrat-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
+            border-top: 1px solid var(--gray-light);
+            padding-top: 15px;
+            margin-top: 5px;
+        }
+        .contrat-actions button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--gray);
+            font-size: 0.8rem;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 8px;
+        }
+        .contrat-actions button:hover { background: var(--light); }
+        .contrat-actions .view:hover { color: var(--info); }
+        .contrat-actions .sign:hover { color: var(--success); }
+        .contrat-actions .delete:hover { color: var(--danger); }
+
+        /* Empty State */
+        .empty-state { text-align: center; padding: 60px; color: var(--gray); }
+        .empty-state i { font-size: 4rem; margin-bottom: 15px; opacity: 0.5; }
+
+        /* Modal */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000; align-items: center; justify-content: center; }
+        .modal-content { background: var(--white); width: 90%; max-width: 600px; border-radius: 24px; overflow: hidden; animation: modalSlide 0.3s ease; }
+        @keyframes modalSlide { from { transform: translateY(-50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .modal-header { padding: 20px; background: var(--light); display: flex; justify-content: space-between; align-items: center; }
+        .modal-header h3 { font-size: 1.2rem; }
+        .close-modal { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--gray); }
+        .modal-body { padding: 25px; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 500; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px; border: 1px solid var(--gray-light); border-radius: 12px; }
+
+        /* Message */
+        .message { position: fixed; bottom: 20px; right: 20px; background: var(--dark); color: white; padding: 12px 20px; border-radius: 8px; display: none; z-index: 2000; animation: slideIn 0.3s ease; }
+        .message.show { display: block; }
+        .message.success { background: var(--success); }
+        .message.error { background: var(--danger); }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .contrats-layout { grid-template-columns: 1fr; }
+            .form-card { position: static; }
+            .stats-cards { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 768px) { 
+            .nav-menu { display: none !important; } 
+            .user-info { display: none !important; } 
+            .mobile-menu-toggle { display: block; } 
+            .stats-cards { grid-template-columns: 1fr; }
+            .page-header { padding: 25px 20px; }
+            .page-header h1 { font-size: 1.4rem; }
+            .contrat-header { flex-direction: column; align-items: flex-start; }
+        }
+        @media (min-width: 769px) { .mobile-nav, .mobile-menu-toggle { display: none; } .nav-menu { display: flex !important; } .user-info { display: flex !important; } }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="dashboard.html" class="logo"><div class="logo-icon"><i class="fas fa-graduation-cap"></i></div><h1>Edu<span>Learn</span> Pro</h1></a>
+            <div class="nav-menu">
+                <a href="dashboard.html">Accueil</a>
+                <a href="storage.html">Fichiers</a>
+                <a href="cours.html">Cours</a>
+                <a href="notes.html">Notes</a>
+                <a href="questions.html">Quiz</a>
+                <a href="rappels.html">Rappels</a>
+                <a href="projets.html">Projets</a>
+                <a href="carrieres.html">Carrières</a>
+                <a href="negociation.html">Négociations</a>
+                <a href="contrat.html" class="active">Contrats</a>
+                   <a href="centre-partenariats.html">Partenariats</a>
+                <a href="tarifs.html">tarifs</a>
+                <a href="comptes.html">Compte</a>
+            </div>
+            <div class="user-info"><img id="user-avatar" src="https://via.placeholder.com/40"><span id="user-name"></span><button class="logout-btn" id="logout-btn"><i class="fas fa-sign-out-alt"></i></button></div>
+            <button class="mobile-menu-toggle" id="mobile-toggle"><i class="fas fa-bars"></i></button>
+        </div>
+    </nav>
+
+    <div class="mobile-nav" id="mobile-nav">
+        <a href="dashboard.html"><i class="fas fa-home"></i> Accueil</a>
+        <a href="storage.html"><i class="fas fa-file-alt"></i> Fichiers</a>
+        <a href="cours.html"><i class="fas fa-book"></i> Cours</a>
+        <a href="notes.html"><i class="fas fa-pencil-alt"></i> Notes</a>
+        <a href="questions.html"><i class="fas fa-question-circle"></i> Quiz</a>
+        <a href="rappels.html"><i class="fas fa-bell"></i> Rappels</a>
+        <a href="projets.html"><i class="fas fa-tasks"></i> Projets</a>
+        <a href="negociation.html"><i class="fas fa-handshake"></i> Négociations</a>
+        <a href="contrat.html"><i class="fas fa-file-signature"></i> Contrats</a>
+        <a href="comptes.html"><i class="fas fa-user-circle"></i> Compte</a>
+        <a href="carrieres.html"><i class="fas fa-briefcase"></i> Carrières</a>
+         <a href="centre-partenariats.html"><i class="fas fa-handshake"></i> Partenariats</a>
+        <button id="mobile-logout"><i class="fas fa-sign-out-alt"></i> Déconnexion</button>
+    </div>
+
+    <div class="main-content">
+        <div class="container">
+            <!-- Page Header avec fond dégradé -->
+            <div class="page-header">
+                <h1><i class="fas fa-file-signature"></i> Mes Contrats</h1>
+                <p>Gérez vos contrats, licences et documents légaux</p>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="stats-cards">
+                <div class="stat-card"><i class="fas fa-file-contract"></i><h3 id="stat-total">0</h3><p>Total contrats</p></div>
+                <div class="stat-card"><i class="fas fa-clock"></i><h3 id="stat-attente">0</h3><p>En attente</p></div>
+                <div class="stat-card"><i class="fas fa-check-circle"></i><h3 id="stat-signes">0</h3><p>Signés</p></div>
+                <div class="stat-card"><i class="fas fa-chart-line"></i><h3 id="stat-taux">0%</h3><p>Taux signature</p></div>
+            </div>
+
+            <div class="contrats-layout">
+                <!-- Formulaire -->
+                <div class="form-card">
+                    <h2><i class="fas fa-plus-circle"></i> Nouveau contrat</h2>
+                    <form id="contrat-form">
+                        <div class="form-group"><label>Type de contrat</label><select id="type-contrat"><option value="partenariat">🤝 Partenariat</option><option value="licence">📜 Licence logicielle</option><option value="maintenance">🔧 Maintenance</option><option value="formation">🎓 Formation</option></select></div>
+                        <div class="form-group"><label>Contenu du contrat</label><textarea id="contenu" rows="8" required placeholder="Décrivez les termes du contrat..."></textarea></div>
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Créer le contrat</button>
+                    </form>
+                </div>
+
+                <!-- Liste des contrats -->
+                <div class="contrats-list">
+                    <h2><i class="fas fa-list"></i> Mes contrats <span id="contrats-count" style="margin-left: auto; font-size: 0.8rem; background: var(--light); padding: 4px 12px; border-radius: 20px;">0</span></h2>
+                    <div class="search-bar"><input type="text" id="search-input" placeholder="Rechercher un contrat..."><i class="fas fa-search"></i></div>
+                    <div class="filter-buttons"><button class="filter-btn active" data-filter="all">Tous</button><button class="filter-btn" data-filter="attente">En attente</button><button class="filter-btn" data-filter="signe">Signés</button></div>
+                    <div id="contrats-container"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Détails -->
+    <div class="modal" id="contrat-modal">
+        <div class="modal-content">
+            <div class="modal-header"><h3 id="modal-title">Détails du contrat</h3><button class="close-modal">&times;</button></div>
+            <div class="modal-body" id="modal-body"></div>
+        </div>
+    </div>
+
+    <div id="message" class="message"></div>
+
+    <script>
+        let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        if (!currentUser) window.location.href = 'index.html';
+        document.getElementById('user-name').innerText = currentUser.name.split(' ')[0];
+        if (currentUser.avatar) document.getElementById('user-avatar').src = currentUser.avatar;
+        
+        let contrats = JSON.parse(localStorage.getItem(`contrats_${currentUser.id}`)) || [];
+        let currentFilter = 'all';
+        let searchTerm = '';
+        
+        const templates = {
+            partenariat: "CONTRAT DE PARTENARIAT\n\nEntre les soussignés :\n\nEduLearn Pro, représenté par Franck BESSALA\nEt le partenaire : ________________\n\nArticle 1 : Objet\nLe présent contrat a pour objet de définir les termes du partenariat entre les parties.\n\nArticle 2 : Durée\nLe contrat est conclu pour une durée d'un an, renouvelable.\n\nArticle 3 : Obligations\nChaque partie s'engage à...\n\nFait à Douala, le ________________",
+            licence: "LICENCE D'UTILISATION\n\nEduLearn Pro accorde une licence non exclusive d'utilisation du logiciel.\n\nDurée : À vie\n\nRestrictions : L'utilisateur ne peut pas modifier, redistribuer ou revendre le logiciel.\n\nSupport : Inclus pendant 1 an.",
+            maintenance: "CONTRAT DE MAINTENANCE\n\nPrestations :\n- Support technique 24h/24\n- Mise à jour du logiciel\n- Correction des bugs\n\nIntervention : Dans les 24h ouvrées\n\nTarifs : Forfait annuel de 50 000 FCFA",
+            formation: "CONVENTION DE FORMATION\n\nObjet : Formation à l'utilisation de la plateforme EduLearn Pro\n\nDurée : 2 jours (14 heures)\n\nLieu : Douala ou à distance\n\nTarif : 100 000 FCFA par personne"
+        };
+        
+        function saveContrats() { localStorage.setItem(`contrats_${currentUser.id}`, JSON.stringify(contrats)); }
+        function showMessage(msg, type = 'success') { const m = document.getElementById('message'); m.textContent = msg; m.className = `message show ${type}`; setTimeout(() => m.classList.remove('show'), 3000); }
+        
+        function updateStats() {
+            const total = contrats.length;
+            const enAttente = contrats.filter(c => !c.signe).length;
+            const signes = contrats.filter(c => c.signe).length;
+            const taux = total > 0 ? Math.round((signes / total) * 100) : 0;
+            document.getElementById('stat-total').innerText = total;
+            document.getElementById('stat-attente').innerText = enAttente;
+            document.getElementById('stat-signes').innerText = signes;
+            document.getElementById('stat-taux').innerText = taux;
+            document.getElementById('contrats-count').innerText = total;
+        }
+        
+        function getTypeLabel(type) {
+            const labels = { partenariat: '🤝 Partenariat', licence: '📜 Licence', maintenance: '🔧 Maintenance', formation: '🎓 Formation' };
+            return labels[type] || type;
+        }
+        
+        function getTypeClass(type) {
+            const classes = { partenariat: 'type-partenariat', licence: 'type-licence', maintenance: 'type-maintenance', formation: 'type-formation' };
+            return classes[type] || 'type-partenariat';
+        }
+        
+        function renderContrats() {
+            let filtered = contrats;
+            if (currentFilter === 'attente') filtered = filtered.filter(c => !c.signe);
+            if (currentFilter === 'signe') filtered = filtered.filter(c => c.signe);
+            if (searchTerm) filtered = filtered.filter(c => c.contenu.toLowerCase().includes(searchTerm.toLowerCase()));
+            
+            const container = document.getElementById('contrats-container');
+            if (filtered.length === 0) {
+                container.innerHTML = '<div class="empty-state"><i class="fas fa-file-contract"></i><p>Aucun contrat trouvé</p><small>Créez votre premier contrat</small></div>';
+                return;
+            }
+            
+            container.innerHTML = filtered.map(c => `
+                <div class="contrat-card">
+                    <div class="contrat-header">
+                        <span class="contrat-type ${getTypeClass(c.type)}"><i class="fas ${c.type === 'partenariat' ? 'fa-handshake' : c.type === 'licence' ? 'fa-file-code' : c.type === 'maintenance' ? 'fa-tools' : 'fa-chalkboard-user'}"></i> ${getTypeLabel(c.type)}</span>
+                        <span class="contrat-status ${c.signe ? 'status-signe' : 'status-attente'}"><i class="fas ${c.signe ? 'fa-check-circle' : 'fa-clock'}"></i> ${c.signe ? 'Signé' : 'En attente'}</span>
+                    </div>
+                    <div class="contrat-title">${c.type === 'partenariat' ? 'Contrat de partenariat' : c.type === 'licence' ? 'Licence d\'utilisation' : c.type === 'maintenance' ? 'Contrat de maintenance' : 'Convention de formation'}</div>
+                    <div class="contrat-date"><span><i class="fas fa-calendar-alt"></i> Créé le ${new Date(c.date_creation).toLocaleDateString('fr-FR')}</span>${c.date_signature ? `<span><i class="fas fa-check-circle"></i> Signé le ${new Date(c.date_signature).toLocaleDateString('fr-FR')}</span>` : ''}</div>
+                    <div class="contrat-content">${c.contenu.substring(0, 150)}${c.contenu.length > 150 ? '...' : ''}</div>
+                    <div class="contrat-actions">
+                        <button class="view" onclick="viewContrat(${c.id})"><i class="fas fa-eye"></i> Voir</button>
+                        ${!c.signe ? `<button class="sign" onclick="signerContrat(${c.id})"><i class="fas fa-signature"></i> Signer</button>` : ''}
+                        <button class="delete" onclick="deleteContrat(${c.id})"><i class="fas fa-trash"></i> Supprimer</button>
+                    </div>
+                </div>
+            `).join('');
+            updateStats();
+        }
+        
+        document.getElementById('contrat-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const type = document.getElementById('type-contrat').value;
+            const contenu = document.getElementById('contenu').value;
+            if (!contenu) { showMessage('Veuillez remplir le contenu', 'error'); return; }
+            const nouveau = { id: Date.now(), type: type, contenu: contenu, signe: false, date_creation: new Date().toISOString() };
+            contrats.unshift(nouveau); saveContrats(); renderContrats(); document.getElementById('contrat-form').reset(); document.getElementById('type-contrat').value = 'partenariat'; document.getElementById('contenu').value = templates.partenariat; showMessage('Contrat créé avec succès');
+        });
+        
+        document.getElementById('type-contrat').addEventListener('change', (e) => { document.getElementById('contenu').value = templates[e.target.value]; });
+        
+        function viewContrat(id) {
+            const c = contrats.find(c => c.id === id);
+            if (!c) return;
+            const modal = document.getElementById('contrat-modal');
+            document.getElementById('modal-title').textContent = getTypeLabel(c.type);
+            document.getElementById('modal-body').innerHTML = `
+                <div style="margin-bottom:15px"><strong>Type:</strong> ${getTypeLabel(c.type)}</div>
+                <div style="margin-bottom:15px"><strong>Date de création:</strong> ${new Date(c.date_creation).toLocaleString('fr-FR')}</div>
+                ${c.date_signature ? `<div style="margin-bottom:15px"><strong>Date de signature:</strong> ${new Date(c.date_signature).toLocaleString('fr-FR')}</div>` : ''}
+                <div style="margin-bottom:15px"><strong>Statut:</strong> <span class="contrat-status ${c.signe ? 'status-signe' : 'status-attente'}"><i class="fas ${c.signe ? 'fa-check-circle' : 'fa-clock'}"></i> ${c.signe ? 'Signé' : 'En attente de signature'}</span></div>
+                <div><strong>Contenu:</strong></div>
+                <div style="background: var(--light); padding: 15px; border-radius: 12px; margin-top: 10px; white-space: pre-wrap; max-height: 400px; overflow-y: auto;">${escapeHtml(c.contenu)}</div>
+                ${!c.signe ? `<button class="btn btn-primary" style="margin-top:20px; width:100%" onclick="signerContrat(${c.id}); document.getElementById('contrat-modal').style.display='none'"><i class="fas fa-signature"></i> Signer le contrat</button>` : ''}
+            `;
+            modal.style.display = 'flex';
+        }
+        
+        function signerContrat(id) {
+            if (confirm('Confirmez-vous la signature de ce contrat ?')) {
+                const index = contrats.findIndex(c => c.id === id);
+                if (index !== -1) { contrats[index].signe = true; contrats[index].date_signature = new Date().toISOString(); saveContrats(); renderContrats(); showMessage('Contrat signé avec succès'); }
+            }
+        }
+        
+        function deleteContrat(id) { if (confirm('Supprimer ce contrat ?')) { contrats = contrats.filter(c => c.id !== id); saveContrats(); renderContrats(); showMessage('Contrat supprimé'); } }
+        
+        function escapeHtml(text) { const div = document.createElement('div'); div.textContent = text; return div.innerHTML; }
+        
+        document.getElementById('search-input').addEventListener('input', (e) => { searchTerm = e.target.value; renderContrats(); });
+        document.querySelectorAll('.filter-btn').forEach(btn => { btn.addEventListener('click', () => { document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); currentFilter = btn.dataset.filter; renderContrats(); }); });
+        document.querySelectorAll('.close-modal').forEach(btn => { btn.onclick = () => document.getElementById('contrat-modal').style.display = 'none'; });
+        window.onclick = (e) => { if (e.target === document.getElementById('contrat-modal')) document.getElementById('contrat-modal').style.display = 'none'; };
+        document.getElementById('logout-btn').onclick = () => { localStorage.removeItem('currentUser'); window.location.href = 'index.html'; };
+        
+        // Menu responsive
+        const toggleBtn = document.getElementById('mobile-toggle');
+        const mobileNav = document.getElementById('mobile-nav');
+        if (toggleBtn && mobileNav) {
+            toggleBtn.onclick = () => { mobileNav.classList.toggle('open'); toggleBtn.classList.toggle('active'); document.body.style.overflow = mobileNav.classList.contains('open') ? 'hidden' : ''; };
+            document.querySelectorAll('.mobile-nav a, .mobile-nav button').forEach(link => { link.onclick = () => { mobileNav.classList.remove('open'); toggleBtn.classList.remove('active'); document.body.style.overflow = ''; }; });
+            document.addEventListener('click', (e) => { if (!mobileNav.contains(e.target) && !toggleBtn.contains(e.target) && mobileNav.classList.contains('open')) { mobileNav.classList.remove('open'); toggleBtn.classList.remove('active'); document.body.style.overflow = ''; } });
+        }
+        document.getElementById('mobile-logout')?.addEventListener('click', () => { localStorage.removeItem('currentUser'); window.location.href = 'index.html'; });
+        
+        renderContrats();
+    </script>
+</body>
+</html>

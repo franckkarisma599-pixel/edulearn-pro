@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Mes Cours - EduLearn Pro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a0ca3;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --info: #3498db;
+            --dark: #1a1a2e;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --gray-light: #e9ecef;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0,0,0,0.1);
+            --shadow-sm: 0 2px 10px rgba(0,0,0,0.05);
+            --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        body { background: #f5f7ff; }
+
+        /* Navigation */
+        .navbar { background: var(--white); box-shadow: var(--shadow-sm); position: sticky; top: 0; z-index: 1000; padding: 12px 0; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .navbar .container { display: flex; justify-content: space-between; align-items: center; }
+        .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+        .logo-icon { width: 40px; height: 40px; background: var(--gradient); border-radius: 12px; display: flex; align-items: center; justify-content: center; }
+        .logo-icon i { font-size: 1.3rem; color: white; }
+        .logo h1 { font-size: 1.3rem; font-weight: 700; color: var(--dark); }
+        .logo span { color: var(--primary); }
+        .nav-menu { display: flex; gap: 15px; flex-wrap: wrap; }
+        .nav-menu a { text-decoration: none; color: var(--gray); padding: 8px 16px; border-radius: 8px; transition: all 0.3s; font-weight: 500; font-size: 0.9rem; }
+        .nav-menu a:hover, .nav-menu a.active { background: rgba(67,97,238,0.1); color: var(--primary); }
+        .user-info { display: flex; align-items: center; gap: 12px; }
+        .user-info img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
+        .logout-btn { background: none; border: none; color: var(--gray); cursor: pointer; font-size: 1.2rem; transition: all 0.3s; }
+        .logout-btn:hover { color: var(--danger); }
+
+        /* Menu Mobile */
+        .mobile-menu-toggle { display: none; background: none; border: none; font-size: 1.5rem; color: var(--dark); cursor: pointer; padding: 8px; border-radius: 8px; z-index: 1001; }
+        .mobile-nav { position: fixed; top: 0; right: -100%; width: 80%; max-width: 320px; height: 100vh; background: var(--white); box-shadow: -5px 0 30px rgba(0,0,0,0.1); z-index: 1000; transition: right 0.3s ease; display: flex; flex-direction: column; padding: 80px 20px 20px; overflow-y: auto; }
+        .mobile-nav.open { right: 0; }
+        .mobile-nav a, .mobile-nav button { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 12px; text-decoration: none; color: var(--dark); font-weight: 500; width: 100%; text-align: left; background: none; border: none; cursor: pointer; font-size: 1rem; }
+        .mobile-nav a:hover, .mobile-nav button:hover { background: rgba(67,97,238,0.1); color: var(--primary); }
+        .mobile-nav i { width: 24px; }
+
+        /* Main Content */
+        .main-content { padding: 30px 0; }
+
+        /* Page Header avec fond dégradé */
+        .page-header {
+            background: var(--gradient);
+            border-radius: 24px;
+            padding: 35px 30px;
+            margin-bottom: 30px;
+            color: white;
+        }
+        .page-header h1 {
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+        .page-header p {
+            opacity: 0.9;
+            font-size: 0.95rem;
+        }
+
+        /* Stats Cards */
+        .stats-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 30px; }
+        .stat-card { background: var(--white); border-radius: 16px; padding: 20px; display: flex; align-items: center; gap: 15px; box-shadow: var(--shadow-sm); transition: all 0.3s; }
+        .stat-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+        .stat-icon { width: 50px; height: 50px; background: rgba(67,97,238,0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; }
+        .stat-icon i { font-size: 1.5rem; color: var(--primary); }
+        .stat-info h3 { font-size: 1.5rem; font-weight: 700; color: var(--dark); }
+        .stat-info p { color: var(--gray); font-size: 0.8rem; }
+
+        /* Layout Grid */
+        .cours-layout { display: grid; grid-template-columns: 1fr 2fr; gap: 30px; }
+
+        /* Formulaire */
+        .form-card { background: var(--white); border-radius: 20px; padding: 25px; box-shadow: var(--shadow); position: sticky; top: 100px; }
+        .form-card h2 { font-size: 1.3rem; margin-bottom: 20px; color: var(--dark); display: flex; align-items: center; gap: 10px; padding-bottom: 15px; border-bottom: 2px solid var(--gray-light); }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 500; color: var(--dark); }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px; border: 1px solid var(--gray-light); border-radius: 12px; font-size: 0.9rem; transition: all 0.3s; background: var(--white); }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(67,97,238,0.1); }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .btn { padding: 12px 20px; border-radius: 12px; font-weight: 600; cursor: pointer; border: none; transition: all 0.3s; display: inline-flex; align-items: center; gap: 8px; font-size: 0.9rem; }
+        .btn-primary { background: var(--primary); color: white; width: 100%; justify-content: center; }
+        .btn-primary:hover { background: var(--primary-dark); transform: translateY(-2px); }
+
+        /* Liste des cours */
+        .cours-list { background: var(--white); border-radius: 20px; padding: 25px; box-shadow: var(--shadow); }
+        .cours-list h2 { font-size: 1.3rem; margin-bottom: 20px; color: var(--dark); display: flex; align-items: center; gap: 10px; }
+        .search-bar { margin-bottom: 20px; position: relative; }
+        .search-bar input { width: 100%; padding: 12px 40px 12px 15px; border: 1px solid var(--gray-light); border-radius: 12px; }
+        .search-bar i { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: var(--gray); }
+        .filter-buttons { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+        .filter-btn { padding: 8px 16px; border: none; background: var(--light); border-radius: 50px; cursor: pointer; transition: all 0.3s; font-size: 0.8rem; font-weight: 500; }
+        .filter-btn:hover { background: rgba(67,97,238,0.1); color: var(--primary); }
+        .filter-btn.active { background: var(--primary); color: white; }
+        .cours-grid { display: grid; gap: 15px; }
+        .cours-item { background: var(--light); border-radius: 12px; padding: 18px; transition: all 0.3s; border: 1px solid var(--gray-light); }
+        .cours-item:hover { transform: translateX(5px); border-color: var(--primary); background: white; }
+        .cours-item-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; flex-wrap: wrap; gap: 10px; }
+        .cours-item-title { font-size: 1rem; font-weight: 600; color: var(--dark); }
+        .cours-item-matiere { padding: 4px 10px; background: rgba(67,97,238,0.1); color: var(--primary); border-radius: 20px; font-size: 0.7rem; font-weight: 500; }
+        .cours-item-date { font-size: 0.7rem; color: var(--gray); margin-bottom: 8px; display: flex; align-items: center; gap: 15px; }
+        .cours-item-desc { color: var(--gray); font-size: 0.85rem; margin-bottom: 12px; line-height: 1.5; }
+        .cours-item-actions { display: flex; gap: 15px; justify-content: flex-end; border-top: 1px solid var(--gray-light); padding-top: 12px; margin-top: 8px; }
+        .cours-item-actions button { background: none; border: none; cursor: pointer; color: var(--gray); font-size: 0.8rem; transition: all 0.3s; display: inline-flex; align-items: center; gap: 6px; }
+        .cours-item-actions .edit:hover { color: var(--info); }
+        .cours-item-actions .delete:hover { color: var(--danger); }
+        .cours-item-actions .share:hover { color: var(--success); }
+
+        /* Empty State */
+        .empty-state { text-align: center; padding: 50px; color: var(--gray); }
+        .empty-state i { font-size: 3rem; margin-bottom: 15px; opacity: 0.5; }
+
+        /* Modal */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000; align-items: center; justify-content: center; }
+        .modal-content { background: var(--white); width: 90%; max-width: 600px; border-radius: 20px; overflow: hidden; animation: modalSlide 0.3s ease; }
+        @keyframes modalSlide { from { transform: translateY(-50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .modal-header { padding: 20px; background: var(--light); display: flex; justify-content: space-between; align-items: center; }
+        .modal-header h3 { font-size: 1.2rem; }
+        .close-modal { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--gray); }
+        .modal-body { padding: 25px; }
+
+        /* Message */
+        .message { position: fixed; bottom: 20px; right: 20px; background: var(--dark); color: white; padding: 12px 20px; border-radius: 8px; display: none; z-index: 2000; animation: slideIn 0.3s ease; }
+        .message.show { display: block; }
+        .message.success { background: var(--success); }
+        .message.error { background: var(--danger); }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+        /* Sidebar Sections */
+        .sidebar-sections { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-top: 30px; }
+        .sidebar-card { background: var(--white); border-radius: 16px; padding: 20px; box-shadow: var(--shadow-sm); }
+        .sidebar-card h3 { font-size: 1rem; margin-bottom: 15px; color: var(--dark); display: flex; align-items: center; gap: 8px; padding-bottom: 10px; border-bottom: 1px solid var(--gray-light); }
+        .sidebar-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--gray-light); }
+        .sidebar-item:last-child { border-bottom: none; }
+        .sidebar-item-info { display: flex; align-items: center; gap: 10px; }
+        .sidebar-item-info i { color: var(--primary); width: 20px; }
+        .sidebar-item-info span { font-size: 0.85rem; color: var(--dark); }
+        .sidebar-item-date { font-size: 0.7rem; color: var(--gray); }
+        .empty-sidebar { text-align: center; padding: 20px; color: var(--gray); font-size: 0.8rem; }
+
+        /* Responsive */
+        @media (max-width: 992px) { .cours-layout { grid-template-columns: 1fr; } .form-card { position: static; } }
+        @media (max-width: 768px) { 
+            .nav-menu { display: none !important; } 
+            .user-info { display: none !important; } 
+            .mobile-menu-toggle { display: block; } 
+            .stats-cards { grid-template-columns: repeat(2, 1fr); }
+            .form-row { grid-template-columns: 1fr; }
+            .sidebar-sections { grid-template-columns: 1fr; }
+            .page-header { padding: 25px 20px; }
+            .page-header h1 { font-size: 1.4rem; }
+        }
+        @media (min-width: 769px) { .mobile-nav, .mobile-menu-toggle { display: none; } .nav-menu { display: flex !important; } .user-info { display: flex !important; } }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="dashboard.html" class="logo"><div class="logo-icon"><i class="fas fa-graduation-cap"></i></div><h1>Edu<span>Learn</span> Pro</h1></a>
+            <div class="nav-menu">
+                <a href="dashboard.html">Accueil</a>
+                <a href="storage.html">Fichiers</a>
+                <a href="cours.html" class="active">Cours</a>
+                <a href="notes.html">Notes</a>
+                <a href="questions.html">Quiz</a>
+                <a href="rappels.html">Rappels</a>
+                <a href="projets.html">Projets</a>
+                <a href="carrieres.html">Carrières</a>
+                <a href="negociation.html">Négociations</a>
+                <a href="contrat.html">Contrats</a>
+                   <a href="centre-partenariats.html">Partenariats</a>
+                <a href="tarifs.html">Tarifs</a>
+                <a href="comptes.html">Compte</a>
+            </div>
+            <div class="user-info"><img id="user-avatar" src="https://via.placeholder.com/40"><span id="user-name"></span><button class="logout-btn" id="logout-btn"><i class="fas fa-sign-out-alt"></i></button></div>
+            <button class="mobile-menu-toggle" id="mobile-toggle"><i class="fas fa-bars"></i></button>
+        </div>
+    </nav>
+
+    <div class="mobile-nav" id="mobile-nav">
+        <a href="dashboard.html"><i class="fas fa-home"></i> Accueil</a>
+        <a href="storage.html"><i class="fas fa-file-alt"></i> Fichiers</a>
+        <a href="cours.html"><i class="fas fa-book"></i> Cours</a>
+        <a href="notes.html"><i class="fas fa-pencil-alt"></i> Notes</a>
+        <a href="questions.html"><i class="fas fa-question-circle"></i> Quiz</a>
+        <a href="rappels.html"><i class="fas fa-bell"></i> Rappels</a>
+        <a href="projets.html"><i class="fas fa-tasks"></i> Projets</a>
+        <a href="negociation.html"><i class="fas fa-handshake"></i> Négociations</a>
+        <a href="contrat.html"><i class="fas fa-file-signature"></i> Contrats</a>
+        <a href="comptes.html"><i class="fas fa-user-circle"></i> Compte</a>
+        <a href="carrieres.html"><i class="fas fa-briefcase"></i> Carrières</a>
+         <a href="centre-partenariats.html"><i class="fas fa-handshake"></i> Partenariats</a>
+        <button id="mobile-logout"><i class="fas fa-sign-out-alt"></i> Déconnexion</button>
+    </div>
+
+    <div class="main-content">
+        <div class="container">
+            <!-- Page Header avec fond dégradé -->
+            <div class="page-header">
+                <h1><i class="fas fa-book-open"></i> Mes Cours</h1>
+                <p>Créez, organisez et partagez vos cours avec vos camarades</p>
+            </div>
+
+            <div class="stats-cards">
+                <div class="stat-card"><div class="stat-icon"><i class="fas fa-book"></i></div><div class="stat-info"><h3 id="stat-total">0</h3><p>Total cours</p></div></div>
+                <div class="stat-card"><div class="stat-icon"><i class="fas fa-calendar-week"></i></div><div class="stat-info"><h3 id="stat-month">0</h3><p>Ce mois</p></div></div>
+                <div class="stat-card"><div class="stat-icon"><i class="fas fa-share-alt"></i></div><div class="stat-info"><h3 id="stat-shared">0</h3><p>Partagés</p></div></div>
+                <div class="stat-card"><div class="stat-icon"><i class="fas fa-tags"></i></div><div class="stat-info"><h3 id="stat-matiere">0</h3><p>Matières</p></div></div>
+            </div>
+
+            <div class="cours-layout">
+                <div class="form-card">
+                    <h2><i class="fas fa-plus-circle"></i> Nouveau cours</h2>
+                    <form id="cours-form">
+                        <div class="form-group"><label>Titre du cours *</label><input type="text" id="titre" required placeholder="Ex: Introduction à la Programmation"></div>
+                        <div class="form-row"><div class="form-group"><label>Matière</label><input type="text" id="matiere" placeholder="Mathématiques, Programmation..."></div><div class="form-group"><label>Niveau</label><select id="niveau"><option>Débutant</option><option>Intermédiaire</option><option>Avancé</option><option>Expert</option></select></div></div>
+                        <div class="form-group"><label>Description</label><textarea id="description" rows="3" placeholder="Décrivez le contenu de ce cours..."></textarea></div>
+                        <div class="form-group"><label>Contenu du cours</label><textarea id="contenu" rows="5" placeholder="Écrivez le contenu détaillé de votre cours ici..."></textarea></div>
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Enregistrer le cours</button>
+                    </form>
+                </div>
+
+                <div class="cours-list">
+                    <h2><i class="fas fa-list"></i> Mes cours <span id="cours-count" style="margin-left: auto; font-size: 0.8rem; background: var(--light); padding: 4px 12px; border-radius: 20px;">0</span></h2>
+                    <div class="search-bar"><input type="text" id="search-input" placeholder="Rechercher un cours..."><i class="fas fa-search"></i></div>
+                    <div class="filter-buttons"><button class="filter-btn active" data-filter="all">Tous</button><button class="filter-btn" data-filter="Mathématiques">Mathématiques</button><button class="filter-btn" data-filter="Programmation">Programmation</button><button class="filter-btn" data-filter="Physique">Physique</button><button class="filter-btn" data-filter="Anglais">Anglais</button></div>
+                    <div id="cours-container"></div>
+                </div>
+            </div>
+
+            <!-- Sidebar Sections: Documents récents et Négociations -->
+            <div class="sidebar-sections">
+                <div class="sidebar-card">
+                    <h3><i class="fas fa-file-alt"></i> Documents récents</h3>
+                    <div id="recent-documents"></div>
+                </div>
+                <div class="sidebar-card">
+                    <h3><i class="fas fa-handshake"></i> Négociations actives</h3>
+                    <div id="active-negociations"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="cours-modal"><div class="modal-content"><div class="modal-header"><h3 id="modal-title">Modifier le cours</h3><button class="close-modal">&times;</button></div><div class="modal-body"><form id="edit-cours-form"><div class="form-group"><label>Titre</label><input type="text" id="edit-titre" required></div><div class="form-row"><div class="form-group"><label>Matière</label><input type="text" id="edit-matiere"></div><div class="form-group"><label>Niveau</label><select id="edit-niveau"><option>Débutant</option><option>Intermédiaire</option><option>Avancé</option><option>Expert</option></select></div></div><div class="form-group"><label>Description</label><textarea id="edit-description" rows="3"></textarea></div><div class="form-group"><label>Contenu</label><textarea id="edit-contenu" rows="5"></textarea></div><button type="submit" class="btn btn-primary" style="width:100%"><i class="fas fa-save"></i> Mettre à jour</button></form></div></div></div>
+
+    <div id="message" class="message"></div>
+
+    <script>
+        let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        if (!currentUser) window.location.href = 'index.html';
+        document.getElementById('user-name').innerText = currentUser.name.split(' ')[0];
+        if (currentUser.avatar) document.getElementById('user-avatar').src = currentUser.avatar;
+        
+        let cours = JSON.parse(localStorage.getItem(`cours_${currentUser.id}`)) || [];
+        let documents = JSON.parse(localStorage.getItem(`documents_${currentUser.id}`)) || [];
+        let negociations = JSON.parse(localStorage.getItem(`negociations_${currentUser.id}`)) || [];
+        let editId = null;
+        let currentFilter = 'all';
+        let searchTerm = '';
+        
+        function saveCours() { localStorage.setItem(`cours_${currentUser.id}`, JSON.stringify(cours)); }
+        function showMessage(msg, type = 'success') { const m = document.getElementById('message'); m.textContent = msg; m.className = `message show ${type}`; setTimeout(() => m.classList.remove('show'), 3000); }
+        
+        function updateStats() {
+            const total = cours.length;
+            const thisMonth = cours.filter(c => new Date(c.dateCreation).getMonth() === new Date().getMonth()).length;
+            const shared = cours.filter(c => c.shared).length;
+            const matieres = new Set(cours.map(c => c.matiere).filter(m => m)).size;
+            document.getElementById('stat-total').innerText = total;
+            document.getElementById('stat-month').innerText = thisMonth;
+            document.getElementById('stat-shared').innerText = shared;
+            document.getElementById('stat-matiere').innerText = matieres;
+            document.getElementById('cours-count').innerText = total;
+        }
+        
+        function renderCours() {
+            let filtered = cours;
+            if (currentFilter !== 'all') filtered = filtered.filter(c => c.matiere === currentFilter);
+            if (searchTerm) filtered = filtered.filter(c => c.titre.toLowerCase().includes(searchTerm.toLowerCase()) || (c.description && c.description.toLowerCase().includes(searchTerm.toLowerCase())));
+            
+            const container = document.getElementById('cours-container');
+            if (filtered.length === 0) { container.innerHTML = '<div class="empty-state"><i class="fas fa-book-open"></i><p>Aucun cours trouvé</p><small>Créez votre premier cours</small></div>'; return; }
+            
+            container.innerHTML = `<div class="cours-grid">${filtered.map(c => `
+                <div class="cours-item">
+                    <div class="cours-item-header"><span class="cours-item-title">${escapeHtml(c.titre)}</span><span class="cours-item-matiere">${c.matiere || 'Général'}</span></div>
+                    <div class="cours-item-date"><span><i class="fas fa-calendar-alt"></i> ${new Date(c.dateCreation).toLocaleDateString('fr-FR')}</span><span><i class="fas fa-chart-line"></i> ${c.niveau || 'Débutant'}</span></div>
+                    <div class="cours-item-desc">${c.description ? (c.description.length > 100 ? c.description.substring(0,100)+'...' : c.description) : 'Aucune description'}</div>
+                    <div class="cours-item-actions"><button class="edit" onclick="openEditModal(${c.id})"><i class="fas fa-edit"></i> Modifier</button><button class="share" onclick="shareCours(${c.id})"><i class="fab fa-whatsapp"></i> Partager</button><button class="delete" onclick="deleteCours(${c.id})"><i class="fas fa-trash"></i> Supprimer</button></div>
+                </div>`).join('')}</div>`;
+            updateStats();
+        }
+        
+        function renderSidebar() {
+            // Documents récents
+            const recentDocs = documents.slice(-3).reverse();
+            const docsContainer = document.getElementById('recent-documents');
+            if (recentDocs.length === 0) {
+                docsContainer.innerHTML = '<div class="empty-sidebar"><i class="fas fa-folder-open"></i><p>Aucun document</p></div>';
+            } else {
+                docsContainer.innerHTML = recentDocs.map(d => `
+                    <div class="sidebar-item">
+                        <div class="sidebar-item-info"><i class="fas fa-file"></i><span>${d.nom?.length > 25 ? d.nom.substring(0,22)+'...' : d.nom || 'Sans nom'}</span></div>
+                        <div class="sidebar-item-date">${new Date(d.dateAjout || d.uploaded_at).toLocaleDateString('fr-FR')}</div>
+                    </div>
+                `).join('');
+            }
+            
+            // Négociations actives
+            const activeNegos = negociations.filter(n => n.statut === 'en_cours').slice(0, 3);
+            const negosContainer = document.getElementById('active-negociations');
+            if (activeNegos.length === 0) {
+                negosContainer.innerHTML = '<div class="empty-sidebar"><i class="fas fa-handshake"></i><p>Aucune négociation</p></div>';
+            } else {
+                negosContainer.innerHTML = activeNegos.map(n => `
+                    <div class="sidebar-item">
+                        <div class="sidebar-item-info"><i class="fas fa-building"></i><span>${n.partenaire?.length > 20 ? n.partenaire.substring(0,17)+'...' : n.partenaire}</span></div>
+                        <div class="sidebar-item-date">${new Date(n.date_debut).toLocaleDateString('fr-FR')}</div>
+                    </div>
+                `).join('');
+            }
+        }
+        
+        function escapeHtml(text) { const div = document.createElement('div'); div.textContent = text; return div.innerHTML; }
+        
+        function shareCours(id) {
+            const c = cours.find(c => c.id === id);
+            if (c) {
+                const message = `📚 *EduLearn Pro - Partage de cours* 📚\n\n📖 *Cours:* ${c.titre}\n📚 *Matière:* ${c.matiere || 'Non spécifiée'}\n📊 *Niveau:* ${c.niveau || 'Débutant'}\n\n📝 *Description:*\n${c.description || 'Aucune description'}\n\n---\n📖 EduLearn Pro - Votre plateforme d'étude intelligente`;
+                window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
+                showMessage('Partage WhatsApp ouvert');
+            }
+        }
+        
+        document.getElementById('cours-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const titre = document.getElementById('titre').value.trim();
+            const matiere = document.getElementById('matiere').value;
+            const niveau = document.getElementById('niveau').value;
+            const description = document.getElementById('description').value;
+            const contenu = document.getElementById('contenu').value;
+            if (!titre) { showMessage('Veuillez entrer un titre', 'error'); return; }
+            const nouveau = { id: Date.now(), titre, matiere, niveau, description, contenu, dateCreation: new Date().toISOString() };
+            cours.unshift(nouveau); saveCours(); renderCours(); renderSidebar(); document.getElementById('cours-form').reset(); showMessage('Cours ajouté avec succès');
+        });
+        
+        function openEditModal(id) { const c = cours.find(c => c.id === id); if (c) { editId = id; document.getElementById('edit-titre').value = c.titre; document.getElementById('edit-matiere').value = c.matiere || ''; document.getElementById('edit-niveau').value = c.niveau || 'Débutant'; document.getElementById('edit-description').value = c.description || ''; document.getElementById('edit-contenu').value = c.contenu || ''; document.getElementById('cours-modal').style.display = 'flex'; } }
+        
+        document.getElementById('edit-cours-form').addEventListener('submit', (e) => {
+            e.preventDefault(); const idx = cours.findIndex(c => c.id === editId); if (idx !== -1) { cours[idx] = { ...cours[idx], titre: document.getElementById('edit-titre').value, matiere: document.getElementById('edit-matiere').value, niveau: document.getElementById('edit-niveau').value, description: document.getElementById('edit-description').value, contenu: document.getElementById('edit-contenu').value, dateModif: new Date().toISOString() }; saveCours(); renderCours(); renderSidebar(); showMessage('Cours modifié'); } document.getElementById('cours-modal').style.display = 'none';
+        });
+        
+        function deleteCours(id) { if (confirm('Supprimer ce cours ?')) { cours = cours.filter(c => c.id !== id); saveCours(); renderCours(); renderSidebar(); showMessage('Cours supprimé'); } }
+        
+        document.getElementById('search-input').addEventListener('input', (e) => { searchTerm = e.target.value; renderCours(); });
+        document.querySelectorAll('.filter-btn').forEach(btn => { btn.addEventListener('click', () => { document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); currentFilter = btn.dataset.filter; renderCours(); }); });
+        document.querySelectorAll('.close-modal').forEach(btn => { btn.onclick = () => document.getElementById('cours-modal').style.display = 'none'; });
+        window.onclick = (e) => { if (e.target === document.getElementById('cours-modal')) document.getElementById('cours-modal').style.display = 'none'; };
+        document.getElementById('logout-btn').onclick = () => { localStorage.removeItem('currentUser'); window.location.href = 'index.html'; };
+        
+        // Menu responsive
+        const toggleBtn = document.getElementById('mobile-toggle');
+        const mobileNav = document.getElementById('mobile-nav');
+        if (toggleBtn && mobileNav) {
+            toggleBtn.onclick = () => { mobileNav.classList.toggle('open'); toggleBtn.classList.toggle('active'); document.body.style.overflow = mobileNav.classList.contains('open') ? 'hidden' : ''; };
+            document.querySelectorAll('.mobile-nav a, .mobile-nav button').forEach(link => { link.onclick = () => { mobileNav.classList.remove('open'); toggleBtn.classList.remove('active'); document.body.style.overflow = ''; }; });
+            document.addEventListener('click', (e) => { if (!mobileNav.contains(e.target) && !toggleBtn.contains(e.target) && mobileNav.classList.contains('open')) { mobileNav.classList.remove('open'); toggleBtn.classList.remove('active'); document.body.style.overflow = ''; } });
+        }
+        document.getElementById('mobile-logout')?.addEventListener('click', () => { localStorage.removeItem('currentUser'); window.location.href = 'index.html'; });
+        
+        renderCours();
+        renderSidebar();
+    </script>
+</body>
+</html>

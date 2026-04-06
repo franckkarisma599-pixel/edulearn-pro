@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Blog - EduLearn Pro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a0ca3;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --info: #3498db;
+            --dark: #1a1a2e;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --gray-light: #e9ecef;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0,0,0,0.1);
+            --shadow-sm: 0 2px 10px rgba(0,0,0,0.05);
+            --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        body { background: #f5f7ff; }
+
+        /* Navigation */
+        .navbar { background: var(--white); box-shadow: var(--shadow-sm); position: sticky; top: 0; z-index: 1000; padding: 12px 0; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .navbar .container { display: flex; justify-content: space-between; align-items: center; }
+        .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+        .logo-icon { width: 40px; height: 40px; background: var(--gradient); border-radius: 12px; display: flex; align-items: center; justify-content: center; }
+        .logo-icon i { font-size: 1.3rem; color: white; }
+        .logo h1 { font-size: 1.3rem; font-weight: 700; color: var(--dark); }
+        .logo span { color: var(--primary); }
+        .nav-menu { display: flex; gap: 15px; flex-wrap: wrap; }
+        .nav-menu a { text-decoration: none; color: var(--gray); padding: 8px 16px; border-radius: 8px; transition: all 0.3s; font-weight: 500; font-size: 0.9rem; }
+        .nav-menu a:hover, .nav-menu a.active { background: rgba(67,97,238,0.1); color: var(--primary); }
+        .user-info { display: flex; align-items: center; gap: 12px; }
+        .user-info img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
+        .logout-btn { background: none; border: none; color: var(--gray); cursor: pointer; font-size: 1.2rem; transition: all 0.3s; }
+        .logout-btn:hover { color: var(--danger); }
+
+        /* Menu Mobile */
+        .mobile-menu-toggle { display: none; background: none; border: none; font-size: 1.5rem; color: var(--dark); cursor: pointer; padding: 8px; border-radius: 8px; z-index: 1001; }
+        .mobile-nav { position: fixed; top: 0; right: -100%; width: 80%; max-width: 320px; height: 100vh; background: var(--white); box-shadow: -5px 0 30px rgba(0,0,0,0.1); z-index: 1000; transition: right 0.3s ease; display: flex; flex-direction: column; padding: 80px 20px 20px; overflow-y: auto; }
+        .mobile-nav.open { right: 0; }
+        .mobile-nav a, .mobile-nav button { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 12px; text-decoration: none; color: var(--dark); font-weight: 500; width: 100%; text-align: left; background: none; border: none; cursor: pointer; font-size: 1rem; }
+        .mobile-nav a:hover, .mobile-nav button:hover { background: rgba(67,97,238,0.1); color: var(--primary); }
+        .mobile-nav i { width: 24px; }
+
+        /* Main Content */
+        .main-content { padding: 30px 0; }
+
+        /* Page Header avec fond dégradé */
+        .page-header {
+            background: var(--gradient);
+            border-radius: 24px;
+            padding: 40px 30px;
+            margin-bottom: 40px;
+            color: white;
+            text-align: center;
+        }
+        .page-header h1 {
+            font-size: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        .page-header p {
+            opacity: 0.9;
+            font-size: 1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Search Bar */
+        .search-bar {
+            margin-bottom: 30px;
+            position: relative;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .search-bar input {
+            width: 100%;
+            padding: 14px 50px 14px 20px;
+            border: 1px solid var(--gray-light);
+            border-radius: 50px;
+            font-size: 0.95rem;
+            background: var(--white);
+            box-shadow: var(--shadow-sm);
+        }
+        .search-bar input:focus { outline: none; border-color: var(--primary); }
+        .search-bar i {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+            font-size: 1.1rem;
+            cursor: pointer;
+        }
+
+        /* Categories */
+        .categories {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+        }
+        .category-btn {
+            padding: 10px 24px;
+            border: none;
+            background: var(--white);
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--gray);
+            box-shadow: var(--shadow-sm);
+        }
+        .category-btn:hover { background: rgba(67,97,238,0.1); color: var(--primary); transform: translateY(-2px); }
+        .category-btn.active { background: var(--primary); color: white; }
+
+        /* Blog Grid */
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+        .blog-card {
+            background: var(--white);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        .blog-card:hover { transform: translateY(-8px); box-shadow: var(--shadow); }
+        .blog-image {
+            height: 220px;
+            overflow: hidden;
+            position: relative;
+        }
+        .blog-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+        .blog-card:hover .blog-image img { transform: scale(1.05); }
+        .blog-category {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: var(--primary);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 50px;
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+        .blog-content { padding: 20px; }
+        .blog-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--dark);
+            line-height: 1.4;
+        }
+        .blog-meta {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 12px;
+            font-size: 0.75rem;
+            color: var(--gray);
+        }
+        .blog-meta span { display: flex; align-items: center; gap: 5px; }
+        .blog-excerpt {
+            color: var(--gray);
+            font-size: 0.85rem;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+        .blog-readmore {
+            color: var(--primary);
+            font-size: 0.85rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.3s;
+        }
+        .blog-readmore:hover { gap: 10px; }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 40px;
+        }
+        .page-btn {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            background: var(--white);
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: var(--shadow-sm);
+            font-weight: 500;
+        }
+        .page-btn:hover, .page-btn.active { background: var(--primary); color: white; }
+
+        /* Sidebar */
+        .sidebar {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-top: 50px;
+        }
+        .sidebar-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: var(--shadow-sm);
+        }
+        .sidebar-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--gray-light);
+        }
+        .sidebar-card h3 i { color: var(--primary); }
+        .sidebar-list { list-style: none; }
+        .sidebar-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid var(--gray-light);
+        }
+        .sidebar-list li a {
+            text-decoration: none;
+            color: var(--gray);
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .sidebar-list li a:hover { color: var(--primary); transform: translateX(5px); }
+        .sidebar-list li a i { width: 20px; color: var(--primary); }
+        .newsletter-form { display: flex; margin-top: 15px; }
+        .newsletter-form input {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid var(--gray-light);
+            border-radius: 50px 0 0 50px;
+            outline: none;
+        }
+        .newsletter-form button {
+            padding: 12px 20px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 0 50px 50px 0;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .newsletter-form button:hover { background: var(--primary-dark); }
+
+        /* Footer */
+        .footer {
+            background: var(--dark);
+            color: white;
+            padding: 60px 0 30px;
+            margin-top: 60px;
+        }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        .footer-col h3 {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            color: white;
+        }
+        .footer-col p {
+            color: #aaa;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        .footer-col a {
+            display: block;
+            color: #aaa;
+            text-decoration: none;
+            margin-bottom: 12px;
+            transition: all 0.3s;
+        }
+        .footer-col a:hover { color: white; transform: translateX(5px); }
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+        }
+        .social-links a:hover { background: var(--primary); transform: translateY(-3px); }
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #aaa;
+            font-size: 0.85rem;
+        }
+
+        /* Modal Article */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            background: var(--white);
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            border-radius: 24px;
+            overflow-y: auto;
+            animation: modalSlide 0.3s ease;
+        }
+        @keyframes modalSlide { from { transform: translateY(-50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .modal-header {
+            padding: 20px 25px;
+            background: var(--light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            border-bottom: 1px solid var(--gray-light);
+        }
+        .modal-header h3 { font-size: 1.3rem; }
+        .close-modal { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--gray); }
+        .modal-body { padding: 30px; }
+        .modal-body img { width: 100%; border-radius: 16px; margin-bottom: 20px; }
+        .modal-body h2 { margin-bottom: 15px; color: var(--dark); }
+        .modal-body p { color: var(--gray); line-height: 1.6; margin-bottom: 15px; }
+
+        /* Message */
+        .message { position: fixed; bottom: 20px; right: 20px; background: var(--dark); color: white; padding: 12px 20px; border-radius: 8px; display: none; z-index: 2000; animation: slideIn 0.3s ease; }
+        .message.show { display: block; }
+        .message.success { background: var(--success); }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .blog-grid { grid-template-columns: repeat(2, 1fr); }
+            .sidebar { grid-template-columns: repeat(2, 1fr); }
+            .footer-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 768px) { 
+            .nav-menu { display: none !important; } 
+            .user-info { display: none !important; } 
+            .mobile-menu-toggle { display: block; } 
+            .blog-grid { grid-template-columns: 1fr; }
+            .sidebar { grid-template-columns: 1fr; }
+            .footer-grid { grid-template-columns: 1fr; }
+            .page-header { padding: 30px 20px; }
+            .page-header h1 { font-size: 1.5rem; }
+            .categories { gap: 8px; }
+            .category-btn { padding: 6px 16px; font-size: 0.75rem; }
+        }
+        @media (min-width: 769px) { .mobile-nav, .mobile-menu-toggle { display: none; } .nav-menu { display: flex !important; } .user-info { display: flex !important; } }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="dashboard.html" class="logo"><div class="logo-icon"><i class="fas fa-graduation-cap"></i></div><h1>Edu<span>Learn</span> Pro</h1></a>
+            <div class="nav-menu">
+                <a href="dashboard.html">Accueil</a>
+                <a href="storage.html">Fichiers</a>
+                <a href="cours.html">Cours</a>
+                <a href="notes.html">Notes</a>
+                <a href="questions.html">Quiz</a>
+                <a href="rappels.html">Rappels</a>
+                <a href="projets.html">Projets</a>
+                <a href="carrieres.html">Carrières</a>
+                <a href="negociation.html">Négociations</a>
+                <a href="contrat.html">Contrats</a>
+                <a href="centre-partenariats.html">Partenariats</a>
+                <a href="tarifs.html">tarifs</a>
+                <a href="blog.html" class="active">Blog</a>
+                <a href="comptes.html">Compte</a>
+            </div>
+            <div class="user-info"><img id="user-avatar" src="https://via.placeholder.com/40"><span id="user-name"></span><button class="logout-btn" id="logout-btn"><i class="fas fa-sign-out-alt"></i></button></div>
+            <button class="mobile-menu-toggle" id="mobile-toggle"><i class="fas fa-bars"></i></button>
+        </div>
+    </nav>
+
+    <div class="mobile-nav" id="mobile-nav">
+        <a href="dashboard.html"><i class="fas fa-home"></i> Accueil</a>
+        <a href="storage.html"><i class="fas fa-file-alt"></i> Fichiers</a>
+        <a href="cours.html"><i class="fas fa-book"></i> Cours</a>
+        <a href="notes.html"><i class="fas fa-pencil-alt"></i> Notes</a>
+        <a href="questions.html"><i class="fas fa-question-circle"></i> Quiz</a>
+        <a href="rappels.html"><i class="fas fa-bell"></i> Rappels</a>
+        <a href="projets.html"><i class="fas fa-tasks"></i> Projets</a>
+        <a href="negociation.html"><i class="fas fa-handshake"></i> Négociations</a>
+        <a href="contrat.html"><i class="fas fa-file-signature"></i> Contrats</a>
+        <a href="blog.html"><i class="fas fa-blog"></i> Blog</a>
+        <a href="comptes.html"><i class="fas fa-user-circle"></i> Compte</a>
+        <a href="carrieres.html"><i class="fas fa-briefcase"></i> Carrières</a>
+         <a href="centre-partenariats.html"><i class="fas fa-handshake"></i> Partenariats</a>
+        <button id="mobile-logout"><i class="fas fa-sign-out-alt"></i> Déconnexion</button>
+    </div>
+
+    <div class="main-content">
+        <div class="container">
+            <div class="page-header">
+                <h1><i class="fas fa-blog"></i> Le Blog EduLearn Pro</h1>
+                <p>Conseils, astuces et actualités pour réussir vos études</p>
+            </div>
+
+            <div class="search-bar">
+                <input type="text" id="search-input" placeholder="Rechercher un article...">
+                <i class="fas fa-search" onclick="searchArticles()"></i>
+            </div>
+
+            <div class="categories" id="categories">
+                <button class="category-btn active" data-category="all">Tous</button>
+                <button class="category-btn" data-category="conseils">📚 Conseils d'étude</button>
+                <button class="category-btn" data-category="technologie">💻 Technologie</button>
+                <button class="category-btn" data-category="organisation">📅 Organisation</button>
+                <button class="category-btn" data-category="examens">🎓 Examens</button>
+                <button class="category-btn" data-category="motivation">🔥 Motivation</button>
+            </div>
+
+            <div id="blog-grid" class="blog-grid"></div>
+
+            <div id="pagination" class="pagination"></div>
+
+            <div class="sidebar">
+                <div class="sidebar-card">
+                    <h3><i class="fas fa-fire"></i> Articles populaires</h3>
+                    <ul class="sidebar-list" id="popular-list"></ul>
+                </div>
+                <div class="sidebar-card">
+                    <h3><i class="fas fa-tags"></i> Catégories</h3>
+                    <ul class="sidebar-list" id="category-list"></ul>
+                </div>
+                <div class="sidebar-card">
+                    <h3><i class="fas fa-envelope"></i> Newsletter</h3>
+                    <p style="color:var(--gray); margin-bottom:15px;">Recevez nos meilleurs conseils chaque semaine</p>
+                    <div class="newsletter-form">
+                        <input type="email" id="newsletter-email" placeholder="Votre email">
+                        <button onclick="subscribeNewsletter()"><i class="fas fa-paper-plane"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="logo" style="margin-bottom: 15px;">
+                        <div class="logo-icon"><i class="fas fa-graduation-cap"></i></div>
+                        <h1 style="color:white;">Edu<span>Learn</span> Pro</h1>
+                    </div>
+                    <p>Votre compagnon d'études intelligent pour réussir vos examens et organiser vos révisions.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h3>Liens rapides</h3>
+                    <a href="index.html">Accueil</a>
+                    <a href="dashboard.html">Tableau de bord</a>
+                    <a href="tarifs.html">Tarifs</a>
+                    <a href="contact.html">Contact</a>
+                </div>
+                <div class="footer-col">
+                    <h3>Ressources</h3>
+                    <a href="blog.html">Blog</a>
+                    <a href="faq.html">FAQ</a>
+                    <a href="documentation.html">Documentation</a>
+                    <a href="support.html">Support technique</a>
+                </div>
+                <div class="footer-col">
+                    <h3>Légal</h3>
+                    <a href="legal.html">Mentions légales</a>
+                    <a href="cgu.html">CGU</a>
+                    <a href="confidentialite.html">Confidentialité</a>
+                    <a href="cookies.html">Cookies</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 EduLearn Pro - Tous droits réservés | Conçu par Lee Startup - Douala, Cameroun</p>
+            </div>
+        </div>
+    </footer>
+
+    <div class="modal" id="article-modal"><div class="modal-content"><div class="modal-header"><h3 id="modal-title"></h3><button class="close-modal">&times;</button></div><div class="modal-body" id="modal-body"></div></div></div>
+    <div id="message" class="message"></div>
+
+    <script>
+        const articles = [
+            { id: 1, title: "10 astuces pour réussir vos révisions", excerpt: "Découvrez les meilleures techniques de révision pour optimiser votre temps et mémoriser efficacement.", content: "<p>Les révisions sont une étape cruciale pour réussir vos examens. Voici 10 astuces qui vous aideront à optimiser votre temps et à mémoriser plus efficacement.</p><h3>1. Planifiez vos révisions</h3><p>Établissez un calendrier réaliste en fonction de vos objectifs et du temps disponible.</p><h3>2. Alternez les matières</h3><p>Changez de matière régulièrement pour maintenir votre concentration.</p><h3>3. Faites des pauses régulières</h3><p>La technique Pomodoro (25 minutes de travail, 5 minutes de pause) est très efficace.</p><h3>4. Utilisez des moyens mnémotechniques</h3><p>Créez des associations d'idées pour retenir plus facilement.</p><h3>5. Testez-vous régulièrement</h3><p>Faites des quiz et des exercices pour vérifier votre compréhension.</p><h3>6. Révisez dans un environnement calme</h3><p>Choisissez un endroit sans distractions.</p><h3>7. Prenez soin de vous</h3><p>Dormez suffisamment et mangez équilibré.</p><h3>8. Utilisez nos outils de révision</h3><p>Profitez des quiz et rappels d'EduLearn Pro.</p><h3>9. Formez un groupe d'étude</h3><p>Révisez avec d'autres étudiants pour échanger.</p><h3>10. Restez positif et motivé</h3><p>Célébrez vos progrès, même petits !</p>", category: "conseils", date: "2026-04-01", readTime: 5, image: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=600&h=300&fit=crop", views: 1250 },
+            { id: 2, title: "Comment le numérique transforme l'éducation", excerpt: "Les outils digitaux révolutionnent la façon dont nous apprenons. Découvrez comment.", content: "<p>La transformation numérique de l'éducation est en marche. Découvrez comment les nouvelles technologies changent notre façon d'apprendre.</p><h3>L'apprentissage personnalisé</h3><p>Grâce à l'IA, les plateformes adaptent le contenu au niveau de chaque étudiant.</p><h3>L'accès à une multitude de ressources</h3><p>Internet donne accès à des cours, tutoriels et bibliothèques du monde entier.</p><h3>La collaboration à distance</h3><p>Les outils collaboratifs permettent de travailler en groupe même à distance.</p><h3>Le suivi des progrès</h3><p>Les données permettent d'analyser vos forces et faiblesses pour mieux progresser.</p>", category: "technologie", date: "2026-03-28", readTime: 7, image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=600&h=300&fit=crop", views: 980 },
+            { id: 3, title: "Maîtrisez votre emploi du temps", excerpt: "Les meilleures méthodes pour organiser vos journées d'étude et ne plus rien oublier.", content: "<p>Une bonne organisation du temps est la clé de la réussite. Voici comment maîtriser votre emploi du temps.</p><h3>Utilisez un agenda</h3><p>Notez toutes vos échéances, examens et devoirs.</p><h3>Priorisez vos tâches</h3><p>Classez par ordre d'importance et d'urgence.</p><h3>Fixez-vous des objectifs quotidiens</h3><p>Des petits objectifs réalisables chaque jour.</p><h3>Évitez la procrastination</h3><p>Identifiez ce qui vous fait perdre du temps et éliminez les distractions.</p>", category: "organisation", date: "2026-03-25", readTime: 4, image: "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=600&h=300&fit=crop", views: 2100 },
+            { id: 4, title: "Préparez vos examens comme un pro", excerpt: "Stratégies efficaces pour aborder sereinement vos examens et maximiser vos chances de réussite.", content: "<p>La préparation aux examens ne se limite pas aux révisions. Voici une stratégie complète.</p><h3>Anticipez</h3><p>Commencez à réviser plusieurs semaines avant l'examen.</p><h3>Révisez activement</h3><p>Ne vous contentez pas de lire, faites des exercices, rédigez des fiches.</p><h3>Gérez votre stress</h3><p>Pratiquez la respiration, la méditation ou le sport.</p><h3>Le jour J</h3><p>Arrivez en avance, lisez bien le sujet, gérez votre temps.</p>", category: "examens", date: "2026-03-20", readTime: 6, image: "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=600&h=300&fit=crop", views: 3400 },
+            { id: 5, title: "Restez motivé toute l'année", excerpt: "Techniques pour maintenir votre motivation et éviter le décrochage scolaire.", content: "<p>La motivation est essentielle pour réussir ses études. Voici comment la maintenir sur la durée.</p><h3>Fixez-vous des objectifs clairs</h3><p>Sachez pourquoi vous étudiez et ce que vous voulez accomplir.</p><h3>Célébrez vos réussites</h3><p>Chaque petit progrès mérite d'être reconnu.</p><h3>Entourez-vous de personnes positives</h3><p>Rejoignez des groupes d'étude, partagez vos difficultés.</p><h3>Visualisez votre réussite</h3><p>Imaginez-vous en train de réussir votre examen.</p>", category: "motivation", date: "2026-03-15", readTime: 5, image: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=600&h=300&fit=crop", views: 890 },
+            { id: 6, title: "Les meilleures applications pour étudier", excerpt: "Découvrez les applications indispensables pour optimiser votre apprentissage.", content: "<p>Les applications mobiles peuvent grandement faciliter vos études. Voici notre sélection.</p><h3>Pour la prise de notes</h3><p>Notion, Evernote, OneNote - organisez toutes vos notes.</p><h3>Pour la gestion du temps</h3><p>Trello, Todoist, Forest - gérez vos tâches et votre concentration.</p><h3>Pour les flashcards</h3><p>Anki, Quizlet - mémorisez efficacement.</p><h3>Pour les mindmaps</h3><p>MindMeister, XMind - visualisez vos idées.</p>", category: "technologie", date: "2026-03-10", readTime: 8, image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=600&h=300&fit=crop", views: 1560 }
+        ];
+
+        let currentCategory = "all";
+        let currentSearch = "";
+        let currentPage = 1;
+        const articlesPerPage = 6;
+
+        function getCategoryName(cat) {
+            const names = { conseils: "📚 Conseils", technologie: "💻 Technologie", organisation: "📅 Organisation", examens: "🎓 Examens", motivation: "🔥 Motivation" };
+            return names[cat] || cat;
+        }
+
+        function renderArticles() {
+            let filtered = articles;
+            if (currentCategory !== "all") filtered = filtered.filter(a => a.category === currentCategory);
+            if (currentSearch) filtered = filtered.filter(a => a.title.toLowerCase().includes(currentSearch.toLowerCase()) || a.excerpt.toLowerCase().includes(currentSearch.toLowerCase()));
+            
+            const start = (currentPage - 1) * articlesPerPage;
+            const paginated = filtered.slice(start, start + articlesPerPage);
+            const container = document.getElementById('blog-grid');
+            
+            if (paginated.length === 0) { container.innerHTML = '<div style="text-align:center;padding:60px;color:var(--gray);"><i class="fas fa-search" style="font-size:3rem;margin-bottom:15px;opacity:0.5;"></i><p>Aucun article trouvé</p></div>'; renderPagination(filtered.length); return; }
+            
+            container.innerHTML = paginated.map(a => `
+                <div class="blog-card" onclick="viewArticle(${a.id})">
+                    <div class="blog-image"><img src="${a.image}" alt="${a.title}"><span class="blog-category">${getCategoryName(a.category)}</span></div>
+                    <div class="blog-content">
+                        <h3 class="blog-title">${a.title}</h3>
+                        <div class="blog-meta"><span><i class="fas fa-calendar-alt"></i> ${new Date(a.date).toLocaleDateString('fr-FR')}</span><span><i class="fas fa-clock"></i> ${a.readTime} min</span><span><i class="fas fa-eye"></i> ${a.views}</span></div>
+                        <p class="blog-excerpt">${a.excerpt.substring(0, 100)}${a.excerpt.length > 100 ? '...' : ''}</p>
+                        <div class="blog-readmore">Lire la suite <i class="fas fa-arrow-right"></i></div>
+                    </div>
+                </div>
+            `).join('');
+            renderPagination(filtered.length);
+        }
+
+        function renderPagination(total) {
+            const totalPages = Math.ceil(total / articlesPerPage);
+            const container = document.getElementById('pagination');
+            if (totalPages <= 1) { container.innerHTML = ""; return; }
+            let html = `<div class="page-btn" onclick="changePage(${currentPage-1})" ${currentPage === 1 ? 'style="opacity:0.5;pointer-events:none"' : ''}><i class="fas fa-chevron-left"></i></div>`;
+            for (let i = 1; i <= Math.min(totalPages, 5); i++) html += `<div class="page-btn ${currentPage === i ? 'active' : ''}" onclick="changePage(${i})">${i}</div>`;
+            html += `<div class="page-btn" onclick="changePage(${currentPage+1})" ${currentPage === totalPages ? 'style="opacity:0.5;pointer-events:none"' : ''}><i class="fas fa-chevron-right"></i></div>`;
+            container.innerHTML = html;
+        }
+
+        function changePage(page) { currentPage = page; renderArticles(); window.scrollTo({ top: 400, behavior: 'smooth' }); }
+        function filterByCategory(category) { currentCategory = category; currentPage = 1; renderArticles(); document.querySelectorAll('.category-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.category === category)); }
+        function searchArticles() { currentSearch = document.getElementById('search-input').value; currentPage = 1; renderArticles(); }
+
+        function viewArticle(id) {
+            const a = articles.find(a => a.id === id);
+            if (!a) return;
+            document.getElementById('modal-title').innerHTML = `<i class="fas fa-newspaper"></i> ${a.title}`;
+            document.getElementById('modal-body').innerHTML = `<img src="${a.image}" alt="${a.title}"><div class="blog-meta" style="margin-bottom:20px;"><span><i class="fas fa-calendar-alt"></i> ${new Date(a.date).toLocaleDateString('fr-FR')}</span><span><i class="fas fa-clock"></i> ${a.readTime} min</span><span><i class="fas fa-eye"></i> ${a.views}</span><span><i class="fas fa-tag"></i> ${getCategoryName(a.category)}</span></div><h2>${a.title}</h2>${a.content}</div>`;
+            document.getElementById('article-modal').style.display = 'flex';
+        }
+
+        function subscribeNewsletter() {
+            const email = document.getElementById('newsletter-email').value;
+            if (email) { showMessage(`Merci ! ${email} est bien inscrit à notre newsletter.`); document.getElementById('newsletter-email').value = ''; }
+            else showMessage('Veuillez entrer une adresse email valide.', 'error');
+        }
+
+        function showMessage(msg, type = 'success') { const m = document.getElementById('message'); m.textContent = msg; m.className = `message show ${type}`; setTimeout(() => m.classList.remove('show'), 3000); }
+
+        function renderSidebar() {
+            const popular = [...articles].sort((a,b) => b.views - a.views).slice(0, 5);
+            document.getElementById('popular-list').innerHTML = popular.map(a => `<li><a href="#" onclick="viewArticle(${a.id})"><i class="fas fa-arrow-right"></i> ${a.title}</a></li>`).join('');
+            const categories = {}; articles.forEach(a => { categories[a.category] = (categories[a.category] || 0) + 1; });
+            document.getElementById('category-list').innerHTML = Object.entries(categories).map(([cat, count]) => `<li><a href="#" onclick="filterByCategory('${cat}')"><i class="fas fa-tag"></i> ${getCategoryName(cat)} (${count})</a></li>`).join('');
+        }
+
+        document.querySelectorAll('.category-btn').forEach(btn => btn.addEventListener('click', () => filterByCategory(btn.dataset.category)));
+        document.getElementById('search-input').addEventListener('keypress', (e) => { if (e.key === 'Enter') searchArticles(); });
+        document.querySelectorAll('.close-modal').forEach(btn => btn.onclick = () => document.getElementById('article-modal').style.display = 'none');
+        window.onclick = (e) => { if (e.target === document.getElementById('article-modal')) document.getElementById('article-modal').style.display = 'none'; };
+        document.getElementById('logout-btn').onclick = () => { localStorage.removeItem('currentUser'); window.location.href = 'index.html'; };
+
+        // Menu responsive
+        const toggleBtn = document.getElementById('mobile-toggle');
+        const mobileNav = document.getElementById('mobile-nav');
+        if (toggleBtn && mobileNav) {
+            toggleBtn.onclick = () => { mobileNav.classList.toggle('open'); toggleBtn.classList.toggle('active'); document.body.style.overflow = mobileNav.classList.contains('open') ? 'hidden' : ''; };
+            document.querySelectorAll('.mobile-nav a, .mobile-nav button').forEach(link => { link.onclick = () => { mobileNav.classList.remove('open'); toggleBtn.classList.remove('active'); document.body.style.overflow = ''; }; });
+            document.addEventListener('click', (e) => { if (!mobileNav.contains(e.target) && !toggleBtn.contains(e.target) && mobileNav.classList.contains('open')) { mobileNav.classList.remove('open'); toggleBtn.classList.remove('active'); document.body.style.overflow = ''; } });
+        }
+        document.getElementById('mobile-logout')?.addEventListener('click', () => { localStorage.removeItem('currentUser'); window.location.href = 'index.html'; });
+
+        let currentUser = null;
+        try { const userData = localStorage.getItem('currentUser'); if (userData) currentUser = JSON.parse(userData); } catch(e) {}
+        if (currentUser) document.getElementById('user-name').innerText = currentUser.name.split(' ')[0];
+        if (currentUser?.avatar) document.getElementById('user-avatar').src = currentUser.avatar;
+
+        renderArticles();
+        renderSidebar();
+    </script>
+</body>
+</html>

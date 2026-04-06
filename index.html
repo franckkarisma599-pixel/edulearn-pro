@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>EduLearn Pro - Plateforme Éducative Intelligente</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a0ca3;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --dark: #1a1a2e;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0,0,0,0.1);
+            --shadow-sm: 0 2px 10px rgba(0,0,0,0.05);
+            --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        body {
+            background: var(--white);
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            padding: 15px 0;
+            transition: all 0.3s;
+        }
+
+        .navbar.scrolled {
+            padding: 10px 0;
+            box-shadow: var(--shadow);
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 30px;
+        }
+
+        .navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-icon i {
+            font-size: 1.3rem;
+            color: white;
+        }
+
+        .logo h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .logo span {
+            color: var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--gray);
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .btn {
+            padding: 12px 28px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background: var(--gradient);
+            color: white;
+            box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(67, 97, 238, 0.4);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 140px 0 80px;
+            background: linear-gradient(135deg, #f5f7ff 0%, #ffffff 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -30%;
+            width: 80%;
+            height: 150%;
+            background: radial-gradient(circle, rgba(67, 97, 238, 0.03) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .hero .container {
+            display: flex;
+            align-items: center;
+            gap: 60px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-content {
+            flex: 1;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(67, 97, 238, 0.1);
+            color: var(--primary);
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-bottom: 20px;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 20px;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-content p {
+            font-size: 1.1rem;
+            color: var(--gray);
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .hero-stat h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .hero-stat p {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        .hero-image {
+            flex: 1;
+            position: relative;
+        }
+
+        .hero-image img {
+            width: 100%;
+            border-radius: 30px;
+            box-shadow: var(--shadow);
+        }
+
+        .hero-image .floating-card {
+            position: absolute;
+            bottom: -30px;
+            left: -30px;
+            background: white;
+            padding: 15px 20px;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .floating-card i {
+            font-size: 2rem;
+            color: var(--primary);
+        }
+
+        /* Features Section */
+        .features {
+            padding: 80px 0;
+            background: var(--white);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .section-header p {
+            color: var(--gray);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-card {
+            background: var(--white);
+            padding: 35px;
+            border-radius: 24px;
+            text-align: center;
+            transition: all 0.3s;
+            border: 1px solid #e9ecef;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow);
+            border-color: transparent;
+        }
+
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            background: rgba(67, 97, 238, 0.1);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+        }
+
+        .feature-icon i {
+            font-size: 2rem;
+            color: var(--primary);
+        }
+
+        .feature-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+        }
+
+        .feature-card p {
+            color: var(--gray);
+            line-height: 1.6;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 80px 0;
+            background: var(--white);
+        }
+
+        .cta-card {
+            background: var(--gradient);
+            border-radius: 40px;
+            padding: 60px;
+            text-align: center;
+            color: white;
+        }
+
+        .cta-card h2 {
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+
+        .cta-card p {
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        .cta-card .btn {
+            background: white;
+            color: var(--primary);
+            box-shadow: none;
+        }
+
+        .cta-card .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            width: 90%;
+            max-width: 500px;
+            border-radius: 24px;
+            overflow: hidden;
+            animation: modalSlide 0.3s ease;
+        }
+
+        @keyframes modalSlide {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            padding: 20px 25px;
+            background: var(--light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .modal-header h2 {
+            font-size: 1.3rem;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--gray);
+        }
+
+        form {
+            padding: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #e9ecef;
+            border-radius: 12px;
+            font-size: 14px;
+        }
+
+        .form-footer {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .form-footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--dark);
+            color: white;
+            padding: 60px 0 30px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-col h3 {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+
+        .footer-col a {
+            display: block;
+            color: #aaa;
+            text-decoration: none;
+            margin-bottom: 12px;
+            transition: all 0.3s;
+        }
+
+        .footer-col a:hover {
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            margin: 0;
+        }
+
+        .social-links a:hover {
+            background: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #aaa;
+            font-size: 0.85rem;
+        }
+
+        /* Menu Responsive */
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--dark);
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+            z-index: 1001;
+        }
+
+        .mobile-menu-toggle:hover {
+            background: rgba(67, 97, 238, 0.1);
+        }
+
+        .mobile-menu-toggle.active {
+            color: var(--primary);
+        }
+
+        .mobile-nav {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 80%;
+            max-width: 320px;
+            height: 100vh;
+            background: var(--white);
+            box-shadow: -5px 0 30px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            transition: right 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            padding: 80px 20px 20px;
+            overflow-y: auto;
+        }
+
+        .mobile-nav.open {
+            right: 0;
+        }
+
+        .mobile-nav a,
+        .mobile-nav button {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: 12px;
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: all 0.3s;
+            width: 100%;
+            text-align: left;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .mobile-nav a:hover,
+        .mobile-nav button:hover {
+            background: rgba(67, 97, 238, 0.1);
+            color: var(--primary);
+        }
+
+        .mobile-nav i {
+            width: 24px;
+            font-size: 1.2rem;
+        }
+
+        .mobile-nav .divider {
+            height: 1px;
+            background: #e9ecef;
+            margin: 15px 0;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none !important;
+            }
+            .mobile-menu-toggle {
+                display: block;
+            }
+            .hero .container {
+                flex-direction: column;
+                text-align: center;
+            }
+            .hero-buttons {
+                justify-content: center;
+            }
+            .hero-stats {
+                justify-content: center;
+            }
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+            .cta-card {
+                padding: 40px 20px;
+            }
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            .footer-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 769px) {
+            .mobile-nav,
+            .mobile-menu-toggle {
+                display: none;
+            }
+            .nav-links {
+                display: flex !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <div class="logo-icon"><i class="fas fa-graduation-cap"></i></div>
+                <h1>Edu<span>Learn</span> Pro</h1>
+            </a>
+            <div class="nav-links">
+                <a href="index.html">Accueil</a>
+                <a href="about.html">A propos</a>
+                <a href="tarifs.html">Tarifs</a>
+                <a href="blog.html">Blog</a>
+                <a href="contact.html">Contact</a>
+                <button class="btn btn-outline" id="show-login">Connexion</button>
+                <button class="btn btn-primary" id="show-register">Inscription</button>
+            </div>
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <div class="mobile-nav" id="mobile-nav">
+        <a href="index.html"><i class="fas fa-home"></i> Accueil</a>
+        <a href="about.html"><i class="fas fa-chart-line"></i> A propos</a>
+        <a href="tarifs.html"><i class="fas fa-tag"></i> Tarifs</a>
+        <a href="blog.html"><i class="fas fa-blog"></i> Blog</a>
+        <a href="contact.html"><i class="fas fa-envelope"></i> Contact</a>
+        <div class="divider"></div>
+        <button id="mobile-login"><i class="fas fa-sign-in-alt"></i> Connexion</button>
+        <button id="mobile-register"><i class="fas fa-user-plus"></i> Inscription</button>
+    </div>
+
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <span class="hero-badge"><i class="fas fa-rocket"></i> La nouvelle génération d'apprentissage</span>
+                <h1>Apprenez plus intelligemment avec EduLearn Pro</h1>
+                <p>La plateforme tout-en-un pour gérer vos cours, réviser efficacement et réussir vos examens. Plus de 10 000 étudiants nous font déjà confiance.</p>
+                <div class="hero-buttons">
+                    <button class="btn btn-primary" id="hero-register">Commencer gratuitement <i class="fas fa-arrow-right"></i></button>
+                    <button class="btn btn-outline">Voir la démo <i class="fas fa-play"></i></button>
+                </div>
+                <div class="hero-stats">
+                    <div class="hero-stat"><h3>10K+</h3><p>Étudiants actifs</p></div>
+                    <div class="hero-stat"><h3>500+</h3><p>Cours disponibles</p></div>
+                    <div class="hero-stat"><h3>98%</h3><p>Taux de satisfaction</p></div>
+                </div>
+            </div>
+            <div class="hero-image">
+                <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=600&h=500&fit=crop" alt="Étudiants">
+                <div class="floating-card">
+                    <i class="fas fa-chart-line"></i>
+                    <div><strong>+45% de réussite</strong><br><small>avec EduLearn Pro</small></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-header">
+                <h2>Des fonctionnalités puissantes pour réussir</h2>
+                <p>Découvrez tous les outils nécessaires pour optimiser votre apprentissage</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+                    <h3>Stockage illimité</h3>
+                    <p>Enregistrez tous vos documents, cours et fichiers en toute sécurité.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fab fa-whatsapp"></i></div>
+                    <h3>Partage instantané</h3>
+                    <p>Envoyez vos cours directement via WhatsApp à vos camarades.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-question-circle"></i></div>
+                    <h3>Quiz intelligents</h3>
+                    <p>Testez vos connaissances avec des questions adaptées à votre niveau.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-bell"></i></div>
+                    <h3>Rappels automatiques</h3>
+                    <p>Ne manquez plus aucun examen ou révision avec nos notifications.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-tasks"></i></div>
+                    <h3>Gestion de projets</h3>
+                    <p>Organisez vos travaux et suivez votre progression en temps réel.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
+                    <h3>Statistiques avancées</h3>
+                    <p>Analysez vos performances et identifiez vos points d'amélioration.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section" id="contact">
+        <div class="container">
+            <div class="cta-card">
+                <h2>Prêt à révolutionner vos études ?</h2>
+                <p>Rejoignez plus de 10 000 étudiants qui utilisent déjà EduLearn Pro</p>
+                <button class="btn btn-primary" id="cta-register">Créer un compte gratuit <i class="fas fa-arrow-right"></i></button>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="logo" style="margin-bottom: 15px;">
+                        <div class="logo-icon"><i class="fas fa-graduation-cap"></i></div>
+                        <h1 style="color:white;">Edu<span>Learn</span> Pro</h1>
+                    </div>
+                    <p>Votre compagnon d'études intelligent</p>
+                    <p style="margin-top: 10px; font-size: 0.8rem;">Douala, Cameroun</p>
+                    <p style="font-size: 0.8rem;">contact@edulearnpro.com</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h3>Produit</h3>
+                    <a href="#features">Fonctionnalités</a>
+                    <a href="tarifs.html">Tarifs</a>
+                    <a href="faq.html">FAQ</a>
+                    <a href="documentation.html">Documentation</a>
+                </div>
+                <div class="footer-col">
+                    <h3>Entreprise</h3>
+                    <a href="about.html">À propos</a>
+                    <a href="blog.html">Blog</a>
+                    <a href="carrieres.html">Carrières</a>
+                    <a href="contact.html">Contact</a>
+                </div>
+                <div class="footer-col">
+                    <h3>Légal</h3>
+                    <a href="legal.html">Mentions légales</a>
+                    <a href="cgu.html">CGU</a>
+                    <a href="confidenialite.html">Confidentialité</a>
+                    <a href="cookies.html">Cookies</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 EduLearn Pro - Tous droits réservés | Conçu par Lee Startup  - Douala, Cameroun</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modales -->
+    <div class="modal" id="login-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Connexion</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <form id="login-form">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="login-email" required placeholder="exemple@email.com">
+                </div>
+                <div class="form-group">
+                    <label>Mot de passe</label>
+                    <input type="password" id="login-password" required placeholder="••••••••">
+                </div>
+                <button type="submit" class="btn btn-primary" style="width:100%" id="login-btn">Se connecter</button>
+                <p class="form-footer">Pas de compte ? <a href="#" id="switch-to-register">S'inscrire</a></p>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal" id="register-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Inscription</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <form id="register-form">
+                <div class="form-group">
+                    <label>Nom complet</label>
+                    <input type="text" id="register-name" required placeholder="Jean Dupont">
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="register-email" required placeholder="jean@email.com">
+                </div>
+                <div class="form-group">
+                    <label>Mot de passe</label>
+                    <input type="password" id="register-password" required placeholder="••••••••">
+                </div>
+                <div class="form-group">
+                    <label>Confirmer</label>
+                    <input type="password" id="confirm-password" required placeholder="••••••••">
+                </div>
+                <div class="form-group">
+                    <label>Type</label>
+                    <select id="user-type">
+                        <option value="etudiant">Étudiant</option>
+                        <option value="enseignant">Enseignant</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width:100%" id="register-btn">S'inscrire</button>
+                <p class="form-footer">Déjà un compte ? <a href="#" id="switch-to-login">Se connecter</a></p>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // ========== SYSTÈME D'AUTHENTIFICATION ==========
+        let users = JSON.parse(localStorage.getItem('users')) || [];
+        
+        function saveUsers() {
+            localStorage.setItem('users', JSON.stringify(users));
+        }
+        
+        function login(email, password) {
+            const user = users.find(u => u.email === email && u.password === password);
+            if (user) {
+                localStorage.setItem('currentUser', JSON.stringify(user));
+                return true;
+            }
+            return false;
+        }
+        
+        function register(name, email, password, type) {
+            if (users.find(u => u.email === email)) return false;
+            const newUser = {
+                id: Date.now(),
+                name: name,
+                email: email,
+                password: password,
+                type: type,
+                avatar: null,
+                joined: new Date().toISOString()
+            };
+            users.push(newUser);
+            saveUsers();
+            localStorage.setItem('currentUser', JSON.stringify(newUser));
+            return true;
+        }
+        
+        // ========== GESTION DES MODALES ==========
+        const loginModal = document.getElementById('login-modal');
+        const registerModal = document.getElementById('register-modal');
+        
+        document.getElementById('show-login')?.addEventListener('click', () => loginModal.style.display = 'flex');
+        document.getElementById('show-register')?.addEventListener('click', () => registerModal.style.display = 'flex');
+        document.getElementById('hero-register')?.addEventListener('click', () => registerModal.style.display = 'flex');
+        document.getElementById('cta-register')?.addEventListener('click', () => registerModal.style.display = 'flex');
+        
+        document.querySelectorAll('.close-modal').forEach(btn => {
+            btn.onclick = () => {
+                loginModal.style.display = 'none';
+                registerModal.style.display = 'none';
+            };
+        });
+        
+        window.onclick = (e) => {
+            if (e.target === loginModal) loginModal.style.display = 'none';
+            if (e.target === registerModal) registerModal.style.display = 'none';
+        };
+        
+        document.getElementById('switch-to-register')?.addEventListener('click', (e) => {
+            e.preventDefault();
+            loginModal.style.display = 'none';
+            registerModal.style.display = 'flex';
+        });
+        
+        document.getElementById('switch-to-login')?.addEventListener('click', (e) => {
+            e.preventDefault();
+            registerModal.style.display = 'none';
+            loginModal.style.display = 'flex';
+        });
+        
+        // ========== FORMULAIRES ==========
+        document.getElementById('login-form')?.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            if (login(email, password)) {
+                window.location.href = 'dashboard.html';
+            } else {
+                alert('Email ou mot de passe incorrect');
+            }
+        });
+        
+        document.getElementById('register-form')?.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('register-name').value;
+            const email = document.getElementById('register-email').value;
+            const password = document.getElementById('register-password').value;
+            const confirm = document.getElementById('confirm-password').value;
+            const type = document.getElementById('user-type').value;
+            
+            if (password !== confirm) {
+                alert('Les mots de passe ne correspondent pas');
+                return;
+            }
+            
+            if (register(name, email, password, type)) {
+                window.location.href = 'dashboard.html';
+            } else {
+                alert('Cet email est déjà utilisé');
+            }
+        });
+        
+        // ========== VÉRIFICATION CONNEXION ==========
+        if (localStorage.getItem('currentUser')) {
+            window.location.href = 'dashboard.html';
+        }
+        
+        // ========== MENU RESPONSIVE ==========
+        const toggleBtn = document.getElementById('mobile-menu-toggle');
+        const mobileNav = document.getElementById('mobile-nav');
+        
+        if (toggleBtn && mobileNav) {
+            toggleBtn.addEventListener('click', () => {
+                mobileNav.classList.toggle('open');
+                toggleBtn.classList.toggle('active');
+                document.body.style.overflow = mobileNav.classList.contains('open') ? 'hidden' : '';
+            });
+            
+            document.querySelectorAll('.mobile-nav a, .mobile-nav button').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileNav.classList.remove('open');
+                    toggleBtn.classList.remove('active');
+                    document.body.style.overflow = '';
+                });
+            });
+            
+            document.addEventListener('click', (e) => {
+                if (!mobileNav.contains(e.target) && !toggleBtn.contains(e.target) && mobileNav.classList.contains('open')) {
+                    mobileNav.classList.remove('open');
+                    toggleBtn.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            });
+        }
+        
+        // Boutons mobile pour connexion/inscription
+        document.getElementById('mobile-login')?.addEventListener('click', () => {
+            loginModal.style.display = 'flex';
+            mobileNav.classList.remove('open');
+            toggleBtn.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+        
+        document.getElementById('mobile-register')?.addEventListener('click', () => {
+            registerModal.style.display = 'flex';
+            mobileNav.classList.remove('open');
+            toggleBtn.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+        
+        // ========== EFFET SCROLL NAVBAR ==========
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Mes Rappels - EduLearn Pro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a0ca3;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --info: #3498db;
+            --dark: #1a1a2e;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --gray-light: #e9ecef;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0,0,0,0.1);
+            --shadow-sm: 0 2px 10px rgba(0,0,0,0.05);
+            --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        body { background: #f5f7ff; }
+
+        /* Navigation */
+        .navbar { background: var(--white); box-shadow: var(--shadow-sm); position: sticky; top: 0; z-index: 1000; padding: 12px 0; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .navbar .container { display: flex; justify-content: space-between; align-items: center; }
+        .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+        .logo-icon { width: 40px; height: 40px; background: var(--gradient); border-radius: 12px; display: flex; align-items: center; justify-content: center; }
+        .logo-icon i { font-size: 1.3rem; color: white; }
+        .logo h1 { font-size: 1.3rem; font-weight: 700; color: var(--dark); }
+        .logo span { color: var(--primary); }
+        .nav-menu { display: flex; gap: 15px; flex-wrap: wrap; }
+        .nav-menu a { text-decoration: none; color: var(--gray); padding: 8px 16px; border-radius: 8px; transition: all 0.3s; font-weight: 500; font-size: 0.9rem; }
+        .nav-menu a:hover, .nav-menu a.active { background: rgba(67,97,238,0.1); color: var(--primary); }
+        .user-info { display: flex; align-items: center; gap: 12px; }
+        .user-info img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
+        .logout-btn { background: none; border: none; color: var(--gray); cursor: pointer; font-size: 1.2rem; transition: all 0.3s; }
+        .logout-btn:hover { color: var(--danger); }
+
+        /* Menu Mobile */
+        .mobile-menu-toggle { display: none; background: none; border: none; font-size: 1.5rem; color: var(--dark); cursor: pointer; padding: 8px; border-radius: 8px; z-index: 1001; }
+        .mobile-nav { position: fixed; top: 0; right: -100%; width: 80%; max-width: 320px; height: 100vh; background: var(--white); box-shadow: -5px 0 30px rgba(0,0,0,0.1); z-index: 1000; transition: right 0.3s ease; display: flex; flex-direction: column; padding: 80px 20px 20px; overflow-y: auto; }
+        .mobile-nav.open { right: 0; }
+        .mobile-nav a, .mobile-nav button { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 12px; text-decoration: none; color: var(--dark); font-weight: 500; width: 100%; text-align: left; background: none; border: none; cursor: pointer; font-size: 1rem; }
+        .mobile-nav a:hover, .mobile-nav button:hover { background: rgba(67,97,238,0.1); color: var(--primary); }
+        .mobile-nav i { width: 24px; }
+
+        /* Main Content */
+        .main-content { padding: 30px 0; }
+
+        /* Page Header avec fond dégradé */
+        .page-header {
+            background: var(--gradient);
+            border-radius: 24px;
+            padding: 35px 30px;
+            margin-bottom: 30px;
+            color: white;
+        }
+        .page-header h1 {
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+        .page-header p {
+            opacity: 0.9;
+            font-size: 0.95rem;
+        }
+
+        /* Stats Cards */
+        .stats-cards {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .stat-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--gray-light);
+            transition: all 0.3s;
+        }
+        .stat-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+        .stat-card i { font-size: 1.8rem; color: var(--primary); margin-bottom: 10px; }
+        .stat-card h3 { font-size: 1.5rem; font-weight: 700; color: var(--dark); }
+        .stat-card p { color: var(--gray); font-size: 0.8rem; margin-top: 5px; }
+
+        /* Notification Banner */
+        .notification-banner {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 20px 25px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--gray-light);
+        }
+        .notification-banner .notif-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .notification-banner .notif-info i {
+            font-size: 2rem;
+            color: var(--primary);
+        }
+        .notification-banner .notif-info h3 { font-size: 1rem; margin-bottom: 5px; }
+        .notification-banner .notif-info p { font-size: 0.8rem; color: var(--gray); }
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 30px;
+        }
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--gray);
+            transition: 0.3s;
+            border-radius: 30px;
+        }
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 24px;
+            width: 24px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: 0.3s;
+            border-radius: 50%;
+        }
+        input:checked + .toggle-slider { background-color: var(--success); }
+        input:checked + .toggle-slider:before { transform: translateX(30px); }
+
+        /* Layout Grid */
+        .rappels-layout {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 30px;
+        }
+
+        /* Formulaire */
+        .form-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 100px;
+        }
+        .form-card h2 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--gray-light);
+        }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 500; color: var(--dark); }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--gray-light);
+            border-radius: 12px;
+            font-size: 0.9rem;
+            background: var(--white);
+        }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67,97,238,0.1);
+        }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .priority-select { display: flex; gap: 10px; margin-top: 10px; }
+        .priority-option {
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+            border: 2px solid var(--gray-light);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        .priority-option:hover { border-color: var(--primary); }
+        .priority-option.selected { border-color: var(--primary); background: rgba(67,97,238,0.05); }
+        .priority-option.high i { color: var(--danger); }
+        .priority-option.medium i { color: var(--warning); }
+        .priority-option.low i { color: var(--success); }
+        .btn {
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s;
+            width: 100%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .btn:hover { background: var(--primary-dark); transform: translateY(-2px); }
+
+        /* Liste des rappels */
+        .rappels-list {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+        }
+        .rappels-list h2 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .search-bar {
+            margin-bottom: 20px;
+            position: relative;
+        }
+        .search-bar input {
+            width: 100%;
+            padding: 12px 40px 12px 15px;
+            border: 1px solid var(--gray-light);
+            border-radius: 12px;
+        }
+        .search-bar i {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+        }
+        .filter-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .filter-tab {
+            padding: 8px 16px;
+            border: none;
+            background: var(--light);
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        .filter-tab:hover { background: rgba(67,97,238,0.1); color: var(--primary); }
+        .filter-tab.active { background: var(--primary); color: white; }
+        .reminders-grid { display: grid; gap: 15px; }
+        .reminder-card {
+            background: var(--light);
+            border-radius: 16px;
+            padding: 18px;
+            transition: all 0.3s;
+            border: 1px solid var(--gray-light);
+            position: relative;
+            overflow: hidden;
+        }
+        .reminder-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+        }
+        .reminder-card.upcoming::before { background: var(--primary); }
+        .reminder-card.today::before { background: var(--warning); }
+        .reminder-card.passed::before { background: var(--gray); }
+        .reminder-card.completed::before { background: var(--success); }
+        .reminder-card:hover { transform: translateX(5px); border-color: var(--primary); background: white; }
+        .reminder-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .reminder-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .reminder-type {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+        .type-revision { background: rgba(46,204,113,0.1); color: var(--success); }
+        .type-examen { background: rgba(231,76,60,0.1); color: var(--danger); }
+        .type-other { background: rgba(67,97,238,0.1); color: var(--primary); }
+        .reminder-date {
+            font-size: 0.75rem;
+            color: var(--gray);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .reminder-desc {
+            color: var(--gray);
+            font-size: 0.85rem;
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+        .reminder-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
+            border-top: 1px solid var(--gray-light);
+            padding-top: 12px;
+            margin-top: 8px;
+        }
+        .reminder-actions button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--gray);
+            font-size: 0.8rem;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 10px;
+            border-radius: 8px;
+        }
+        .reminder-actions button:hover { background: var(--light); }
+        .reminder-actions .complete:hover { color: var(--success); }
+        .reminder-actions .edit:hover { color: var(--info); }
+        .reminder-actions .delete:hover { color: var(--danger); }
+        .reminder-actions .share:hover { color: var(--success); }
+
+        /* Empty State */
+        .empty-state { text-align: center; padding: 50px; color: var(--gray); }
+        .empty-state i { font-size: 3rem; margin-bottom: 15px; opacity: 0.5; }
+
+        /* Modal */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000; align-items: center; justify-content: center; }
+        .modal-content { background: var(--white); width: 90%; max-width: 550px; border-radius: 24px; overflow: hidden; animation: modalSlide 0.3s ease; }
+        @keyframes modalSlide { from { transform: translateY(-50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .modal-header { padding: 20px; background: var(--light); display: flex; justify-content: space-between; align-items: center; }
+        .modal-header h3 { font-size: 1.2rem; }
+        .close-modal { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--gray); }
+        .modal-body { padding: 25px; }
+
+        /* Message */
+        .message { position: fixed; bottom: 20px; right: 20px; background: var(--dark); color: white; padding: 12px 20px; border-radius: 8px; display: none; z-index: 2000; animation: slideIn 0.3s ease; }
+        .message.show { display: block; }
+        .message.success { background: var(--success); }
+        .message.error { background: var(--danger); }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .rappels-layout { grid-template-columns: 1fr; }
+            .form-card { position: static; }
+            .stats-cards { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 768px) { 
+            .nav-menu { display: none !important; } 
+            .user-info { display: none !important; } 
+            .mobile-menu-toggle { display: block; } 
+            .stats-cards { grid-template-columns: repeat(2, 1fr); }
+            .form-row { grid-template-columns: 1fr; }
+            .page-header { padding: 25px 20px; }
+            .page-header h1 { font-size: 1.4rem; }
+            .notification-banner { flex-direction: column; text-align: center; }
+            .notification-banner .notif-info { flex-direction: column; text-align: center; }
+        }
+        @media (min-width: 769px) { .mobile-nav, .mobile-menu-toggle { display: none; } .nav-menu { display: flex !important; } .user-info { display: flex !important; } }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="dashboard.html" class="logo"><div class="logo-icon"><i class="fas fa-graduation-cap"></i></div><h1>Edu<span>Learn</span> Pro</h1></a>
+            <div class="nav-menu">
+                <a href="dashboard.html">Accueil</a>
+                <a href="storage.html">Fichiers</a>
+                <a href="cours.html">Cours</a>
+                <a href="notes.html">Notes</a>
+                <a href="questions.html">Quiz</a>
+                <a href="rappels.html" class="active">Rappels</a>
+                <a href="projets.html">Projets</a>
+                <a href="carrieres.html">Carrières</a>
+                <a href="negociation.html">Négociations</a>
+                <a href="contrat.html">Contrats</a>
+                <a href="centre-partenariats.html">Partenariats</a>
+                <a href="tarifs.html">Tarifs</a>
+                <a href="comptes.html">Compte</a>
+            </div>
+            <div class="user-info"><img id="user-avatar" src="https://via.placeholder.com/40"><span id="user-name"></span><button class="logout-btn" id="logout-btn"><i class="fas fa-sign-out-alt"></i></button></div>
+            <button class="mobile-menu-toggle" id="mobile-toggle"><i class="fas fa-bars"></i></button>
+        </div>
+    </nav>
+
+    <div class="mobile-nav" id="mobile-nav">
+        <a href="dashboard.html"><i class="fas fa-home"></i> Accueil</a>
+        <a href="storage.html"><i class="fas fa-file-alt"></i> Fichiers</a>
+        <a href="cours.html"><i class="fas fa-book"></i> Cours</a>
+        <a href="notes.html"><i class="fas fa-pencil-alt"></i> Notes</a>
+        <a href="questions.html"><i class="fas fa-question-circle"></i> Quiz</a>
+        <a href="rappels.html"><i class="fas fa-bell"></i> Rappels</a>
+        <a href="projets.html"><i class="fas fa-tasks"></i> Projets</a>
+        <a href="negociation.html"><i class="fas fa-handshake"></i> Négociations</a>
+        <a href="contrat.html"><i class="fas fa-file-signature"></i> Contrats</a>
+        <a href="comptes.html"><i class="fas fa-user-circle"></i> Compte</a>
+         <a href="centre-partenariats.html"><i class="fas fa-handshake"></i> Partenariats</a>
+        <button id="mobile-logout"><i class="fas fa-sign-out-alt"></i> Déconnexion</button>
+    </div>
+
+    <div class="main-content">
+        <div class="container">
+            <!-- Page Header avec fond dégradé -->
+            <div class="page-header">
+                <h1><i class="fas fa-bell"></i> Mes Rappels</h1>
+                <p>Organisez vos révisions, examens et événements importants</p>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="stats-cards">
+                <div class="stat-card"><i class="fas fa-calendar-alt"></i><h3 id="stat-total">0</h3><p>Total rappels</p></div>
+                <div class="stat-card"><i class="fas fa-clock"></i><h3 id="stat-upcoming">0</h3><p>À venir</p></div>
+                <div class="stat-card"><i class="fas fa-sun"></i><h3 id="stat-today">0</h3><p>Aujourd'hui</p></div>
+                <div class="stat-card"><i class="fas fa-check-circle"></i><h3 id="stat-completed">0</h3><p>Terminés</p></div>
+            </div>
+
+            <!-- Notification Banner -->
+            <div class="notification-banner">
+                <div class="notif-info">
+                    <i class="fas fa-bell"></i>
+                    <div><h3>Notifications</h3><p>Recevez des rappels directement sur votre navigateur</p></div>
+                </div>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="notif-toggle">
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+
+            <div class="rappels-layout">
+                <!-- Formulaire -->
+                <div class="form-card">
+                    <h2><i class="fas fa-plus-circle"></i> Ajouter un rappel</h2>
+                    <form id="rappel-form">
+                        <div class="form-group"><label>Titre *</label><input type="text" id="titre" required placeholder="Ex: Révision mathématiques"></div>
+                        <div class="form-row">
+                            <div class="form-group"><label>Type</label><select id="type"><option value="revision">📚 Révision</option><option value="examen">🎓 Examen</option><option value="other">🔔 Autre</option></select></div>
+                            <div class="form-group"><label>Priorité</label><div class="priority-select"><div class="priority-option high" data-priority="haute"><i class="fas fa-flag"></i> Haute</div><div class="priority-option medium selected" data-priority="moyenne"><i class="fas fa-flag"></i> Moyenne</div><div class="priority-option low" data-priority="basse"><i class="fas fa-flag"></i> Basse</div></div></div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group"><label>Date *</label><input type="date" id="date" required></div>
+                            <div class="form-group"><label>Heure *</label><input type="time" id="heure" required></div>
+                        </div>
+                        <div class="form-group"><label>Description</label><textarea id="description" rows="3" placeholder="Ajoutez des détails supplémentaires..."></textarea></div>
+                        <button type="submit" class="btn"><i class="fas fa-save"></i> Ajouter le rappel</button>
+                    </form>
+                </div>
+
+                <!-- Liste des rappels -->
+                <div class="rappels-list">
+                    <h2><i class="fas fa-list"></i> Mes rappels <span id="rappels-count" style="margin-left: auto; font-size: 0.8rem; background: var(--light); padding: 4px 12px; border-radius: 20px;">0</span></h2>
+                    <div class="search-bar"><input type="text" id="search-input" placeholder="Rechercher un rappel..."><i class="fas fa-search"></i></div>
+                    <div class="filter-tabs">
+                        <button class="filter-tab active" data-filter="all">Tous</button>
+                        <button class="filter-tab" data-filter="upcoming">À venir</button>
+                        <button class="filter-tab" data-filter="today">Aujourd'hui</button>
+                        <button class="filter-tab" data-filter="passed">Passés</button>
+                        <button class="filter-tab" data-filter="completed">Terminés</button>
+                    </div>
+                    <div id="rappels-container" class="reminders-grid"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal" id="rappel-modal">
+        <div class="modal-content">
+            <div class="modal-header"><h3 id="modal-title">Modifier le rappel</h3><button class="close-modal">&times;</button></div>
+            <div class="modal-body">
+                <form id="edit-rappel-form">
+                    <div class="form-group"><label>Titre</label><input type="text" id="edit-titre" required></div>
+                    <div class="form-row"><div class="form-group"><label>Type</label><select id="edit-type"><option value="revision">📚 Révision</option><option value="examen">🎓 Examen</option><option value="other">🔔 Autre</option></select></div><div class="form-group"><label>Priorité</label><select id="edit-priorite"><option value="haute">Haute</option><option value="moyenne">Moyenne</option><option value="basse">Basse</option></select></div></div>
+                    <div class="form-row"><div class="form-group"><label>Date</label><input type="date" id="edit-date" required></div><div class="form-group"><label>Heure</label><input type="time" id="edit-heure" required></div></div>
+                    <div class="form-group"><label>Description</label><textarea id="edit-description" rows="3"></textarea></div>
+                    <button type="submit" class="btn"><i class="fas fa-save"></i> Mettre à jour</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="message" class="message"></div>
+
+    <script>
+        let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        if (!currentUser) window.location.href = 'index.html';
+        document.getElementById('user-name').innerText = currentUser.name.split(' ')[0];
+        if (currentUser.avatar) document.getElementById('user-avatar').src = currentUser.avatar;
+        
+        let rappels = JSON.parse(localStorage.getItem(`rappels_${currentUser.id}`)) || [];
+        let editId = null;
+        let currentFilter = 'all';
+        let searchTerm = '';
+        let notificationsEnabled = localStorage.getItem('notifications_enabled') !== 'false';
+        
+        // Appliquer l'état des notifications
+        const notifToggle = document.getElementById('notif-toggle');
+        if (notifToggle) notifToggle.checked = notificationsEnabled;
+        
+        function saveRappels() { localStorage.setItem(`rappels_${currentUser.id}`, JSON.stringify(rappels)); }
+        function showMessage(msg, type = 'success') { const m = document.getElementById('message'); m.textContent = msg; m.className = `message show ${type}`; setTimeout(() => m.classList.remove('show'), 3000); }
+        
+        function getRappelStatus(r) {
+            if (r.complete) return 'completed';
+            const now = new Date();
+            const dateRappel = new Date(`${r.date}T${r.heure}`);
+            const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            const rappelDay = new Date(dateRappel.getFullYear(), dateRappel.getMonth(), dateRappel.getDate());
+            if (dateRappel < now) return 'passed';
+            if (rappelDay.getTime() === today.getTime()) return 'today';
+            return 'upcoming';
+        }
+        
+        function formatDate(dateStr, heureStr) {
+            const d = new Date(`${dateStr}T${heureStr}`);
+            const now = new Date();
+            const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            const tomorrow = new Date(today);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            const rappelDay = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+            
+            if (rappelDay.getTime() === today.getTime()) return `Aujourd'hui à ${d.toLocaleTimeString('fr-FR', {hour:'2-digit',minute:'2-digit'})}`;
+            if (rappelDay.getTime() === tomorrow.getTime()) return `Demain à ${d.toLocaleTimeString('fr-FR', {hour:'2-digit',minute:'2-digit'})}`;
+            return `${d.toLocaleDateString('fr-FR', {day:'numeric', month:'long'})} à ${d.toLocaleTimeString('fr-FR', {hour:'2-digit',minute:'2-digit'})}`;
+        }
+        
+        function updateStats() {
+            const total = rappels.length;
+            const upcoming = rappels.filter(r => !r.complete && getRappelStatus(r) === 'upcoming').length;
+            const today = rappels.filter(r => !r.complete && getRappelStatus(r) === 'today').length;
+            const completed = rappels.filter(r => r.complete).length;
+            document.getElementById('stat-total').innerText = total;
+            document.getElementById('stat-upcoming').innerText = upcoming;
+            document.getElementById('stat-today').innerText = today;
+            document.getElementById('stat-completed').innerText = completed;
+            document.getElementById('rappels-count').innerText = total;
+        }
+        
+        function renderRappels() {
+            let filtered = rappels;
+            if (currentFilter !== 'all') filtered = filtered.filter(r => getRappelStatus(r) === currentFilter);
+            if (searchTerm) filtered = filtered.filter(r => r.titre.toLowerCase().includes(searchTerm.toLowerCase()) || (r.description && r.description.toLowerCase().includes(searchTerm.toLowerCase())));
+            filtered.sort((a, b) => new Date(`${a.date}T${a.heure}`) - new Date(`${b.date}T${b.heure}`));
+            
+            const container = document.getElementById('rappels-container');
+            if (filtered.length === 0) {
+                container.innerHTML = '<div class="empty-state"><i class="fas fa-bell-slash"></i><p>Aucun rappel trouvé</p><small>Ajoutez votre premier rappel</small></div>';
+                return;
+            }
+            
+            container.innerHTML = filtered.map(r => {
+                const status = getRappelStatus(r);
+                const typeLabel = r.type === 'revision' ? '📚 Révision' : r.type === 'examen' ? '🎓 Examen' : '🔔 Autre';
+                const typeClass = r.type === 'revision' ? 'type-revision' : r.type === 'examen' ? 'type-examen' : 'type-other';
+                const priorityIcon = r.priorite === 'haute' ? '🔴' : r.priorite === 'moyenne' ? '🟡' : '🟢';
+                return `
+                    <div class="reminder-card ${status}">
+                        <div class="reminder-header">
+                            <div class="reminder-title">${priorityIcon} ${escapeHtml(r.titre)}</div>
+                            <span class="reminder-type ${typeClass}">${typeLabel}</span>
+                        </div>
+                        <div class="reminder-date"><i class="fas fa-calendar-alt"></i> ${formatDate(r.date, r.heure)}</div>
+                        ${r.description ? `<div class="reminder-desc">${escapeHtml(r.description.substring(0, 100))}${r.description.length > 100 ? '...' : ''}</div>` : ''}
+                        <div class="reminder-actions">
+                            ${!r.complete ? `<button class="complete" onclick="toggleComplete(${r.id})"><i class="fas fa-check-circle"></i> Terminer</button>` : `<button class="complete" onclick="toggleComplete(${r.id})"><i class="fas fa-undo"></i> Réactiver</button>`}
+                            <button class="edit" onclick="editRappel(${r.id})"><i class="fas fa-edit"></i> Modifier</button>
+                            <button class="share" onclick="shareRappel(${r.id})"><i class="fab fa-whatsapp"></i> Partager</button>
+                            <button class="delete" onclick="deleteRappel(${r.id})"><i class="fas fa-trash"></i> Supprimer</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            updateStats();
+        }
+        
+        function escapeHtml(text) { const div = document.createElement('div'); div.textContent = text; return div.innerHTML; }
+        
+        function shareRappel(id) {
+            const r = rappels.find(r => r.id === id);
+            if (r) {
+                const message = `⏰ *Rappel - EduLearn Pro* ⏰\n\n🔔 *${r.titre}*\n📌 Type: ${r.type === 'revision' ? 'Révision' : r.type === 'examen' ? 'Examen' : 'Autre'}\n📆 Date: ${formatDate(r.date, r.heure)}\n${r.description ? `📝 Description: ${r.description}` : ''}\n\n---\n📖 EduLearn Pro - Ne manquez rien !`;
+                window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
+                showMessage('Partage WhatsApp ouvert');
+            }
+        }
+        
+        function toggleComplete(id) {
+            const idx = rappels.findIndex(r => r.id === id);
+            if (idx !== -1) {
+                rappels[idx].complete = !rappels[idx].complete;
+                saveRappels();
+                renderRappels();
+                showMessage(rappels[idx].complete ? 'Rappel marqué comme terminé' : 'Rappel réactivé');
+            }
+        }
+        
+        document.getElementById('rappel-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const titre = document.getElementById('titre').value.trim();
+            const type = document.getElementById('type').value;
+            const priorite = document.querySelector('.priority-option.selected')?.dataset.priority || 'moyenne';
+            const date = document.getElementById('date').value;
+            const heure = document.getElementById('heure').value;
+            const description = document.getElementById('description').value;
+            if (!titre || !date || !heure) { showMessage('Veuillez remplir tous les champs obligatoires', 'error'); return; }
+            const nouveau = { id: Date.now(), titre, type, priorite, date, heure, description, complete: false, dateCreation: new Date().toISOString() };
+            rappels.unshift(nouveau);
+            saveRappels();
+            renderRappels();
+            document.getElementById('rappel-form').reset();
+            document.querySelector('.priority-option').classList.remove('selected');
+            document.querySelector('.priority-option.medium').classList.add('selected');
+            showMessage('Rappel ajouté avec succès');
+            
+            // Notification test
+            if (notificationsEnabled && Notification.permission === 'granted') {
+                new Notification('Nouveau rappel créé', { body: `${titre} - ${formatDate(date, heure)}` });
+            }
+        });
+        
+        function editRappel(id) {
+            const r = rappels.find(r => r.id === id);
+            if (r) {
+                editId = id;
+                document.getElementById('edit-titre').value = r.titre;
+                document.getElementById('edit-type').value = r.type;
+                document.getElementById('edit-priorite').value = r.priorite || 'moyenne';
+                document.getElementById('edit-date').value = r.date;
+                document.getElementById('edit-heure').value = r.heure;
+                document.getElementById('edit-description').value = r.description || '';
+                document.getElementById('rappel-modal').style.display = 'flex';
+            }
+        }
+        
+        document.getElementById('edit-rappel-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const idx = rappels.findIndex(r => r.id === editId);
+            if (idx !== -1) {
+                rappels[idx] = { ...rappels[idx], titre: document.getElementById('edit-titre').value, type: document.getElementById('edit-type').value, priorite: document.getElementById('edit-priorite').value, date: document.getElementById('edit-date').value, heure: document.getElementById('edit-heure').value, description: document.getElementById('edit-description').value, dateModif: new Date().toISOString() };
+                saveRappels();
+                renderRappels();
+                showMessage('Rappel modifié');
+            }
+            document.getElementById('rappel-modal').style.display = 'none';
+        });
+        
+        function deleteRappel(id) { if (confirm('Supprimer ce rappel ?')) { rappels = rappels.filter(r => r.id !== id); saveRappels(); renderRappels(); showMessage('Rappel supprimé'); } }
+        
+        document.getElementById('search-input').addEventListener('input', (e) => { searchTerm = e.target.value; renderRappels(); });
+        document.querySelectorAll('.filter-tab').forEach(btn => { btn.addEventListener('click', () => { document.querySelectorAll('.filter-tab').forEach(b => b.classList.remove('active')); btn.classList.add('active'); currentFilter = btn.dataset.filter; renderRappels(); }); });
+        document.querySelectorAll('.priority-option').forEach(opt => { opt.addEventListener('click', () => { document.querySelectorAll('.priority-option').forEach(o => o.classList.remove('selected')); opt.classList.add('selected'); }); });
+        document.querySelectorAll('.close-modal').forEach(btn => { btn.onclick = () => document.getElementById('rappel-modal').style.display = 'none'; });
+        window.onclick = (e) => { if (e.target === document.getElementById('rappel-modal')) document.getElementById('rappel-modal').style.display = 'none'; };
+        document.getElementById('logout-btn').onclick = () => { localStorage.removeItem('currentUser'); window.location.href = 'index.html'; };
+        
+        // Notifications
+        notifToggle.addEventListener('change', async (e) => {
+            notificationsEnabled = e.target.checked;
+            localStorage.setItem('notifications_enabled', notificationsEnabled);
+            if (notificationsEnabled && Notification.permission !== 'granted') {
+                const permission = await Notification.requestPermission();
+                if (permission === 'granted') {
+                    showMessage('Notifications activées !');
+                } else {
+                    showMessage('Notifications non autorisées', 'error');
+                    notifToggle.checked = false;
+                    notificationsEnabled = false;
+                    localStorage.setItem('notifications_enabled', false);
+                }
+            } else if (notificationsEnabled) {
+                showMessage('Notifications activées');
+            } else {
+                showMessage('Notifications désactivées');
+            }
+        });
+        
+        // Menu responsive
+        const toggleBtn = document.getElementById('mobile-toggle');
+        const mobileNav = document.getElementById('mobile-nav');
+        if (toggleBtn && mobileNav) {
+            toggleBtn.onclick = () => { mobileNav.classList.toggle('open'); toggleBtn.classList.toggle('active'); document.body.style.overflow = mobileNav.classList.contains('open') ? 'hidden' : ''; };
+            document.querySelectorAll('.mobile-nav a, .mobile-nav button').forEach(link => { link.onclick = () => { mobileNav.classList.remove('open'); toggleBtn.classList.remove('active'); document.body.style.overflow = ''; }; });
+            document.addEventListener('click', (e) => { if (!mobileNav.contains(e.target) && !toggleBtn.contains(e.target) && mobileNav.classList.contains('open')) { mobileNav.classList.remove('open'); toggleBtn.classList.remove('active'); document.body.style.overflow = ''; } });
+        }
+        document.getElementById('mobile-logout')?.addEventListener('click', () => { localStorage.removeItem('currentUser'); window.location.href = 'index.html'; });
+        
+        renderRappels();
+    </script>
+</body>
+</html>
